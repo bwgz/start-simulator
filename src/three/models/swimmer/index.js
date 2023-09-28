@@ -4,7 +4,10 @@ class SwimmerModel {
     static generate(manager) {
         return new Promise((resolve, reject) => {
             const fbxLoader = new FBXLoader(manager);
-            fbxLoader.setPath("/models/swimmer/");
+            const url = import.meta.env.BASE_URL + 'models/swimmer/';
+            console.log("loader", url);
+
+            fbxLoader.setPath(url);
 
             fbxLoader.load("swimmer-3.fbx", (result) => {
                 try {
