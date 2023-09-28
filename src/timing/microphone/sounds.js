@@ -1,5 +1,6 @@
 class Beep {
-    audio = new Audio("/start.mp3"); // path to file
+    url = import.meta.env.BASE_URL + 'start.mp3';
+    audio = new Audio(url); // path to file
 
     play() {
         return this.audio.play();

@@ -5,7 +5,7 @@ class BlockModel {
         return new Promise((resolve, reject) => {
             const mtlLoader = new ColladaLoader(manager);
             const url = import.meta.env.BASE_URL + 'models/block/';
-            console.log("loader", url);
+            
             mtlLoader.setPath(url);
 
             mtlLoader.load("model.dae", (result) => {

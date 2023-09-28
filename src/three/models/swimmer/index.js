@@ -5,7 +5,6 @@ class SwimmerModel {
         return new Promise((resolve, reject) => {
             const fbxLoader = new FBXLoader(manager);
             const url = import.meta.env.BASE_URL + 'models/swimmer/';
-            console.log("loader", url);
 
             fbxLoader.setPath(url);
 
