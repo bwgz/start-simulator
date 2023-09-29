@@ -1,7 +1,7 @@
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader";
 
 class BlockModel {
-    static generate(manager, lanes = 1) {
+    static generate(manager) {
         return new Promise((resolve, reject) => {
             const mtlLoader = new ColladaLoader(manager);
             const url = import.meta.env.BASE_URL + "models/block/";
@@ -12,6 +12,7 @@ class BlockModel {
                 try {
                     const block = result.scene.children[0];
                     block.rotateZ(Math.PI / 2);
+                    block.scale.set(4, 4, 4);
 
                     resolve(block);
                 } catch (e) {

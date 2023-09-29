@@ -13,7 +13,7 @@ class SwimmerModel {
                     const swimmer = result;
                     swimmer.rotateZ(Math.PI / 2);
                     swimmer.rotateX(Math.PI / 2);
-                    swimmer.scale.set(0.3, 0.3, 0.3);
+                    //swimmer.scale.set(0.3, 0.3, 0.3);
 
                     resolve(swimmer); 
                 } catch (e) {

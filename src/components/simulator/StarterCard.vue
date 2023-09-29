@@ -4,6 +4,8 @@ import { Microphone } from "../../timing";
 import { StartEvent, controls } from "./controls.js";
 import { stats } from "./stats.js";
 
+const debug = ref(true);
+
 const isHotMic = ref(false);
 
 const microphone = new Microphone();
@@ -58,6 +60,27 @@ function toggleMic() {
                         v-model="isHotMic"
                         @click="toggleMic()"
                     />
+                </div>
+                <div v-if="debug">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    :class="{ disabled: !isHotMic }"
+                    @click="controls.setEvent(StartEvent.TAKE_YOUR_MARKS)"
+                    @keyup.esc="start"
+                >
+                    <span>TYM</span>
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    :class="{ disabled: !isHotMic }"
+                    @click="controls.setEvent(StartEvent.STAND)"
+                    @keyup.esc="start"
+                >
+                    <span>STAND</span>
+                </button>
+
                 </div>
 
                 <button

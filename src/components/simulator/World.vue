@@ -3,8 +3,23 @@ import { defineProps, onMounted, ref, watch } from "vue";
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { BlockModel, SwimmerModel } from "../../three";
+import { BlockModel, PoolModel, SwimmerModel } from "../../three";
 import { StartEvent, controls } from "./controls.js";
+
+const dimensions = new THREE.Vector3(6936.19580078125, 5293.339039520264, 1078.677250341797);
+const positions = [];
+
+for (let i = 0; i < 8; i++) {
+    const x = dimensions.x / 6;
+    const y = dimensions.y / 4;
+    const z = dimensions.z / 2;
+
+    const position = {
+        deck: new THREE.Vector3(x - 150, (y + 270) + (220 * i), z - 247),
+        block: new THREE.Vector3(x + 40, (y + 270) + (220 * i), z - 182),
+    };
+    positions.push(position);
+}
 
 const ONE_SECOND = 1000;
 const ONE_TENTH_SECOND = ONE_SECOND / 10;
@@ -22,6 +37,7 @@ const progressbar = ref(null);
 const world = ref(null);
 const canvas = ref(null);
 
+let pool = null;
 let blocks = [];
 let swimmers = [];
 const mixers = [];
@@ -30,6 +46,15 @@ const getAnimationClipName = (name) => "Armature|" + name;
 const getAnimationClip = (array, name) => THREE.AnimationClip.findByName(array, getAnimationClipName(name));
 
 const getAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
+
+const waitingAnimationNames = [
+    "next-heat-0",
+    "next-heat-1",
+    "next-heat-2",
+    "next-heat-3",
+    "next-heat-4",
+    "next-heat-5",
+];
 
 watch(controls, (current, last) => {
     let { event: next, previous } = current;
@@ -47,31 +72,38 @@ watch(controls, (current, last) => {
         case StartEvent.SHORT_WHISTLES:
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
+                swimmer.position.set(positions[i].deck.x, positions[i].deck.y, positions[i].deck.z);
+
                 const mixer = mixers[i];
-                swimmer.position.set(-60, -20 + 50 * i, 0);
-                const action = getAction(mixer, swimmer.animations, next);
-                action.timeScale = 0.7 + (Math.random() * 0.3);
+                const action = getAction(
+                    mixer,
+                    swimmer.animations,
+                    waitingAnimationNames[Math.floor(Math.random() * 6)]
+                );
+                action.timeScale = 0.7 + Math.random() * 0.3;
                 action.play();
             }
             break;
         case StartEvent.LONG_WHISTLE:
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
+                swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
+
                 const mixer = mixers[i];
-                swimmer.position.set(-19, 10 + 50 * i, 16);
                 const action = getAction(mixer, swimmer.animations, next);
-                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
             break;
         case StartEvent.TAKE_YOUR_MARKS:
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
+                swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
+
                 const mixer = mixers[i];
-                swimmer.position.set(-19, 10 + 50 * i, 16);
                 const action = getAction(mixer, swimmer.animations, next);
                 action.clampWhenFinished = true;
-                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.timeScale = 0.5 + Math.random() * 0.5;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -82,8 +114,17 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getAction(mixer, swimmer.animations, next);
                 action.clampWhenFinished = true;
-                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.timeScale = 0.5 + Math.random() * 0.5;
                 action.setLoop(THREE.LoopOnce, 1);
+                action.play();
+            }
+            break;
+        case StartEvent.STAND:
+            for (let i = 0; i < swimmers.length; i++) {
+                const swimmer = swimmers[i];
+                const mixer = mixers[i];
+                const action = getAction(mixer, swimmer.animations, next);
+                action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
             break;
@@ -98,14 +139,14 @@ onMounted(() => {
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
         loaded.value = itemsLoaded;
         loading.value = itemsTotal;
-        console.log("Started loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
+        //console.log("Started loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
     };
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
         loaded.value = itemsLoaded;
         loading.value = itemsTotal;
         progressbar.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
-        console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
+        //console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
     };
 
     manager.onLoad = function () {
@@ -130,9 +171,9 @@ onMounted(() => {
 
         const light = new THREE.PointLight(0xffffff, 1000);
         light.position.set(20, 7.5, 50);
-        scene.add(light);
+        //scene.add(light);
 
-        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
 
         const onWindowResize = () => {
             const width = world?.value.clientWidth;
@@ -147,21 +188,31 @@ onMounted(() => {
         };
 
         window.addEventListener("resize", onWindowResize, false);
-        camera.position.set(26, -150, 32);
-        camera.lookAt(0, 0, 32);
-        camera.rotateZ(0.5 * Math.PI);
-        //const controls = new OrbitControls(camera, renderer.domElement);
 
         //scene.add(axesHelper);
+        scene.add(pool);
+
+        console.log("dimensions", dimensions);
+
+        const x = dimensions.x / 6 + 110;
+        const y = dimensions.y / 4 + 225;
+        const z = dimensions.z / 2 - 285;
+        console.log("x", x, "y", y, "z", z);
+
+        // camera.lookAt(44, 3, 622);
+        //camera.rotateZ(0.5 * Math.PI);
+        camera.position.set(x, y, z + 1000);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(x, y, z);
+        controls.update();
 
         for (let i = 0; i < blocks.length; i++) {
-            blocks[i].position.set(0, 0 + 50 * i, -10);
+            blocks[i].position.set(x, y + 220 * i, z);
             scene.add(blocks[i]);
         }
 
         for (let i = 0; i < swimmers.length; i++) {
-            swimmers[i].position.set(-60, -20 + 50 * i, 0);
-
+            swimmers[i].position.set(positions[i].deck.x, positions[i].deck.y, positions[i].deck.z);
             scene.add(swimmers[i]);
         }
 
@@ -176,6 +227,8 @@ onMounted(() => {
             const delta = clock.getDelta();
 
             for (const mixer of mixers) mixer.update(delta);
+
+            controls.update();
             render();
         };
 
@@ -185,12 +238,15 @@ onMounted(() => {
         goLive.value = true;
     };
 
+    PoolModel.generate(manager).then((model) => {
+        pool = model;
+    });
+
     BlockModel.generate(manager).then((model) => {
         blocks = [];
 
         for (let i = 0; i < settings.pool.lanes; i++) {
             const clone = model.clone();
-            clone.position.set(0, 0, -10);
 
             blocks.push(clone);
         }
@@ -199,11 +255,22 @@ onMounted(() => {
     SwimmerModel.generate(manager).then((model) => {
         swimmers = [];
 
+        /*
+        model.animations.forEach((animation) => {
+            console.log(animation.name);
+        });
+
+        const helper = new THREE.SkeletonHelper(model);
+        helper.bones.forEach((bone) => {
+            console.log(bone);
+        });
+        */
+
         for (let i = 0; i < settings.pool.lanes; i++) {
             const clone = SkeletonUtils.clone(model);
             const mixer = new THREE.AnimationMixer(clone);
-            const animationClip = getAnimationClip(clone.animations, StartEvent.NEXT_HEAT);
-            mixer.clipAction(animationClip).play();
+            //const animationClip = getAnimationClip(clone.animations, StartEvent.NEXT_HEAT);
+            //mixer.clipAction(animationClip).play();
 
             swimmers.push(clone);
             mixers.push(mixer);
