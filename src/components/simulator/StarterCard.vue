@@ -20,7 +20,7 @@ microphone.onEvent((event) => {
             }
             break;
         case "speech":
-            if (value.startsWith("stand")) {
+            if (value.includes("stand")) {
                 controls.setEvent(StartEvent.STAND);
                 stats.clear();
             } else if (value.includes("take")) {
@@ -48,14 +48,11 @@ function toggleMic() {
 <template>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-header bg-white">Starter</h5>
+            <h5 class="card-header bg-white"><span>Starter</span><img v-if="isHotMic" height="18" src="../../assets/hotmic.png" /></h5>
             <div id="start-steps" class="p-2" role="group">
                 <div class="form-check form-switch" v-on:click.right.prevent="microphone.startPress">
                     <label class="form-check-label" for="microphone">
-                        <div class="d-flex flex-row">
-                            <img v-if="isHotMic" height="24" src="../../assets/hotmic.png" />
                             <span>Microphone</span>
-                        </div>
                     </label>
                     <input
                         id="microphone"
@@ -68,7 +65,7 @@ function toggleMic() {
 
                 <button
                     type="button"
-                    class="btn btn-light"
+                    class="btn btn-danger"
                     :class="{ disabled: !isHotMic }"
                     @click="microphone.startPress()"
                     @keyup.esc="start"

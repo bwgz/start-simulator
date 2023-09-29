@@ -1,12 +1,14 @@
 <script setup>
 import { defineProps, onMounted, ref, watch } from "vue";
 import * as THREE from "three";
+import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { BlockModel, SwimmerModel } from "../../three";
 import { StartEvent, controls } from "./controls.js";
 
-const props = defineProps(["play"]);
-console.log("props", props);
+const props = defineProps(["settings"]);
+const { settings } = props;
+console.log("settings", settings);
 
 const loading = ref(0);
 const loaded = ref(0);
@@ -16,13 +18,12 @@ const progressbar = ref(null);
 const world = ref(null);
 const canvas = ref(null);
 
-let block = null;
-let swimmer = null;
+let blocks = [];
+let swimmers = [];
 
 let mixer = null;
 let action = null;
 let actions = [];
-let animations = [];
 
 const getAction = (name) => {
     const index = "Armature|" + name;
@@ -43,7 +44,7 @@ watch(controls, async (current, last) => {
     console.log("event", event);
     switch (event) {
         case StartEvent.NEXT_HEAT:
-            swimmer.position.set(-50, -30, 0);
+            swimmers[0].position.set(-50, -30, 0);
             action = getAction(StartEvent.NEXT_HEAT);
             console.log("action", action);
 
@@ -53,7 +54,7 @@ watch(controls, async (current, last) => {
             action.play();
             break;
         case StartEvent.SHORT_WHISTLES:
-            swimmer.position.set(-50, -30, 0);
+            swimmers[0].position.set(-50, -30, 0);
             action = getAction(StartEvent.NEXT_HEAT);
             console.log("action", action);
 
@@ -64,7 +65,7 @@ watch(controls, async (current, last) => {
             break;
         case StartEvent.LONG_WHISTLE:
         case StartEvent.STAND:
-            swimmer.position.set(-19, 10, 16);
+            swimmers[0].position.set(-19, 10, 16);
             action = getAction(StartEvent.LONG_WHISTLE);
             console.log("action", action);
 
@@ -73,7 +74,7 @@ watch(controls, async (current, last) => {
             action.play();
             break;
         case StartEvent.TAKE_YOUR_MARKS:
-            swimmer.position.set(-19, 10, 16);
+            swimmers.position.set(-19, 10, 16);
             action = getAction(StartEvent.TAKE_YOUR_MARKS);
             console.log("action", action);
             action.timeScale = 1;
@@ -83,7 +84,7 @@ watch(controls, async (current, last) => {
             action.play();
             break;
         case StartEvent.START:
-            swimmer.position.set(-19, 10, 16);
+            swimmers[0].position.set(-19, 10, 16);
             action = getAction(StartEvent.START);
             console.log("action", action);
             action.timeScale = 1;
@@ -131,6 +132,12 @@ onMounted(() => {
 
         const axesHelper = new THREE.AxesHelper(1000);
         const ambient = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(ambient);
+
+        const light = new THREE.PointLight(0xffffff, 1000);
+        light.position.set(20, 7.5, 50);
+        scene.add(light);
+
         const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
 
         const onWindowResize = () => {
@@ -151,18 +158,22 @@ onMounted(() => {
         camera.rotateZ(0.5 * Math.PI);
         //const controls = new OrbitControls(camera, renderer.domElement);
 
-        scene.add(ambient);
         //scene.add(axesHelper);
-        scene.add(block);
-        scene.add(swimmer);
 
-        const light = new THREE.PointLight(0xffffff, 1000);
-        light.position.set(20, 7.5, 50);
-        scene.add(light);
+        for (let i = 0; i < blocks.length; i++) {
+            blocks[i].position.set(0, 0 + (50 * i), -10);
+            scene.add(blocks[i]);
+        }
 
-        mixer = new THREE.AnimationMixer(swimmer);
+        for (let i = 0; i < swimmers.length; i++) {
+            swimmers[i].position.set(0, 0, -10);
 
-        swimmer.animations.forEach((animation) => {
+            scene.add(swimmers[i]);
+        }
+
+        mixer = new THREE.AnimationMixer(swimmers[0]);
+
+        swimmers[0].animations.forEach((animation) => {
             const action = mixer.clipAction(animation);
             actions[animation.name] = action;
             console.log("action", animation.name, action);
@@ -193,10 +204,24 @@ onMounted(() => {
     };
 
     BlockModel.generate(manager).then((model) => {
-        block = model;
+        blocks = [];
+
+        for (let i = 0; i < settings.pool.lanes; i++) {
+            const clone = model.clone();
+            clone.position.set(0, 0, -10);
+
+            blocks.push(clone);
+        }
     });
+
     SwimmerModel.generate(manager).then((model) => {
-        swimmer = model;
+        swimmers = [];
+
+        for (let i = 0; i < settings.pool.lanes; i++) {
+            const clone = SkeletonUtils.clone(model);
+
+            swimmers.push(clone);
+        }
     });
 });
 </script>
