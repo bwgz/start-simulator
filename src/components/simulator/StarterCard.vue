@@ -9,8 +9,6 @@ const isHotMic = ref(false);
 const microphone = new Microphone();
 microphone.onEvent((event) => {
     const { type, value } = event;
-    console.log("type", type);
-    console.log("value", value);
 
     switch (type) {
         case "isHot":
@@ -31,16 +29,13 @@ microphone.onEvent((event) => {
             break;
         case "start":
             stats.markStart();
+            controls.setEvent(StartEvent.START);
 
-            setTimeout(() => {
-                controls.setEvent(StartEvent.START);
-            }, 700);
             break;
     }
 });
 
 function toggleMic() {
-    console.log("toggleMic", isHotMic.value);
     isHotMic.value ? microphone.keyUp() : microphone.keyDown();
 }
 </script>
@@ -48,11 +43,13 @@ function toggleMic() {
 <template>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-header bg-white"><span>Starter</span><img v-if="isHotMic" height="18" src="../../assets/hotmic.png" /></h5>
+            <h5 class="card-header bg-white">
+                <span>Starter</span><img v-if="isHotMic" height="18" src="../../assets/hotmic.png" />
+            </h5>
             <div id="start-steps" class="p-2" role="group">
                 <div class="form-check form-switch" v-on:click.right.prevent="microphone.startPress">
                     <label class="form-check-label" for="microphone">
-                            <span>Microphone</span>
+                        <span>Microphone</span>
                     </label>
                     <input
                         id="microphone"

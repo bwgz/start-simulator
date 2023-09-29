@@ -6,7 +6,7 @@ class Settings {
     }
 }
 
-const defaultPool = new Pool(1);
+const defaultPool = new Pool(8);
 const defaultSettings = new Settings(defaultPool);
 
 export { Settings, defaultSettings };

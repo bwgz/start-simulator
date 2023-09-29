@@ -10,8 +10,10 @@ const StartEvent = {
 };
 
 const controls = reactive({
-    event: null,
+    event: StartEvent.NEXT_HEAT,
+    previous: null,
     setEvent(value) {
+        this.previous = this.event;
         this.event = value;
     }
 })

@@ -1,10 +1,14 @@
 <script setup>
 import { defineProps, onMounted, ref, watch } from "vue";
 import * as THREE from "three";
-import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { BlockModel, SwimmerModel } from "../../three";
 import { StartEvent, controls } from "./controls.js";
+
+const ONE_SECOND = 1000;
+const ONE_TENTH_SECOND = ONE_SECOND / 10;
+const randomWithin = (miniumn, variance) => miniumn + Math.floor(Math.random() * variance);
 
 const props = defineProps(["settings"]);
 const { settings } = props;
@@ -20,81 +24,71 @@ const canvas = ref(null);
 
 let blocks = [];
 let swimmers = [];
+const mixers = [];
 
-let mixer = null;
-let action = null;
-let actions = [];
+const getAnimationClipName = (name) => "Armature|" + name;
+const getAnimationClip = (array, name) => THREE.AnimationClip.findByName(array, getAnimationClipName(name));
 
-const getAction = (name) => {
-    const index = "Armature|" + name;
-    console.log("index", index);
+const getAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
 
-    return actions[index];
-};
+watch(controls, (current, last) => {
+    let { event: next, previous } = current;
+    if (next === StartEvent.SHORT_WHISTLES) {
+        next = StartEvent.NEXT_HEAT;
+    }
+    console.log("next", next, "previous", previous);
 
-watch(controls, async (current, last) => {
-    const { event } = current;
-    if (action) {
-        action.fadeOut(0.5);
-        action.stop();
-        action.reset();
-        action.clampWhenFinished = false;
+    for (let i = 0; i < swimmers.length; i++) {
+        mixers[i].stopAllAction();
     }
 
-    console.log("event", event);
-    switch (event) {
+    switch (next) {
         case StartEvent.NEXT_HEAT:
-            swimmers[0].position.set(-50, -30, 0);
-            action = getAction(StartEvent.NEXT_HEAT);
-            console.log("action", action);
-
-            action.clampWhenFinished = true;
-            action.setLoop(THREE.LoopOnce, 10);
-            action.reset();
-            action.play();
-            break;
         case StartEvent.SHORT_WHISTLES:
-            swimmers[0].position.set(-50, -30, 0);
-            action = getAction(StartEvent.NEXT_HEAT);
-            console.log("action", action);
-
-            action.clampWhenFinished = true;
-            action.setLoop(THREE.LoopOnce, 10);
-            action.reset();
-            action.play();
+            for (let i = 0; i < swimmers.length; i++) {
+                const swimmer = swimmers[i];
+                const mixer = mixers[i];
+                swimmer.position.set(-60, -20 + 50 * i, 0);
+                const action = getAction(mixer, swimmer.animations, next);
+                action.timeScale = 0.7 + (Math.random() * 0.3);
+                action.play();
+            }
             break;
         case StartEvent.LONG_WHISTLE:
-        case StartEvent.STAND:
-            swimmers[0].position.set(-19, 10, 16);
-            action = getAction(StartEvent.LONG_WHISTLE);
-            console.log("action", action);
-
-            action.clampWhenFinished = false;
-            action.reset();
-            action.play();
+            for (let i = 0; i < swimmers.length; i++) {
+                const swimmer = swimmers[i];
+                const mixer = mixers[i];
+                swimmer.position.set(-19, 10 + 50 * i, 16);
+                const action = getAction(mixer, swimmer.animations, next);
+                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.play();
+            }
             break;
         case StartEvent.TAKE_YOUR_MARKS:
-            swimmers.position.set(-19, 10, 16);
-            action = getAction(StartEvent.TAKE_YOUR_MARKS);
-            console.log("action", action);
-            action.timeScale = 1;
-            action.setLoop(THREE.LoopOnce, 1);
-            action.clampWhenFinished = true;
-            action.reset();
-            action.play();
+            for (let i = 0; i < swimmers.length; i++) {
+                const swimmer = swimmers[i];
+                const mixer = mixers[i];
+                swimmer.position.set(-19, 10 + 50 * i, 16);
+                const action = getAction(mixer, swimmer.animations, next);
+                action.clampWhenFinished = true;
+                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.setLoop(THREE.LoopOnce, 1);
+                action.play();
+            }
             break;
         case StartEvent.START:
-            swimmers[0].position.set(-19, 10, 16);
-            action = getAction(StartEvent.START);
-            console.log("action", action);
-            action.timeScale = 1;
-            action.setLoop(THREE.LoopOnce, 1);
-            action.clampWhenFinished = true;
-            action.reset();
-            action.play();
+            for (let i = 0; i < swimmers.length; i++) {
+                const swimmer = swimmers[i];
+                const mixer = mixers[i];
+                const action = getAction(mixer, swimmer.animations, next);
+                action.clampWhenFinished = true;
+                action.timeScale = 0.5 + (Math.random() * 0.5);
+                action.setLoop(THREE.LoopOnce, 1);
+                action.play();
+            }
             break;
         default:
-            console.error("Unknown event", event);
+            console.error("Unknown event", next);
             break;
     }
 });
@@ -161,26 +155,15 @@ onMounted(() => {
         //scene.add(axesHelper);
 
         for (let i = 0; i < blocks.length; i++) {
-            blocks[i].position.set(0, 0 + (50 * i), -10);
+            blocks[i].position.set(0, 0 + 50 * i, -10);
             scene.add(blocks[i]);
         }
 
         for (let i = 0; i < swimmers.length; i++) {
-            swimmers[i].position.set(0, 0, -10);
+            swimmers[i].position.set(-60, -20 + 50 * i, 0);
 
             scene.add(swimmers[i]);
         }
-
-        mixer = new THREE.AnimationMixer(swimmers[0]);
-
-        swimmers[0].animations.forEach((animation) => {
-            const action = mixer.clipAction(animation);
-            actions[animation.name] = action;
-            console.log("action", animation.name, action);
-        });
-
-        controls.setEvent(StartEvent.NEXT_HEAT);
-        console.log("actions", actions);
 
         const render = () => {
             renderer.render(scene, camera);
@@ -190,16 +173,15 @@ onMounted(() => {
 
         const animate = () => {
             requestAnimationFrame(animate);
-            //controls.update();
+            const delta = clock.getDelta();
 
-            if (mixer) {
-                mixer.update(clock.getDelta());
-            }
+            for (const mixer of mixers) mixer.update(delta);
             render();
         };
 
         animate();
 
+        controls.setEvent(StartEvent.NEXT_HEAT);
         goLive.value = true;
     };
 
@@ -219,8 +201,12 @@ onMounted(() => {
 
         for (let i = 0; i < settings.pool.lanes; i++) {
             const clone = SkeletonUtils.clone(model);
+            const mixer = new THREE.AnimationMixer(clone);
+            const animationClip = getAnimationClip(clone.animations, StartEvent.NEXT_HEAT);
+            mixer.clipAction(animationClip).play();
 
             swimmers.push(clone);
+            mixers.push(mixer);
         }
     });
 });
