@@ -4,11 +4,7 @@ import { Microphone } from "../../timing";
 import { StartEvent, controls } from "./controls.js";
 import { stats } from "./stats.js";
 
-const isMicHot = ref(false);
-
-function whistle() {
-    controls.setEvent(StartEvent.LONG_WHISTLE);
-}
+const isHotMic = ref(false);
 
 const microphone = new Microphone();
 microphone.onEvent((event) => {
@@ -18,7 +14,7 @@ microphone.onEvent((event) => {
 
     switch (type) {
         case "isHot":
-            isMicHot.value = value;
+            isHotMic.value = value;
             if (value) {
                 stats.clear();
             }
@@ -44,54 +40,28 @@ microphone.onEvent((event) => {
 });
 
 function toggleMic() {
-    console.log("toggleMic", isMicHot.value);
-    isMicHot.value ? microphone.keyUp() : microphone.keyDown();
+    console.log("toggleMic", isHotMic.value);
+    isHotMic.value ? microphone.keyUp() : microphone.keyDown();
 }
 </script>
 
 <template>
-    <div class="card" style="width: 100%">
-        <div class="card-body">
-            <h5 class="card-header bg-white">Referee</h5>
-            <div id="referee-steps" class="btn-group-vertical p-2" role="group">
-                <button
-                    type="button"
-                    class="btn btn-light"
-                    :class="{ active: controls.event === StartEvent.NEXT_HEAT }"
-                    @click="controls.setEvent(StartEvent.NEXT_HEAT)"
-                >
-                    Next Heat
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-light"
-                    :class="{ active: controls.event === StartEvent.SHORT_WHISTLES }"
-                    @click="controls.setEvent(StartEvent.SHORT_WHISTLES)"
-                >
-                    Short Whistles
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-light"
-                    :class="{ active: controls.event === StartEvent.LONG_WHISTLE }"
-                    @click="whistle()"
-                >
-                    Long Whistle
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="card" style="width: 100%">
+    <div class="card">
         <div class="card-body">
             <h5 class="card-header bg-white">Starter</h5>
             <div id="start-steps" class="p-2" role="group">
                 <div class="form-check form-switch" v-on:click.right.prevent="microphone.startPress">
-                    <label class="form-check-label" for="microphone">Microphone</label>
+                    <label class="form-check-label" for="microphone">
+                        <div class="d-flex flex-row">
+                            <img v-if="isHotMic" height="24" src="../../assets/hotmic.png" />
+                            <span>Microphone</span>
+                        </div>
+                    </label>
                     <input
                         id="microphone"
                         class="form-check-input"
                         type="checkbox"
-                        v-model="isMicHot"
+                        v-model="isHotMic"
                         @click="toggleMic()"
                     />
                 </div>
@@ -99,7 +69,7 @@ function toggleMic() {
                 <button
                     type="button"
                     class="btn btn-light"
-                    :class="{ disabled: !isMicHot }"
+                    :class="{ disabled: !isHotMic }"
                     @click="microphone.startPress()"
                     @keyup.esc="start"
                     tabindex="0"

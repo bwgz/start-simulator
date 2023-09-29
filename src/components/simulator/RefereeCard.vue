@@ -1,0 +1,66 @@
+<script setup>
+import { ref } from "vue";
+import { StartEvent, controls } from "./controls.js";
+
+const message = ref("");
+
+const nextHeat = () => {
+    controls.setEvent(StartEvent.NEXT_HEAT);
+    message.value = "Next Heat";
+};
+
+const shortWhistles = () => {
+    controls.setEvent(StartEvent.SHORT_WHISTLES);
+    message.value = "beep, beep, beep, beep, beep";
+
+};
+
+const longWhistle = () => {
+    controls.setEvent(StartEvent.LONG_WHISTLE);
+    message.value = "beeeeeep";
+
+};
+</script>
+
+<template>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-header bg-white">Referee</h5>
+            <div class="row">
+                <div class="col">
+                    <div id="referee-steps" class="btn-group-vertical p-2" role="group">
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            :class="{ active: controls.event === StartEvent.NEXT_HEAT }"
+                            @click="nextHeat()"
+                        >
+                            Next Heat
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            :class="{ active: controls.event === StartEvent.SHORT_WHISTLES }"
+                            @click="shortWhistles()"
+                        >
+                            Short Whistles
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            :class="{ active: controls.event === StartEvent.LONG_WHISTLE }"
+                            @click="longWhistle()"
+                        >
+                            Long Whistle
+                        </button>
+                    </div>
+                </div>
+                <div class="col my-auto">
+                    <div class="p-2">
+                        <p v-if="message" class="bg-light">&quot{{ message }}&quot</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

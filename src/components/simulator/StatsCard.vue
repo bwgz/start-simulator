@@ -20,7 +20,7 @@ const isCorrectCommand = () => {
 </script>
 
 <template>
-    <div class="card" style="width: 100%">
+    <div class="card">
         <div class="card-body">
             <h5 class="card-header bg-white">Stats</h5>
             <div class="p-2">
