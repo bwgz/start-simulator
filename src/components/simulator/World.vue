@@ -3,7 +3,7 @@ import { defineProps, onMounted, ref, watch } from "vue";
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { BlockModel, PoolModel, SwimmerModel } from "../../three";
+import { BlockModel, ChairModel, PoolModel, SwimmerModel } from "../../three";
 import { StartEvent, controls } from "./controls.js";
 
 const dimensions = new THREE.Vector3(6936.19580078125, 5293.339039520264, 1078.677250341797);
@@ -39,6 +39,7 @@ const canvas = ref(null);
 
 let pool = null;
 let blocks = [];
+let chairs = [];
 let swimmers = [];
 const mixers = [];
 
@@ -216,6 +217,9 @@ onMounted(() => {
         for (let i = 0; i < blocks.length; i++) {
             blocks[i].position.set(x, y + 220 * i, z);
             scene.add(blocks[i]);
+            chairs[i].position.set(x - 450, y + 220 * i, z + 40);
+            scene.add(chairs[i]);
+
         }
 
         for (let i = 0; i < swimmers.length; i++) {
@@ -264,6 +268,17 @@ onMounted(() => {
             blocks.push(clone);
         }
     });
+
+    ChairModel.generate(manager).then((model) => {
+        chairs = [];
+
+        for (let i = 0; i < settings.pool.lanes; i++) {
+            const clone = model.clone();
+
+            chairs.push(clone);
+        }
+    });
+
 
     SwimmerModel.generate(manager).then((model) => {
         swimmers = [];
