@@ -15,8 +15,8 @@ for (let i = 0; i < 8; i++) {
     const z = dimensions.z / 2;
 
     const position = {
-        deck: new THREE.Vector3(x - 150, (y + 270) + (220 * i), z - 247),
-        block: new THREE.Vector3(x + 40, (y + 270) + (220 * i), z - 182),
+        deck: new THREE.Vector3(x - 150, y + 270 + 220 * i, z - 247),
+        block: new THREE.Vector3(x + 40, y + 270 + 220 * i, z - 182),
     };
     positions.push(position);
 }
@@ -50,11 +50,25 @@ const getAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip
 const waitingAnimationNames = [
     "next-heat-0",
     "next-heat-1",
+    "next-heat-1",
     "next-heat-2",
     "next-heat-3",
     "next-heat-4",
     "next-heat-5",
 ];
+
+const longWhistleAnimationNames = [
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-0",
+    "long-whistle-1",
+];
+
 
 watch(controls, (current, last) => {
     let { event: next, previous } = current;
@@ -78,7 +92,7 @@ watch(controls, (current, last) => {
                 const action = getAction(
                     mixer,
                     swimmer.animations,
-                    waitingAnimationNames[Math.floor(Math.random() * 6)]
+                    waitingAnimationNames[Math.floor(Math.random() * waitingAnimationNames.length)]
                 );
                 action.timeScale = 0.7 + Math.random() * 0.3;
                 action.play();
@@ -90,7 +104,11 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
 
                 const mixer = mixers[i];
-                const action = getAction(mixer, swimmer.animations, next);
+                const action = getAction(
+                    mixer,
+                    swimmer.animations,
+                    longWhistleAnimationNames[Math.floor(Math.random() * longWhistleAnimationNames.length)]
+                );
                 action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
@@ -114,7 +132,7 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getAction(mixer, swimmer.animations, next);
                 action.clampWhenFinished = true;
-                action.timeScale = 0.5 + Math.random() * 0.5;
+                action.timeScale = 0.75 + Math.random() * 0.25;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -211,7 +229,6 @@ onMounted(() => {
         //const controls = new OrbitControls(camera, renderer.domElement);
         //controls.target.set(1266.0326334635417, 2428.334759880066, 254.33862517089847);
         //controls.update();
-
 
         const render = () => {
             renderer.render(scene, camera);
