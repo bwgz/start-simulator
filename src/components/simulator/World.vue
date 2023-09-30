@@ -169,10 +169,6 @@ onMounted(() => {
         const ambient = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambient);
 
-        const light = new THREE.PointLight(0xffffff, 1000);
-        light.position.set(20, 7.5, 50);
-        //scene.add(light);
-
         const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
 
         const onWindowResize = () => {
@@ -199,13 +195,6 @@ onMounted(() => {
         const z = dimensions.z / 2 - 285;
         console.log("x", x, "y", y, "z", z);
 
-        // camera.lookAt(44, 3, 622);
-        //camera.rotateZ(0.5 * Math.PI);
-        camera.position.set(x, y, z + 1000);
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.target.set(x, y, z);
-        controls.update();
-
         for (let i = 0; i < blocks.length; i++) {
             blocks[i].position.set(x, y + 220 * i, z);
             scene.add(blocks[i]);
@@ -215,6 +204,14 @@ onMounted(() => {
             swimmers[i].position.set(positions[i].deck.x, positions[i].deck.y, positions[i].deck.z);
             scene.add(swimmers[i]);
         }
+
+        camera.position.set(1475, 1100, 500);
+        camera.lookAt(blocks[2].position.x - 100, blocks[2].position.y, blocks[2].position.z);
+        camera.rotateZ(Math.PI * 0.29);
+        //const controls = new OrbitControls(camera, renderer.domElement);
+        //controls.target.set(1266.0326334635417, 2428.334759880066, 254.33862517089847);
+        //controls.update();
+
 
         const render = () => {
             renderer.render(scene, camera);
@@ -228,13 +225,12 @@ onMounted(() => {
 
             for (const mixer of mixers) mixer.update(delta);
 
-            controls.update();
+            //controls.update();
             render();
         };
 
         animate();
 
-        controls.setEvent(StartEvent.NEXT_HEAT);
         goLive.value = true;
     };
 
