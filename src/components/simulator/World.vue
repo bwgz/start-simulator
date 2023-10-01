@@ -48,7 +48,7 @@ const getAnimationClipName = (name) => "Armature|" + name;
 const getAnimationClip = (array, name) => THREE.AnimationClip.findByName(array, getAnimationClipName(name));
 const getClipAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
 
-const waitingAnimationNames = ["bashful", "bored", "idle", "standing-greeting", "standing-idle"  ];
+const waitingAnimationNames = ["bashful", "bored", "idle", "standing-greeting", "standing-idle"];
 const longWhistleAnimationNames = ["bashful", "idle", "standing-idle"];
 const shortWhistlesAnimationNames = ["idle-01"];
 const takeYourMarkAnimationNames = ["take-your-mark"];
@@ -59,7 +59,7 @@ const getRandomAnimationName = (names) => {
     const name = names[Math.floor(Math.random() * names.length)];
     console.log("name", name);
     return name;
-}
+};
 
 watch(controls, (current, last) => {
     let { event: next, previous } = current;
@@ -90,10 +90,14 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
 
                 const mixer = mixers[i];
-                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(longWhistleAnimationNames));
+                const action = getClipAction(
+                    mixer,
+                    swimmer.animations,
+                    getRandomAnimationName(longWhistleAnimationNames)
+                );
                 action.clampWhenFinished = true;
                 action.timeScale = 0.5 + Math.random() * 0.5;
-                action.setEffectiveTimeScale()
+                action.setEffectiveTimeScale();
                 action.play();
             }
             break;
@@ -103,9 +107,13 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
 
                 const mixer = mixers[i];
-                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(takeYourMarkAnimationNames));
+                const action = getClipAction(
+                    mixer,
+                    swimmer.animations,
+                    getRandomAnimationName(takeYourMarkAnimationNames)
+                );
                 action.clampWhenFinished = true;
-                action.timeScale = 0.5 + Math.random() * 0.5;
+                action.timeScale = 0.75 + Math.random() * 0.25;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -116,7 +124,7 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(startAnimationNames));
                 action.clampWhenFinished = true;
-                action.timeScale = 0.80 + Math.random() * 0.2;
+                action.timeScale = 0.8 + Math.random() * 0.2;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -137,7 +145,7 @@ watch(controls, (current, last) => {
 });
 
 onMounted(() => {
-   const { pressed } = useMousePressed();
+    const { pressed } = useMousePressed();
     const { x: canvasX } = useMouse({ target: canvas.value });
 
     const manager = new THREE.LoadingManager();
@@ -156,6 +164,17 @@ onMounted(() => {
 
     manager.onLoad = function () {
         console.log("Loading complete!");
+
+        watch(settings, (current, last) => {
+            console.log("settings changed", current);
+            for (let i = 0; i < swimmers.length; i++) {
+                if (i >= settings.simulation.numberOfSwimmers) {
+                    swimmers[i].visible = false;
+                } else {
+                    swimmers[i].visible = true;
+                }
+            }
+        });
 
         const width = world.value.clientWidth;
         const height = world.value.clientHeight;
@@ -178,8 +197,8 @@ onMounted(() => {
         camera.up.set(0, 0, 1);
 
         const onWindowResize = () => {
-            const width = world?.value.clientWidth;
-            const height = world?.value.clientHeight;
+            const width = world?.value?.clientWidth;
+            const height = world?.value?.clientHeight;
 
             if (width && height) {
                 camera.aspect = width / height;
@@ -226,7 +245,7 @@ onMounted(() => {
             }
         });
         /*
-        */
+         */
 
         //const controls = new OrbitControls(camera, renderer.domElement);
         //controls.update();
@@ -280,11 +299,11 @@ onMounted(() => {
     SwimmerModel.generate(manager).then((model) => {
         swimmers = [];
 
+        /*
         model.animations.forEach((animation) => {
             console.log(animation.name);
         });
 
-        /*
         const helper = new THREE.SkeletonHelper(model);
         helper.bones.forEach((bone) => {
             console.log(bone);

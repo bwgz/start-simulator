@@ -1,5 +1,4 @@
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
-import { dumpGeometry } from "../../utils";
 
 class ChairModel {
     static generate(manager) {

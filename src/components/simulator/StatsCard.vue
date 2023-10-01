@@ -22,7 +22,7 @@ const isCorrectCommand = () => {
 <template>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-header bg-white">Stats</h5>
+            <h6 class="card-header bg-white">Stats</h6>
             <div class="p-2">
                 <p>
                     Command: <span :class="{ command_error: !isCorrectCommand() }">{{ displayCommand() }}</span>
