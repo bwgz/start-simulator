@@ -5,7 +5,8 @@ import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { BlockModel, ChairModel, PoolModel, SwimmerModel } from "../../three";
-import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD } from "../../simulator/settings";
+import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, useSettingsStore } from "../../simulator/settings";
+
 import { StartEvent, controls } from "./controls.js";
 
 const dimensions = new THREE.Vector3(6936.19580078125, 5293.339039520264, 1078.677250341797);
@@ -27,8 +28,7 @@ const ONE_SECOND = 1000;
 const ONE_TENTH_SECOND = ONE_SECOND / 10;
 const randomWithin = (miniumn, variance) => miniumn + Math.floor(Math.random() * variance);
 
-const props = defineProps(["settings"]);
-const { settings } = props;
+const settings = useSettingsStore();
 
 const loading = ref(0);
 const loaded = ref(0);

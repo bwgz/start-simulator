@@ -1,7 +1,9 @@
 <script setup>
+import { useSettingsStore } from "../../simulator/settings";
+
 const qualityValues = ["Poor", "Good", "Excellent"];
-const props = defineProps(["settings"]);
-const { settings } = props;
+const settings = useSettingsStore()
+
 </script>
 
 <template>

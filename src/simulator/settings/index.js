@@ -1,4 +1,4 @@
-import { Pool } from './pool';
-import { Simulation, SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, Settings, defaultSettings } from './settings';
+import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, defaultSettings } from './settings';
+import { useSettingsStore } from './store';
 
-export { Pool, Simulation, SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, Settings, defaultSettings };
+export { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, defaultSettings, useSettingsStore };
