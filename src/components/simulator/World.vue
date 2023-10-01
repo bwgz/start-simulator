@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
-//import { useMouse, useMousePressed } from "@vueuse/core";
+import { useMouse, useMousePressed } from "@vueuse/core";
 
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
@@ -49,11 +49,11 @@ const getAnimationClip = (array, name) => THREE.AnimationClip.findByName(array, 
 const getClipAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
 
 const waitingAnimationNames = ["bashful", "bored", "idle", "standing-greeting", "standing-idle"  ];
-const longWhistleAnimationNames = ["bashful", "idle", "standing-idle", "weight-shifting"];
+const longWhistleAnimationNames = ["bashful", "idle", "standing-idle"];
 const shortWhistlesAnimationNames = ["idle-01"];
-const takeYourMarkAnimationNames = ["idle-01"];
-const standAnimationNames = ["idle-01"];
-const startAnimationNames = ["idle-01"];
+const takeYourMarkAnimationNames = ["take-your-mark"];
+const standAnimationNames = ["stand"];
+const startAnimationNames = ["start:2"];
 
 const getRandomAnimationName = (names) => {
     const name = names[Math.floor(Math.random() * names.length)];
@@ -91,6 +91,7 @@ watch(controls, (current, last) => {
 
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(longWhistleAnimationNames));
+                action.clampWhenFinished = true;
                 action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
@@ -135,8 +136,8 @@ watch(controls, (current, last) => {
 });
 
 onMounted(() => {
-   //const { pressed } = useMousePressed();
-    //const { x: canvasX } = useMouse({ target: canvas.value });
+   const { pressed } = useMousePressed();
+    const { x: canvasX } = useMouse({ target: canvas.value });
 
     const manager = new THREE.LoadingManager();
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
@@ -216,7 +217,6 @@ onMounted(() => {
         const lookAt = new THREE.Vector3(blocks[2].position.x - 100, blocks[2].position.y, blocks[2].position.z);
         camera.lookAt(lookAt);
 
-        /*
         watch(canvasX, (current, last) => {
             if (pressed.value && current) {
                 const delta = current - last;
@@ -224,6 +224,7 @@ onMounted(() => {
                 camera.lookAt(lookAt);
             }
         });
+        /*
         */
 
         //const controls = new OrbitControls(camera, renderer.domElement);
