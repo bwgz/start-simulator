@@ -1,4 +1,3 @@
-import { reactive } from "vue";
 import { defineStore } from "pinia";
 import { defaultSettings } from "./settings";
 
@@ -23,4 +22,5 @@ const useSettingsStore = defineStore("settings", {
     },
 });
 
+  
 export { useSettingsStore };
