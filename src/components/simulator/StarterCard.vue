@@ -45,9 +45,9 @@ function toggleMic() {
 <template>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-header bg-white">
+            <h6 class="card-header bg-white">
                 <span>Starter</span><img v-if="isHotMic" height="18" src="../../assets/hotmic.png" />
-            </h5>
+            </h6>
             <small class="pt-2">Switch on the microphone on to perform a start. You can either say "take your mark" and "stand" or use the buttons.</small>
             <div id="start-steps" class="p-2" role="group">
                 <div class="form-check form-switch" v-on:click.right.prevent="microphone.startPress">
