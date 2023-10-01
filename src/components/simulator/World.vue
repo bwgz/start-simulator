@@ -1,5 +1,7 @@
 <script setup>
-import { defineProps, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
+//import { useMouse, useMousePressed } from "@vueuse/core";
+
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -27,7 +29,6 @@ const randomWithin = (miniumn, variance) => miniumn + Math.floor(Math.random() *
 
 const props = defineProps(["settings"]);
 const { settings } = props;
-console.log("settings", settings);
 
 const loading = ref(0);
 const loaded = ref(0);
@@ -45,38 +46,26 @@ const mixers = [];
 
 const getAnimationClipName = (name) => "Armature|" + name;
 const getAnimationClip = (array, name) => THREE.AnimationClip.findByName(array, getAnimationClipName(name));
+const getClipAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
 
-const getAction = (mixer, animations, name) => mixer.clipAction(getAnimationClip(animations, name));
+const waitingAnimationNames = ["bashful", "bored", "idle", "standing-greeting", "standing-idle"  ];
+const longWhistleAnimationNames = ["bashful", "idle", "standing-idle", "weight-shifting"];
+const shortWhistlesAnimationNames = ["idle-01"];
+const takeYourMarkAnimationNames = ["idle-01"];
+const standAnimationNames = ["idle-01"];
+const startAnimationNames = ["idle-01"];
 
-const waitingAnimationNames = [
-    "next-heat-0",
-    "next-heat-1",
-    "next-heat-1",
-    "next-heat-2",
-    "next-heat-3",
-    "next-heat-4",
-    "next-heat-5",
-];
-
-const longWhistleAnimationNames = [
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-0",
-    "long-whistle-1",
-];
-
+const getRandomAnimationName = (names) => {
+    const name = names[Math.floor(Math.random() * names.length)];
+    console.log("name", name);
+    return name;
+}
 
 watch(controls, (current, last) => {
     let { event: next, previous } = current;
     if (next === StartEvent.SHORT_WHISTLES) {
         next = StartEvent.NEXT_HEAT;
     }
-    console.log("next", next, "previous", previous);
 
     for (let i = 0; i < swimmers.length; i++) {
         mixers[i].stopAllAction();
@@ -90,11 +79,7 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].deck.x, positions[i].deck.y, positions[i].deck.z);
 
                 const mixer = mixers[i];
-                const action = getAction(
-                    mixer,
-                    swimmer.animations,
-                    waitingAnimationNames[Math.floor(Math.random() * waitingAnimationNames.length)]
-                );
+                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(waitingAnimationNames));
                 action.timeScale = 0.7 + Math.random() * 0.3;
                 action.play();
             }
@@ -105,11 +90,7 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
 
                 const mixer = mixers[i];
-                const action = getAction(
-                    mixer,
-                    swimmer.animations,
-                    longWhistleAnimationNames[Math.floor(Math.random() * longWhistleAnimationNames.length)]
-                );
+                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(longWhistleAnimationNames));
                 action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
@@ -120,7 +101,7 @@ watch(controls, (current, last) => {
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
 
                 const mixer = mixers[i];
-                const action = getAction(mixer, swimmer.animations, next);
+                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(takeYourMarkAnimationNames));
                 action.clampWhenFinished = true;
                 action.timeScale = 0.5 + Math.random() * 0.5;
                 action.setLoop(THREE.LoopOnce, 1);
@@ -131,7 +112,7 @@ watch(controls, (current, last) => {
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
                 const mixer = mixers[i];
-                const action = getAction(mixer, swimmer.animations, next);
+                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(startAnimationNames));
                 action.clampWhenFinished = true;
                 action.timeScale = 0.75 + Math.random() * 0.25;
                 action.setLoop(THREE.LoopOnce, 1);
@@ -142,7 +123,7 @@ watch(controls, (current, last) => {
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
                 const mixer = mixers[i];
-                const action = getAction(mixer, swimmer.animations, next);
+                const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(standAnimationNames));
                 action.timeScale = 0.5 + Math.random() * 0.5;
                 action.play();
             }
@@ -154,6 +135,9 @@ watch(controls, (current, last) => {
 });
 
 onMounted(() => {
+   //const { pressed } = useMousePressed();
+    //const { x: canvasX } = useMouse({ target: canvas.value });
+
     const manager = new THREE.LoadingManager();
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
         loaded.value = itemsLoaded;
@@ -188,7 +172,8 @@ onMounted(() => {
         const ambient = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambient);
 
-        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 8000);
+        camera.up.set(0, 0, 1);
 
         const onWindowResize = () => {
             const width = world?.value.clientWidth;
@@ -207,8 +192,6 @@ onMounted(() => {
         //scene.add(axesHelper);
         scene.add(pool);
 
-        console.log("dimensions", dimensions);
-
         const x = dimensions.x / 6 + 110;
         const y = dimensions.y / 4 + 225;
         const z = dimensions.z / 2 - 285;
@@ -219,7 +202,6 @@ onMounted(() => {
             scene.add(blocks[i]);
             chairs[i].position.set(x - 450, y + 220 * i, z + 40);
             scene.add(chairs[i]);
-
         }
 
         for (let i = 0; i < swimmers.length; i++) {
@@ -227,11 +209,24 @@ onMounted(() => {
             scene.add(swimmers[i]);
         }
 
-        camera.position.set(1475, 1100, 500);
-        camera.lookAt(blocks[2].position.x - 100, blocks[2].position.y, blocks[2].position.z);
-        camera.rotateZ(Math.PI * 0.29);
+        const rtol = new THREE.Vector3(1475, 1100, 475);
+        const ltor = new THREE.Vector3(1475, 3800, 460);
+        const startPosition = rtol;
+        camera.position.set(startPosition.x, startPosition.y, startPosition.z);
+        const lookAt = new THREE.Vector3(blocks[2].position.x - 100, blocks[2].position.y, blocks[2].position.z);
+        camera.lookAt(lookAt);
+
+        /*
+        watch(canvasX, (current, last) => {
+            if (pressed.value && current) {
+                const delta = current - last;
+                lookAt.x += delta;
+                camera.lookAt(lookAt);
+            }
+        });
+        */
+
         //const controls = new OrbitControls(camera, renderer.domElement);
-        //controls.target.set(1266.0326334635417, 2428.334759880066, 254.33862517089847);
         //controls.update();
 
         const render = () => {
@@ -246,6 +241,7 @@ onMounted(() => {
 
             for (const mixer of mixers) mixer.update(delta);
 
+            camera.updateProjectionMatrix();
             //controls.update();
             render();
         };
@@ -279,15 +275,14 @@ onMounted(() => {
         }
     });
 
-
     SwimmerModel.generate(manager).then((model) => {
         swimmers = [];
 
-        /*
         model.animations.forEach((animation) => {
             console.log(animation.name);
         });
 
+        /*
         const helper = new THREE.SkeletonHelper(model);
         helper.bones.forEach((bone) => {
             console.log(bone);

@@ -8,7 +8,7 @@ class SwimmerModel {
 
             fbxLoader.setPath(url);
 
-            fbxLoader.load("swimmer-3.fbx", (result) => {
+            fbxLoader.load("swimmer-01.fbx", (result) => {
                 try {
                     const swimmer = result;
                     swimmer.rotateZ(Math.PI / 2);
