@@ -93,6 +93,7 @@ watch(controls, (current, last) => {
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(longWhistleAnimationNames));
                 action.clampWhenFinished = true;
                 action.timeScale = 0.5 + Math.random() * 0.5;
+                action.setEffectiveTimeScale()
                 action.play();
             }
             break;
@@ -115,7 +116,7 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(startAnimationNames));
                 action.clampWhenFinished = true;
-                action.timeScale = 0.75 + Math.random() * 0.25;
+                action.timeScale = 0.90 + Math.random() * 0.1;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
