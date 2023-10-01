@@ -116,7 +116,7 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(startAnimationNames));
                 action.clampWhenFinished = true;
-                action.timeScale = 0.90 + Math.random() * 0.1;
+                action.timeScale = 0.80 + Math.random() * 0.2;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
