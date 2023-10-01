@@ -48,6 +48,7 @@ function toggleMic() {
             <h5 class="card-header bg-white">
                 <span>Starter</span><img v-if="isHotMic" height="18" src="../../assets/hotmic.png" />
             </h5>
+            <small class="pt-2">Switch on the microphone on to perform a start. You can either say "take your mark" and "stand" or use the buttons.</small>
             <div id="start-steps" class="p-2" role="group">
                 <div class="form-check form-switch" v-on:click.right.prevent="microphone.startPress">
                     <label class="form-check-label" for="microphone">
@@ -64,7 +65,7 @@ function toggleMic() {
                 <div v-if="debug">
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary m-2"
                     :class="{ disabled: !isHotMic }"
                     @click="controls.setEvent(StartEvent.TAKE_YOUR_MARKS)"
                     @keyup.esc="start"
@@ -73,7 +74,7 @@ function toggleMic() {
                 </button>
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary m-2"
                     :class="{ disabled: !isHotMic }"
                     @click="controls.setEvent(StartEvent.STAND)"
                     @keyup.esc="start"
@@ -85,7 +86,7 @@ function toggleMic() {
 
                 <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-danger m-2"
                     :class="{ disabled: !isHotMic }"
                     @click="microphone.startPress()"
                     @keyup.esc="start"

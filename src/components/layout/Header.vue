@@ -15,7 +15,7 @@ const route = useRoute();
                         class="d-inline-block align-text-top"
                         alt="Starter"
                     />
-                    Start Simulator (Alpha)
+                    Start Simulator
                 </a>
             </router-link>
 
