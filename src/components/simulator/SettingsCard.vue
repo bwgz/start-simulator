@@ -1,6 +1,5 @@
 <script setup>
 const qualityValues = ["Poor", "Good", "Excellent"];
-
 const props = defineProps(["settings"]);
 const { settings } = props;
 </script>
@@ -33,7 +32,7 @@ const { settings } = props;
                         v-model="settings.simulation.quality"
                         type="range"
                         class="form-range"
-                        id="numberOfSwimmers"
+                        id="quality"
                         min="0"
                         max="2"
                     />

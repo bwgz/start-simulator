@@ -16,7 +16,6 @@ class Listen {
         this.recognition.interimResults = false;
         this.recognition.maxAlternatives = 1;
         this.recognition.continuous = true;
-
     }
 
     onEvent(callback) {

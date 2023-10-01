@@ -40,7 +40,7 @@ class Microphone {
     startPress() {
         if (this.listen.isListening) {
             this.beep.play().then(() => {
-                console.log("beep");
+                //console.log("beep");
             }).catch((error) => {
                 console.error("beep", error);
             }).finally(() => {

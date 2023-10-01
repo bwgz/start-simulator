@@ -6,7 +6,7 @@ import RefereeCard from "../components/simulator/RefereeCard.vue";
 import StarterCard from "../components/simulator/StarterCard.vue";
 import StatsCard from "../components/simulator/StatsCard.vue";
 import SettingsCard from "../components/simulator/SettingsCard.vue";
-import { defaultSettings } from "../simulator";
+import { defaultSettings } from "../simulator/settings";
 
 const settings = reactive(defaultSettings);
 

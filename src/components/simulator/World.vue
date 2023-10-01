@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useMouse, useMousePressed } from "@vueuse/core";
-
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { BlockModel, ChairModel, PoolModel, SwimmerModel } from "../../three";
+import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD } from "../../simulator/settings";
 import { StartEvent, controls } from "./controls.js";
 
 const dimensions = new THREE.Vector3(6936.19580078125, 5293.339039520264, 1078.677250341797);
@@ -57,7 +57,6 @@ const startAnimationNames = ["start:2"];
 
 const getRandomAnimationName = (names) => {
     const name = names[Math.floor(Math.random() * names.length)];
-    console.log("name", name);
     return name;
 };
 
@@ -77,7 +76,6 @@ watch(controls, (current, last) => {
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
                 swimmer.position.set(positions[i].deck.x, positions[i].deck.y, positions[i].deck.z);
-
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(waitingAnimationNames));
                 action.timeScale = 0.7 + Math.random() * 0.3;
@@ -88,7 +86,6 @@ watch(controls, (current, last) => {
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
-
                 const mixer = mixers[i];
                 const action = getClipAction(
                     mixer,
@@ -105,7 +102,6 @@ watch(controls, (current, last) => {
             for (let i = 0; i < swimmers.length; i++) {
                 const swimmer = swimmers[i];
                 swimmer.position.set(positions[i].block.x, positions[i].block.y, positions[i].block.z);
-
                 const mixer = mixers[i];
                 const action = getClipAction(
                     mixer,
@@ -113,7 +109,15 @@ watch(controls, (current, last) => {
                     getRandomAnimationName(takeYourMarkAnimationNames)
                 );
                 action.clampWhenFinished = true;
-                action.timeScale = 0.75 + Math.random() * 0.25;
+                let timeScale = 1;
+                if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
+                    timeScale = 0.25 + Math.random() * 0.25;
+                } else if (settings.simulation.quality == SIMULATION_QUALITY.GOOD) {
+                    timeScale = 0.5 + Math.random() * 0.25;
+                } else if (settings.simulation.quality == SIMULATION_QUALITY.EXCELLENT) {
+                    timeScale = 0.75 + Math.random() * 0.25;
+                }
+                action.timeScale = timeScale;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -124,7 +128,15 @@ watch(controls, (current, last) => {
                 const mixer = mixers[i];
                 const action = getClipAction(mixer, swimmer.animations, getRandomAnimationName(startAnimationNames));
                 action.clampWhenFinished = true;
-                action.timeScale = 0.8 + Math.random() * 0.2;
+                let timeScale = 1;
+                if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
+                    timeScale = 0.25 + Math.random() * 0.5;
+                } else if (settings.simulation.quality == SIMULATION_QUALITY.GOOD) {
+                    timeScale = 0.6 + Math.random() * 0.3;
+                } else if (settings.simulation.quality == SIMULATION_QUALITY.EXCELLENT) {
+                    timeScale = 0.8 + Math.random() * 0.2;
+                }
+                action.timeScale = timeScale;
                 action.setLoop(THREE.LoopOnce, 1);
                 action.play();
             }
@@ -166,7 +178,6 @@ onMounted(() => {
         console.log("Loading complete!");
 
         watch(settings, (current, last) => {
-            console.log("settings changed", current);
             for (let i = 0; i < swimmers.length; i++) {
                 if (i >= settings.simulation.numberOfSwimmers) {
                     swimmers[i].visible = false;
@@ -178,7 +189,6 @@ onMounted(() => {
 
         const width = world.value.clientWidth;
         const height = world.value.clientHeight;
-        console.log(`width: ${width}, height: ${height}`);
 
         const renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true });
         renderer.shadowMap.enabled = true;
@@ -216,7 +226,6 @@ onMounted(() => {
         const x = dimensions.x / 6 + 110;
         const y = dimensions.y / 4 + 225;
         const z = dimensions.z / 2 - 285;
-        console.log("x", x, "y", y, "z", z);
 
         for (let i = 0; i < blocks.length; i++) {
             blocks[i].position.set(x, y + 220 * i, z);

@@ -1,6 +1,6 @@
 
 
-const HEAT_QUALITY = {
+const SIMULATION_QUALITY = {
     POOR: 0,
     GOOD: 1,
     EXCELLENT: 2
@@ -16,7 +16,7 @@ const LANE_ASSIGNMENT_METHOD = {
 class Simulation {
     numberOfSwimmers = 8;
     laneAssignmentMethod = LANE_ASSIGNMENT_METHOD.RIGHT_TO_LEFT;
-    quality = HEAT_QUALITY.EXCELLENT;
+    quality = SIMULATION_QUALITY.EXCELLENT;
 
     constructor(numberOfSwimmers, quality, laneAssignmentMethod) {
         this.numberOfSwimmers = numberOfSwimmers;
@@ -25,4 +25,4 @@ class Simulation {
     }
 }
 
-export { Simulation, HEAT_QUALITY, LANE_ASSIGNMENT_METHOD };
+export { Simulation, SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD };
