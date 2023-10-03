@@ -8,7 +8,7 @@ const SIMULATION_QUALITY = {
 const LANE_ASSIGNMENT_METHOD = {
     LEFT_TO_RIGHT: 0,
     RIGHT_TO_LEFT: 1,
-    CENTER: 2,
+    SEEDED: 2,
     RANDOM: 3
 };
 

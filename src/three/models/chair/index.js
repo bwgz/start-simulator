@@ -9,13 +9,15 @@ class ChairModel {
 
             mtlLoader.load("model.dae", (result) => {
                 try {
-                    const chair = result.scene;
-                    chair.rotateX(Math.PI / 2);
-                    chair.rotateZ(Math.PI / 2);
-                    chair.scale.set(3, 3, 3);
-                    resolve(chair);
+                    const model = result.scene;
+                    model.name = "chair";
+                    model.rotateX(Math.PI / 2);
+                    model.rotateZ(Math.PI / 2);
+                    model.scale.set(3, 3, 3);
+                    resolve(model);
                 } catch (e) {
                     console.log(e);
+                    reject(e);
                 }
             });
         });

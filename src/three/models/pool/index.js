@@ -1,4 +1,6 @@
+import * as THREE from "three";
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
+import { dumpGeometry } from "@/three/utils.js";
 
 class PoolModel {
     static generate(manager) {
@@ -9,16 +11,29 @@ class PoolModel {
 
             mtlLoader.load("model.dae", (result) => {
                 try {
-                    const pool = result.scene;
-                    pool.rotateX(Math.PI / 2);
-                    pool.scale.set(2, 2, 2);
-                    pool.position.x += 28767.52;
-                    pool.position.y += 28489.18;
-                    pool.position.z += 291.2756042480469;
+                    const model = result.scene;
 
-                    resolve(pool);
+                    model.name = "pool";
+                    model.rotateX(Math.PI / 2);
+                    //dumpGeometry("original", model);
+
+                    model.scale.set(2, 2, 2);
+                    //dumpGeometry("scaled", model);
+                    
+                    const boundingBox = new THREE.Box3();
+                    boundingBox.setFromObject(model);
+                    const min = boundingBox.min;
+ 
+                    model.position.x += min.x * -1;
+                    model.position.y += min.y * -1;
+                    model.position.z += min.z * -1;
+                    //dumpGeometry("transform", model);
+
+
+                    resolve(model);
                 } catch (e) {
                     console.log(e);
+                    reject(e);
                 }
             });
         });

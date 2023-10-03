@@ -4,10 +4,9 @@ import { useMouse, useMousePressed } from "@vueuse/core";
 import * as THREE from "three";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { BlockModel, ChairModel, PoolModel, SwimmerModel } from "../../three";
-import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, useSettingsStore } from "../../simulator/settings";
-
-import { StartEvent, controls } from "./controls.js";
+import { createWorld } from "@/three";
+import { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, useSettingsStore } from "@/simulator/settings";
+import { StartEvent, controls } from "@/components/simulator/controls";
 
 const dimensions = new THREE.Vector3(6936.19580078125, 5293.339039520264, 1078.677250341797);
 const positions = [];
@@ -178,11 +177,36 @@ onMounted(() => {
         console.log("Loading complete!");
 
         watch(settings, (current, last) => {
-            for (let i = 0; i < swimmers.length; i++) {
-                if (i >= settings.simulation.numberOfSwimmers) {
-                    swimmers[i].visible = false;
-                } else {
-                    swimmers[i].visible = true;
+            const { simulation } = current;
+            const { laneAssignmentMethod, numberOfSwimmers } = simulation;
+
+            if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.RIGHT_TO_LEFT) {
+                for (let i = 0; i < swimmers.length; i++) {
+                    if (i >= numberOfSwimmers) {
+                        swimmers[i].visible = false;
+                    } else {
+                        swimmers[i].visible = true;
+                    }
+                }
+            } else if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.LEFT_TO_RIGHT) {
+                for (let i = 0; i < swimmers.length; i++) {
+                    if (i < numberOfSwimmers - 1) {
+                        swimmers[i].visible = false;
+                    } else {
+                        swimmers[i].visible = true;
+                    }
+                }
+            } else if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.SEEDED) {
+                const size = Number(numberOfSwimmers);
+                const start = Math.floor((swimmers.length - size) / 2);
+                const end = start + Number(size) - 1;
+                console.log(start, end);
+                for (let i = 0; i < swimmers.length; i++) {
+                    if (i < start || i > end) {
+                        swimmers[i].visible = false;
+                    } else {
+                        swimmers[i].visible = true;
+                    }
                 }
             }
         });
@@ -253,8 +277,6 @@ onMounted(() => {
                 camera.lookAt(lookAt);
             }
         });
-        /*
-         */
 
         //const controls = new OrbitControls(camera, renderer.domElement);
         //controls.update();
@@ -281,54 +303,20 @@ onMounted(() => {
         goLive.value = true;
     };
 
-    PoolModel.generate(manager).then((model) => {
-        pool = model;
-    });
-
-    BlockModel.generate(manager).then((model) => {
-        blocks = [];
-
-        for (let i = 0; i < settings.pool.lanes; i++) {
-            const clone = model.clone();
-
-            blocks.push(clone);
-        }
-    });
-
-    ChairModel.generate(manager).then((model) => {
-        chairs = [];
-
-        for (let i = 0; i < settings.pool.lanes; i++) {
-            const clone = model.clone();
-
-            chairs.push(clone);
-        }
-    });
-
-    SwimmerModel.generate(manager).then((model) => {
-        swimmers = [];
-
-        /*
-        model.animations.forEach((animation) => {
-            console.log(animation.name);
+    manager.itemStart("configureModels");
+    createWorld(manager, settings.pool.lanes)
+        .then((models) => {
+            pool = models.pool;
+            blocks = models.blocks;
+            chairs = models.chairs;
+            swimmers = models.swimmers;
+        })
+        .catch((error) => {
+            manager.itemError("configureModels", error);
+        })
+        .finally(() => {
+            manager.itemEnd("configureModels");
         });
-
-        const helper = new THREE.SkeletonHelper(model);
-        helper.bones.forEach((bone) => {
-            console.log(bone);
-        });
-        */
-
-        for (let i = 0; i < settings.pool.lanes; i++) {
-            const clone = SkeletonUtils.clone(model);
-            const mixer = new THREE.AnimationMixer(clone);
-            //const animationClip = getAnimationClip(clone.animations, StartEvent.NEXT_HEAT);
-            //mixer.clipAction(animationClip).play();
-
-            swimmers.push(clone);
-            mixers.push(mixer);
-        }
-    });
 });
 </script>
 

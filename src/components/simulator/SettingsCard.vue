@@ -2,8 +2,9 @@
 import { useSettingsStore } from "../../simulator/settings";
 
 const qualityValues = ["Poor", "Good", "Excellent"];
-const settings = useSettingsStore()
+const laneAssignmentMethodValues = ["Left to Right", "Right to Left", "Seeded", "Random"];
 
+const settings = useSettingsStore();
 </script>
 
 <template>
@@ -27,7 +28,7 @@ const settings = useSettingsStore()
             </div>
             <div class="row">
                 <label for="customRange1" class="form-label"
-                    >Quality of Swimmers: {{ qualityValues[settings.simulation.quality]}}</label
+                    >Quality of Swimmers: {{ qualityValues[settings.simulation.quality] }}</label
                 >
                 <div class="col">
                     <input
@@ -38,6 +39,56 @@ const settings = useSettingsStore()
                         min="0"
                         max="2"
                     />
+                </div>
+            </div>
+            <div class="row">
+                <label for="customRange1" class="form-label"
+                    >Lane Assignment: {{ laneAssignmentMethodValues[settings.simulation.laneAssignmentMethod] }}</label
+                >
+                <div class="col">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            id="rtol"
+                            value="1"
+                            v-model="settings.simulation.laneAssignmentMethod"
+                        />
+                        <label class="form-check-label" for="rtol">Right to Left</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            id="ltor"
+                            value="0"
+                            v-model="settings.simulation.laneAssignmentMethod"
+                        />
+                        <label class="form-check-label" for="ltor">Left to Right</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            id="seeded"
+                            value="2"
+                            v-model="settings.simulation.laneAssignmentMethod"
+                        />
+                        <label class="form-check-label" for="seeded">Seeded</label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            id="random"
+                            value="3"
+                            v-model="settings.simulation.laneAssignmentMethod"
+                            disabled
+                       />
+                        <label class="form-check-label" for="random">Random</label>
+                    </div>
                 </div>
             </div>
         </div>

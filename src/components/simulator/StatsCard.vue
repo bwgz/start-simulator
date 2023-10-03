@@ -14,7 +14,6 @@ const displayCommand = () => {
 const isCorrectCommand = () => {
     const command = stats.command;
     const result = command ? command === "take your marks" : true;
-    console.log("isCorrectCommand", result);
     return result;
 };
 </script>

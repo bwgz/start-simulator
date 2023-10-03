@@ -6,10 +6,13 @@ const dumpGeometry = (string, object) => {
     const center = new THREE.Vector3();
     const size = new THREE.Vector3();
 
+    string = string || object?.name;
+
     boundingBox.setFromObject(object);
     box.getCenter(center);
     box.getSize(size);
 
+    console.log("--- " + string + " ----------" );
     console.log(string + " - position: " + JSON.stringify(object.position));
     console.log(string + " - boundingBox: " + JSON.stringify(boundingBox));
     console.log(string + " - center: " + JSON.stringify(center));

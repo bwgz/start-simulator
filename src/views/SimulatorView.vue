@@ -1,6 +1,6 @@
 <script setup>
 import Layout from "../components/layout/Layout.vue";
-import World from "../components/simulator/World.vue";
+import World from "../components/simulator/world/World.vue";
 import RefereeCard from "../components/simulator/RefereeCard.vue";
 import StarterCard from "../components/simulator/StarterCard.vue";
 import StatsCard from "../components/simulator/StatsCard.vue";
