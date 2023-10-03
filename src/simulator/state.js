@@ -19,13 +19,16 @@ const STATE = {
     RACING: "RACING", // start signal
 };
 
+const defaultState = {
+    current: STATE.IDLE,
+    previous: null,
+}
+
 const useStateStore = defineStore("state", {
-    state: () => ({
-        current: STATE.IDLE,
-        previous: null,
-    }),
+    state: () => defaultState,
     actions: {
         command(command) {
+            console.log(command)
             switch (command) {
                 case COMMAND.RESET:
                     this.setState(STATE.IDLE);
@@ -52,7 +55,7 @@ const useStateStore = defineStore("state", {
         },
         setState(state) {
             this.previous = this.current;
-            this.state = state;
+            this.current = state;
         },
     },
 });

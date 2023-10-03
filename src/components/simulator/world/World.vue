@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import * as THREE from "three";
 
 import { useSettingsStore } from "@/simulator/settings";
@@ -7,13 +7,12 @@ import { createWorld } from "@/three";
 import { POOL } from "./constants";
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { populateWorld } from "./populate";
-import { useStateStore } from "../state";
+import { useStateStore } from "@/simulator/state";
 import { createDataGui } from "./gui";
 import { dumpGeometry } from "@/three/utils";
 
 const debug = ref(true);
 const state = useStateStore();
-const { current } = state;
 
 const data = {
     camera: CAMERA_NAMES.STARTER,
@@ -80,14 +79,15 @@ const renderWorld = (models) => {
         }
     }
 
-    const onWindowResize = () => {
-        console.log("resize", worldView.value);
-        const width = worldView.value.clientWidth;
-        const height = worldView.value.clientHeight;
+    const onWindowResize = (event) => {
+        if (worldView?.value) {
+            const width = worldView.value.clientWidth;
+            const height = worldView.value.clientHeight;
 
-        if (width && height) {
-            updateCameras(cameras, width, height);
-            renderer.setSize(width, height);
+            if (width && height) {
+                updateCameras(cameras, width, height);
+                renderer.setSize(width, height);
+            }
         }
     };
     window.addEventListener("resize", onWindowResize, false);
@@ -114,6 +114,10 @@ const renderWorld = (models) => {
 
 onMounted(() => {
     const manager = new THREE.LoadingManager();
+
+    watch(state, (state) => {
+        console.log("state", state.current);
+    });
 
     if (debug.value) {
         createDataGui(dataGui.value, data);

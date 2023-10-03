@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Microphone } from "@/timing";
-import { COMMAND, useStateStore } from "./state";
+import { COMMAND, useStateStore } from "@/simulator/state";
 import { stats } from "./stats.js";
 
 const debug = ref(true);

@@ -7,11 +7,6 @@ const loadSettings = () => {
 
 const useSettingsStore = defineStore("settings", {
     state: loadSettings,
-    actions: {
-        increment() {
-            this.count++;
-        },
-    },
     getters: {
         getPool: (state) => {
             return state.pool;

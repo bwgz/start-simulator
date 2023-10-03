@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { COMMAND, useStateStore } from "./state";
+import { COMMAND, useStateStore } from "@/simulator/state";
 
 const state = useStateStore();
 const message = ref("");

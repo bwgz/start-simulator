@@ -1,6 +1,6 @@
 import { GUI } from "dat.gui";
 import { CAMERA_NAMES } from "./camera";
-import { STATE } from "../state";
+import { STATE } from "../../../simulator/state";
 
 const gui = new GUI({ autoPlace: false });
 
