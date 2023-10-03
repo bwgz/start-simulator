@@ -1,5 +1,10 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
+import { dumpGeometry } from "@/three/utils.js";
 
+/*
+ * On a global scale, the average height of men is around 5 feet 9 inches (175 cm), 
+ * while the average height of women is around 5 feet 4 inches (162 cm). 
+ */
 class SwimmerModel {
     static generateFromFbx(manager) {
         return new Promise((resolve, reject) => {
@@ -13,11 +18,11 @@ class SwimmerModel {
                     const model = result;
                     model.rotateZ(Math.PI / 2);
                     model.rotateX(Math.PI / 2);
-                    //swimmer.scale.set(0.3, 0.3, 0.3);
+                    dumpGeometry("original", model);
 
                     resolve(model); 
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                     reject(e);
                 }
             });

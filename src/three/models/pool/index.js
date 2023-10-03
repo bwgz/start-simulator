@@ -32,7 +32,7 @@ class PoolModel {
 
                     resolve(model);
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                     reject(e);
                 }
             });

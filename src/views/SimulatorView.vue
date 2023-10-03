@@ -3,7 +3,6 @@ import Layout from "../components/layout/Layout.vue";
 import World from "../components/simulator/world/World.vue";
 import RefereeCard from "../components/simulator/RefereeCard.vue";
 import StarterCard from "../components/simulator/StarterCard.vue";
-import StatsCard from "../components/simulator/StatsCard.vue";
 import SettingsCard from "../components/simulator/SettingsCard.vue";
 </script>
 
@@ -12,8 +11,8 @@ import SettingsCard from "../components/simulator/SettingsCard.vue";
         <template v-slot:default>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-9"><World /></div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-10"><World /></div>
+                    <div class="col-lg-2">
                         <RefereeCard class="mb-2" />
                         <StarterCard class="mb-2" />
                         <StatsCard class="mb-2" />

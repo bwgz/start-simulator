@@ -13,7 +13,7 @@ const settings = useSettingsStore();
             <h6 class="card-header bg-white">Simulation Settings</h6>
             <div class="row mt-2">
                 <label for="customRange1" class="form-label"
-                    >Number of Swimmers: {{ settings.simulation.numberOfSwimmers }}</label
+                    >Swimmers: {{ settings.simulation.numberOfSwimmers }}</label
                 >
                 <div class="col">
                     <input
@@ -28,7 +28,7 @@ const settings = useSettingsStore();
             </div>
             <div class="row">
                 <label for="customRange1" class="form-label"
-                    >Quality of Swimmers: {{ qualityValues[settings.simulation.quality] }}</label
+                    >Swimmer Quality: {{ qualityValues[settings.simulation.quality] }}</label
                 >
                 <div class="col">
                     <input

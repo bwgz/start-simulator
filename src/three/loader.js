@@ -60,7 +60,6 @@ function createModels(manager, lanes) {
                         break;
                 }
             }
-            console.log("result", result);
             return result;
         });
 }
