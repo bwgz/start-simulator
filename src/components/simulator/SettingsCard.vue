@@ -1,5 +1,5 @@
 <script setup>
-import { useSettingsStore } from "../../simulator/settings";
+import { useSettingsStore } from "@/simulator/settings";
 
 const qualityValues = ["Poor", "Good", "Excellent"];
 const laneAssignmentMethodValues = ["Left to Right", "Right to Left", "Seeded", "Random"];

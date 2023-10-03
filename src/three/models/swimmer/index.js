@@ -18,7 +18,7 @@ class SwimmerModel {
                     const model = result;
                     model.rotateZ(Math.PI / 2);
                     model.rotateX(Math.PI / 2);
-                    dumpGeometry("original", model);
+                    //dumpGeometry("original", model);
 
                     resolve(model); 
                 } catch (e) {

@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { StartEvent, controls } from "./controls.js";
 
 const message = ref("");

@@ -1,9 +1,10 @@
 <script setup>
-import Layout from "../components/layout/Layout.vue";
-import World from "../components/simulator/world/World.vue";
-import RefereeCard from "../components/simulator/RefereeCard.vue";
-import StarterCard from "../components/simulator/StarterCard.vue";
-import SettingsCard from "../components/simulator/SettingsCard.vue";
+import Layout from "@/components/layout/Layout.vue";
+import World from "@/components/simulator/world/World.vue";
+import RefereeCard from "@/components/simulator/RefereeCard.vue";
+import StarterCard from "@/components/simulator/StarterCard.vue";
+import StatsCard from "@/components/simulator/StatsCard.vue";
+import SettingsCard from "@/components/simulator/SettingsCard.vue";
 </script>
 
 <template>

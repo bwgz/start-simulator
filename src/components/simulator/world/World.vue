@@ -2,9 +2,10 @@
 import { onMounted, ref, render } from "vue";
 import * as THREE from "three";
 import { useSettingsStore } from "@/simulator/settings";
-import { loadModels, createWorld } from "@/three";
+import { createWorld } from "@/three";
+import { POOL } from "./constants";
+import { populateWorld } from "./populate";
 import { dumpGeometry } from "@/three/utils";
-import { right } from "@popperjs/core";
 
 const settings = useSettingsStore();
 
@@ -19,8 +20,6 @@ const showView = ref(false);
 const world = {
     models: null,
 };
-
-const corner = new THREE.Vector3(1228.9, 1344.35, 295.3);
 
 const renderWorld = (models) => {
     world.models = models;
@@ -57,77 +56,27 @@ const renderWorld = (models) => {
 
     if (false) {
         const axisHelper = new THREE.AxesHelper(200);
-        axisHelper.position.copy(corner);
+        axisHelper.position.copy(POOL.corner);
         scene.add(axisHelper);
     }
 
     const { pool, chairs, blocks, swimmers } = models;
     [pool].concat(chairs, blocks, swimmers).forEach((model) => scene.add(model));
 
-    const laneWidth = 223;
-    const rightLane = new THREE.Vector3(corner.x, corner.y + 105, corner.z);
     if (false) {
         const axisHelper = new THREE.AxesHelper(200);
-        axisHelper.position.copy(rightLane);
+        axisHelper.position.copy(POOL.rightLane);
         scene.add(axisHelper);
     }
 
-    {
-        const boundingBox = new THREE.Box3();
-        const size = new THREE.Vector3();
-        boundingBox.setFromObject(blocks[0]).getSize(size);
-
-        // brings the block to the right edge of lane 1
-        const position = rightLane.clone();
-        // x, y, z normalizes the block to the pool deck and
-        // move the block to the center of the lane
-        const x = blocks[0].position.x - boundingBox.max.x;
-        const y = blocks[0].position.y - boundingBox.min.y + (laneWidth - size.y) / 2;
-        const z = blocks[0].position.z - boundingBox.min.z - 1.9; // deck is slanted and need to go a little lower
-        position.add(new THREE.Vector3(x, y, z));
-
-        for (let block of blocks) {
-            block.position.copy(position);
-            if (false) {
-                scene.add(new THREE.BoxHelper(block, 0xffffff));
-                const axisHelper = new THREE.AxesHelper(1000);
-                axisHelper.position.copy(position);
-                scene.add(axisHelper);
-            }
-            position.add(new THREE.Vector3(0, laneWidth, 0));
-        }
-    }
-
-    {
-        const boundingBox = new THREE.Box3();
-        const size = new THREE.Vector3();
-        boundingBox.setFromObject(chairs[0]).getSize(size);
-
-        const position = rightLane.clone();
-        // x, y, z normalizes the block to the pool deck and
-        const x = chairs[0].position.x - boundingBox.max.x - 350;
-        const y = 0;
-        const z = chairs[0].position.z - boundingBox.min.z;
-        position.add(new THREE.Vector3(x, y, z));
-
-        // move the chair to the center of the lane
-        position.add(new THREE.Vector3(0, (laneWidth - size.y) / 2, 0));
-        for (let chair of chairs) {
-            chair.position.copy(position);
-            if (false) {
-                scene.add(new THREE.BoxHelper(chair, 0xffffff));
-            }
-
-            position.add(new THREE.Vector3(0, laneWidth, 0));
-        }
-    }
+    populateWorld(POOL, blocks, chairs)
 
     {
         const boundingBox = new THREE.Box3();
         const size = new THREE.Vector3();
         boundingBox.setFromObject(swimmers[0]).getSize(size);
 
-        const position = rightLane.clone();
+        const position = POOL.rightLane.clone();
         // x, y, z normalizes the block to the pool deck and
         const x = swimmers[0].position.x - 150;
         const y = 0;
@@ -135,33 +84,33 @@ const renderWorld = (models) => {
         position.add(new THREE.Vector3(x, y, z));
 
         // move the block to the center of the lane
-        position.add(new THREE.Vector3(0, (laneWidth - size.y) / 2, 0));
+        position.add(new THREE.Vector3(0, (POOL.laneWidth - size.y) / 2, 0));
         for (let swimmer of swimmers) {
             swimmer.position.copy(position);
-            position.add(new THREE.Vector3(0, laneWidth, 0));
+            position.add(new THREE.Vector3(0, POOL.laneWidth, 0));
         }
     }
 
     {
-        downLine.position.set(corner.x, corner.y - 200, corner.z + 150);
-        downLine.lookAt(corner.x, corner.y + 2000, corner.z);
+        downLine.position.set(POOL.corner.x, POOL.corner.y - 200, POOL.corner.z + 150);
+        downLine.lookAt(POOL.corner.x, POOL.corner.y + 2000, POOL.corner.z);
     }
     {
-        const position = corner.clone();
+        const position = POOL.corner.clone();
         position.add(new THREE.Vector3(150, -100, 150));
         camera.position.copy(position);
-        camera.lookAt(corner.x - 70, rightLane.y + laneWidth * 3, corner.z + 100);
+        camera.lookAt(POOL.corner.x - 70, POOL.rightLane.y + POOL.laneWidth * 3, POOL.corner.z + 100);
 
         if (false) {
             const axisHelper = new THREE.AxesHelper(1000);
-            axisHelper.position.set(corner.x - 70, rightLane.y + laneWidth * 3, corner.z + 100);
+            axisHelper.position.set(POOL.corner.x - 70, POOL.rightLane.y + POOL.laneWidth * 3, POOL.corner.z + 100);
             scene.add(axisHelper);
         }
     }
 
     {
-        const position = rightLane.clone();
-        position.add(new THREE.Vector3(0, laneWidth / 2, 0));
+        const position = POOL.rightLane.clone();
+        position.add(new THREE.Vector3(0, POOL.laneWidth / 2, 0));
 
         overhead.position.set(position.x, position.y, position.z + 200);
         overhead.lookAt(position.x, position.y, position.z);

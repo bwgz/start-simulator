@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Microphone } from "../../timing";
+import { Microphone } from "@/timing";
 import { StartEvent, controls } from "./controls.js";
 import { stats } from "./stats.js";
 
