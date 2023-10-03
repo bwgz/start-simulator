@@ -3,13 +3,20 @@ import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader";
 import { dumpGeometry } from "@/three/utils.js";
 
 /*
+ * https://www.swisstiming.com/fileadmin/Resources/Data/Datasheets/DOCM_AQ_OSB11_anTiSlip_0519.pdf
+ * https://www.swisstiming.com/fileadmin/Resources/Instruction_Manuals/3454.504.02.pdf
+ *
  * OMEGA OSB11 – SWIMMING STARTING BLOCK
  * Overall length x width : 780 x 640 mm
  * Top plate length x width : 740 x 520 mm
  * Height : max. 650 mm
+ * 
+ * This model does not fully confirm to the OMEGA OSB11 specifications. It's close but not exact.
 */
 
-const width = 64.0; // cm
+const length = 78.0; // cm - model's y axis
+const width = 64.0; // cm - model's x axis
+const height = 74.0; // cm - model's z axis
 
 class BlockModel {
     static generate(manager) {
@@ -30,8 +37,7 @@ class BlockModel {
                     const size = new THREE.Vector3();
                     boundingBox.setFromObject(model).getSize(size);
 
-                    const scale = width / size.y;
-                    model.scale.set(scale, scale, scale);
+                    model.scale.set(width / size.y, length / size.x, height / size.z);
                     //dumpGeometry("scaled", model);
                     
                     boundingBox = new THREE.Box3();

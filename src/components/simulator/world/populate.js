@@ -30,7 +30,7 @@ function populateBlocks(pool, blocks) {
     // move the block to the center of the lane
     const x = position.x - bounds.max.x;
     const y = position.y - bounds.min.y + (laneWidth - size.y) / 2;
-    const z = position.z - bounds.min.z - 1.9; // deck is slanted and need to go a little lower
+    const z = position.z - bounds.min.z - 0.5; // deck is slanted and need to go a little lower
     const lane = rightLane.clone().add(new THREE.Vector3(x, y, z));
 
     positionObject(blocks, lane, laneWidth)
@@ -43,7 +43,7 @@ function populateChairs(pool, chairs) {
     // start at the right edge of lane 1
     // x, y, z normalizes the block to the pool deck and
     const x = position.x - bounds.max.x - 350;
-    const y = 0;
+    const y = (laneWidth - size.y) / 2 + 10;
     const z = position.z - bounds.min.z;
     const lane = rightLane.clone().add(new THREE.Vector3(x, y, z));
 

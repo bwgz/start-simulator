@@ -1,17 +1,27 @@
 <script setup>
-import { onMounted, ref, render } from "vue";
+import { onMounted, ref } from "vue";
 import * as THREE from "three";
+
 import { useSettingsStore } from "@/simulator/settings";
 import { createWorld } from "@/three";
 import { POOL } from "./constants";
+import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { populateWorld } from "./populate";
+import { createDataGui } from "./gui";
 import { dumpGeometry } from "@/three/utils";
+
+const debug = ref(true);
+
+const data = {
+    camera: CAMERA_NAMES.DECK_CHECK,
+};
 
 const settings = useSettingsStore();
 
 const progressBar = ref(null);
 const worldView = ref(null);
 const canvas = ref(null);
+const dataGui = ref(null);
 
 const loading = ref(0);
 const loaded = ref(0);
@@ -24,8 +34,8 @@ const world = {
 const renderWorld = (models) => {
     world.models = models;
 
-    const width = worldView?.value.clientWidth;
-    const height = worldView?.value.clientHeight;
+    const width = worldView.value.clientWidth;
+    const height = worldView.value.clientHeight;
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true });
     renderer.shadowMap.enabled = true;
@@ -39,37 +49,13 @@ const renderWorld = (models) => {
     const ambient = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambient);
 
-    const camera = new THREE.PerspectiveCamera(70, width / height, 1, 7000);
-    camera.up.set(0, 0, 1);
-    scene.add(camera);
-    //scene.add(new THREE.CameraHelper(camera));
-
-    const overhead = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-    overhead.up.set(0, 0, 1);
-    scene.add(overhead);
-    //scene.add(new THREE.CameraHelper(overhead));
-
-    const downLine = new THREE.PerspectiveCamera(45, width / height, 1, 7000);
-    downLine.up.set(0, 0, 1);
-    scene.add(downLine);
-    //scene.add(new THREE.CameraHelper(downLine));
-
-    if (false) {
-        const axisHelper = new THREE.AxesHelper(200);
-        axisHelper.position.copy(POOL.corner);
-        scene.add(axisHelper);
-    }
+    const cameras = createCameras(POOL, width, height);
+    cameras.forEach((camera) => scene.add(camera));
 
     const { pool, chairs, blocks, swimmers } = models;
     [pool].concat(chairs, blocks, swimmers).forEach((model) => scene.add(model));
 
-    if (false) {
-        const axisHelper = new THREE.AxesHelper(200);
-        axisHelper.position.copy(POOL.rightLane);
-        scene.add(axisHelper);
-    }
-
-    populateWorld(POOL, blocks, chairs)
+    populateWorld(POOL, blocks, chairs);
 
     {
         const boundingBox = new THREE.Box3();
@@ -91,46 +77,20 @@ const renderWorld = (models) => {
         }
     }
 
-    {
-        downLine.position.set(POOL.corner.x, POOL.corner.y - 200, POOL.corner.z + 150);
-        downLine.lookAt(POOL.corner.x, POOL.corner.y + 2000, POOL.corner.z);
-    }
-    {
-        const position = POOL.corner.clone();
-        position.add(new THREE.Vector3(150, -100, 150));
-        camera.position.copy(position);
-        camera.lookAt(POOL.corner.x - 70, POOL.rightLane.y + POOL.laneWidth * 3, POOL.corner.z + 100);
-
-        if (false) {
-            const axisHelper = new THREE.AxesHelper(1000);
-            axisHelper.position.set(POOL.corner.x - 70, POOL.rightLane.y + POOL.laneWidth * 3, POOL.corner.z + 100);
-            scene.add(axisHelper);
-        }
-    }
-
-    {
-        const position = POOL.rightLane.clone();
-        position.add(new THREE.Vector3(0, POOL.laneWidth / 2, 0));
-
-        overhead.position.set(position.x, position.y, position.z + 200);
-        overhead.lookAt(position.x, position.y, position.z);
-    }
-
     const onWindowResize = () => {
-        const width = world?.value?.clientWidth;
-        const height = world?.value?.clientHeight;
+        console.log("resize", world.value);
+        const width = worldView.value?.clientWidth;
+        const height = worldView.value?.clientHeight;
 
         if (width && height) {
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-
+            updateCameras(cameras, width, height);
             renderer.setSize(width, height);
         }
     };
     window.addEventListener("resize", onWindowResize, false);
 
     const render = () => {
-        renderer.render(scene, camera);
+        renderer.render(scene, cameras[data.camera]);
     };
 
     const clock = new THREE.Clock();
@@ -140,8 +100,6 @@ const renderWorld = (models) => {
         const delta = clock.getDelta();
 
         //for (const mixer of mixers) mixer.update(delta);
-
-        camera.updateProjectionMatrix();
         //controls.update();
         render();
     };
@@ -171,6 +129,10 @@ onMounted(() => {
     };
     */
 
+    if (debug.value) {
+        createDataGui(dataGui.value, data);
+    }
+
     createWorld(manager, settings.pool.lanes).then((models) => renderWorld(models));
 });
 </script>
@@ -189,6 +151,9 @@ onMounted(() => {
             </div>
         </div>
 
-        <canvas ref="canvas" class="h-auto d-inline-block" />
+        <div>
+            <div v-if="debug" ref="dataGui" />
+            <canvas id="canvas" ref="canvas" class="h-auto d-inline-block" />
+        </div>
     </div>
 </template>

@@ -2,7 +2,6 @@ import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { BlockModel, ChairModel, PoolModel, SwimmerModel } from ".";
 
 function loadModels(manager) {
-
     const poolPromise = PoolModel.generate(manager);
     const blockPromise = BlockModel.generate(manager);
     const chairPromise = ChairModel.generate(manager);

@@ -2,6 +2,14 @@ import * as THREE from "three";
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 import { dumpGeometry } from "@/three/utils.js";
 
+/*
+ * https://3dwarehouse.sketchup.com/model/93a0210ce458dbb4c90e1681ced8feb6/Olympic-Swimming-Pool
+ *
+ * Bounds: 67,225 x 88,090 x 13,699
+ * Distance: from Origin 459,304.3
+ * Units of Measure: millimeter
+ */
+
 class PoolModel {
     static generate(manager) {
         return new Promise((resolve, reject) => {
