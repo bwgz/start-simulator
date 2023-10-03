@@ -4,7 +4,7 @@ const CAMERA_NAMES = {
     STARTER: "starter",
     DOWN_THE_LINE: "downTheLine",
     OVERHEAD: "overhead",
-    FIVE_METER: "15Meter",
+    FIVE_METER: "5Meter",
     FIFTEEN_METER: "15Meter",
     DECK_CHECK: "deckCheck",
 };

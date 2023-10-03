@@ -13,7 +13,7 @@ import { dumpGeometry } from "@/three/utils";
 const debug = ref(true);
 
 const data = {
-    camera: CAMERA_NAMES.DECK_CHECK,
+    camera: CAMERA_NAMES.STARTER,
 };
 
 const settings = useSettingsStore();

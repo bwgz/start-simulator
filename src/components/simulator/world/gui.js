@@ -10,7 +10,10 @@ function createDataGui(parent, data) {
         Starter: CAMERA_NAMES.STARTER,
         "Down The Line": CAMERA_NAMES.DOWN_THE_LINE,
         Overhead: CAMERA_NAMES.OVERHEAD,
-        "15 Meter": CAMERA_NAMES.FIFTEEN_METER
+        "5 Meter": CAMERA_NAMES.FIVE_METER,
+        "15 Meter": CAMERA_NAMES.FIFTEEN_METER,
+        "Deck Check": CAMERA_NAMES.DECK_CHECK
+
     });
 }
 
