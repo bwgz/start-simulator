@@ -1,21 +1,22 @@
 <script setup>
 import { ref } from "vue";
-import { StartEvent, controls } from "./controls.js";
+import { COMMAND, useStateStore } from "./state";
 
+const state = useStateStore();
 const message = ref("");
 
-const nextHeat = () => {
-    controls.setEvent(StartEvent.NEXT_HEAT);
-    message.value = "Next Heat";
+const reset = () => {
+    state.command(COMMAND.RESET);
+    message.value = "New Heat";
 };
 
 const shortWhistles = () => {
-    controls.setEvent(StartEvent.SHORT_WHISTLES);
+    state.command(COMMAND.SHORT_WHISTLES);
     message.value = "beep, beep, beep, beep, beep";
 };
 
 const longWhistle = () => {
-    controls.setEvent(StartEvent.LONG_WHISTLE);
+    state.command(COMMAND.LONG_WHISTLE);
     message.value = "beeeeeep";
 };
 </script>
@@ -35,7 +36,13 @@ const longWhistle = () => {
                     <button
                         type="button"
                         class="btn btn-primary btn-sm m-2"
-                        :class="{ active: controls.event === StartEvent.SHORT_WHISTLES }"
+                        @click="reset()"
+                    >
+                        RESET
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-sm m-2"
                         @click="shortWhistles()"
                     >
                         Short Whistles
@@ -43,7 +50,6 @@ const longWhistle = () => {
                     <button
                         type="button"
                         class="btn btn-primary btn-sm m-2"
-                        :class="{ active: controls.event === StartEvent.LONG_WHISTLE }"
                         @click="longWhistle()"
                     >
                         Long Whistle

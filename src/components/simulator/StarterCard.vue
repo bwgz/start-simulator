@@ -1,12 +1,13 @@
 <script setup>
 import { ref } from "vue";
 import { Microphone } from "@/timing";
-import { StartEvent, controls } from "./controls.js";
+import { COMMAND, useStateStore } from "./state";
 import { stats } from "./stats.js";
 
 const debug = ref(true);
 
 const isHotMic = ref(false);
+const state = useStateStore();
 
 const microphone = new Microphone();
 microphone.onEvent((event) => {
@@ -21,17 +22,17 @@ microphone.onEvent((event) => {
             break;
         case "speech":
             if (value.includes("stand")) {
-                controls.setEvent(StartEvent.STAND);
+                state.command(COMMAND.STAND);
                 stats.clear();
             } else if (value.includes("take")) {
-                controls.setEvent(StartEvent.TAKE_YOUR_MARKS);
+                state.command(COMMAND.TAKE_YOUR_MARKS);
                 stats.setCommand(value);
                 stats.markTym();
             }
             break;
         case "start":
             stats.markStart();
-            controls.setEvent(StartEvent.START);
+            state.command(COMMAND.START_SIGNAL);
 
             break;
     }

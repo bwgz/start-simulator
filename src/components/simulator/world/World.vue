@@ -7,10 +7,13 @@ import { createWorld } from "@/three";
 import { POOL } from "./constants";
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { populateWorld } from "./populate";
+import { useStateStore } from "../state";
 import { createDataGui } from "./gui";
 import { dumpGeometry } from "@/three/utils";
 
 const debug = ref(true);
+const state = useStateStore();
+const { current } = state;
 
 const data = {
     camera: CAMERA_NAMES.STARTER,
@@ -78,9 +81,9 @@ const renderWorld = (models) => {
     }
 
     const onWindowResize = () => {
-        console.log("resize", world.value);
-        const width = worldView.value?.clientWidth;
-        const height = worldView.value?.clientHeight;
+        console.log("resize", worldView.value);
+        const width = worldView.value.clientWidth;
+        const height = worldView.value.clientHeight;
 
         if (width && height) {
             updateCameras(cameras, width, height);
@@ -111,23 +114,6 @@ const renderWorld = (models) => {
 
 onMounted(() => {
     const manager = new THREE.LoadingManager();
-    const models = [];
-
-    /*
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        //console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
-        loaded.value = itemsLoaded;
-        loading.value = itemsTotal;
-        if (progressBar.value) {
-            progressBar.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
-        }
-    };
-
-    manager.onLoad = function () {
-        console.log("models", models);
-        console.log("Loading complete!");
-    };
-    */
 
     if (debug.value) {
         createDataGui(dataGui.value, data);

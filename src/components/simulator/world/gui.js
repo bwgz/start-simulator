@@ -1,5 +1,6 @@
 import { GUI } from "dat.gui";
 import { CAMERA_NAMES } from "./camera";
+import { STATE } from "../state";
 
 const gui = new GUI({ autoPlace: false });
 
@@ -12,8 +13,7 @@ function createDataGui(parent, data) {
         Overhead: CAMERA_NAMES.OVERHEAD,
         "5 Meter": CAMERA_NAMES.FIVE_METER,
         "15 Meter": CAMERA_NAMES.FIFTEEN_METER,
-        "Deck Check": CAMERA_NAMES.DECK_CHECK
-
+        "Deck Check": CAMERA_NAMES.DECK_CHECK,
     });
 }
 
