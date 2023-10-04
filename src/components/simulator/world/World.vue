@@ -58,6 +58,12 @@ const renderWorld = (models) => {
 
     populateWorld(POOL, blocks, chairs);
 
+    if (debug.value) {
+        let axisHelper = new THREE.AxesHelper(2000);
+        axisHelper.position.copy(POOL.corner);
+        scene.add(axisHelper);
+    }
+
     {
         const boundingBox = new THREE.Box3();
         const size = new THREE.Vector3();
@@ -118,7 +124,6 @@ const onWaiting = () => {
         position.sub(new THREE.Vector3(100, 0, 0));
         swimmer.position.copy(position);
     });
-
 };
 
 const onCommencement = () => {

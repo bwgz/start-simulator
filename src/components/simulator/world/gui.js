@@ -15,6 +15,7 @@ function createDatGui(parent, data) {
         "5 Meter": CAMERA_NAMES.FIVE_METER,
         "15 Meter": CAMERA_NAMES.FIFTEEN_METER,
         "Deck Check": CAMERA_NAMES.DECK_CHECK,
+        "Corner": CAMERA_NAMES.CORNER,
     });
 
     return gui;

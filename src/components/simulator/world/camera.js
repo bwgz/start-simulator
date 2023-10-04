@@ -7,6 +7,8 @@ const CAMERA_NAMES = {
     FIVE_METER: "5Meter",
     FIFTEEN_METER: "15Meter",
     DECK_CHECK: "deckCheck",
+    CORNER: "corner",
+    LANE: "lane",
 };
 
 const cameraLocations = [];
@@ -56,6 +58,22 @@ cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
     return {
         position: rightLane.clone().add(new THREE.Vector3(0 - 50, 0, 0)),
         lookAt: rightLane.clone().add(new THREE.Vector3(0 - 50, 2000, 0)),
+    };
+};
+
+cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
+    const { rightLane, laneWidth } = pool;
+    return {
+        position: rightLane.clone().add(new THREE.Vector3(0 - 50, 0, 0)),
+        lookAt: rightLane.clone().add(new THREE.Vector3(0 - 50, 2000, 0)),
+    };
+};
+
+cameraLocations[CAMERA_NAMES.CORNER] = (pool) => {
+    const { corner } = pool;
+    return {
+        position: corner.clone().add(new THREE.Vector3(0, 0, 200)),
+        lookAt: corner.clone(),
     };
 };
 
@@ -120,6 +138,14 @@ function createCameras(pool, width, height) {
         1,
         7000,
         cameraLocations[CAMERA_NAMES.DECK_CHECK](pool)
+    );
+    cameras[CAMERA_NAMES.CORNER] = createPerspectiveCamera(
+        CAMERA_NAMES.CORNER,
+        70,
+        width / height,
+        1,
+        7000,
+        cameraLocations[CAMERA_NAMES.CORNER](pool)
     );
     return cameras;
 }
