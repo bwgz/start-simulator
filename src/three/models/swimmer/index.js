@@ -19,10 +19,10 @@ class SwimmerModel {
                     model.name = "swimmer";
                     model.rotateZ(Math.PI / 2);
                     model.rotateX(Math.PI / 2);
-                    dumpGeometry("original swimmer", model);
+                    //dumpGeometry("original swimmer", model);
 
                     model.scale.set(0.01, 0.01, 0.01)
-                    dumpGeometry("scaled swimmer", model);
+                    //dumpGeometry("scaled swimmer", model);
 
                     resolve(model); 
                 } catch (e) {

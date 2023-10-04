@@ -28,7 +28,7 @@ const showView = ref(false);
 const world = {
     state: STATE.WAITING,
     models: null,
-    camera: CAMERA_NAMES.RIGHT_LANE,
+    camera: CAMERA_NAMES.ORIGIN,
 };
 
 const renderWorld = (models) => {

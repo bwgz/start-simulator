@@ -25,13 +25,6 @@ class PoolModel0 {
                     model.rotateX(Math.PI / 2);
                     //dumpGeometry("original", model);
 
-                    // scaled 1 - size: {"x":3468.097900390625,"y":2646.669519760133,"z":539.3386251708985}
-                    // scaled 10 - size: {"x":34680.97900390625,"y":26466.695197601322,"z":5393.386251708985}
-
-                    //const scale = 1;// / model.scale.x;
-                    //model.scale.set(scale, scale, scale);
-                    //dumpGeometry("scaled", model);
-
                     const boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);
                     const min = boundingBox.min;

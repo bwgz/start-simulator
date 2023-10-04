@@ -31,7 +31,7 @@ class BlockModel {
                     const model = result.scene.children[0];
                     model.name = "block";
                     model.rotateZ(Math.PI / 2);
-                    dumpGeometry("original", model);
+                    //dumpGeometry("original", model);
 
                     let boundingBox = new THREE.Box3();
                     const size = new THREE.Vector3();
@@ -39,7 +39,7 @@ class BlockModel {
 
                     // correct size and scale to meters (original is centimeters)
                     model.scale.set(width / size.y / 100, length / size.x / 100, height / size.z / 100);
-                    dumpGeometry("scaled", model);
+                    //dumpGeometry("scaled", model);
 
                     boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);

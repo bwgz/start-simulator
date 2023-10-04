@@ -22,11 +22,11 @@ const POOL0 = {
 
 
 const POOL1 = {
-    corner: new THREE.Vector3(1645., 3290., 110.),
+    corner: new THREE.Vector3(27.75, 27.8, 2.75),
     get rightLane() {
         return new THREE.Vector3(this.corner.x, this.corner.y , this.corner.z);
     },
-    laneWidth: 223,
+    laneWidth: 2.43,
 };
 
 const POOL2 = {

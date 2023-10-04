@@ -91,8 +91,8 @@ cameraLocations[CAMERA_NAMES.RIGHT_LANE] = (pool) => {
 cameraLocations[CAMERA_NAMES.ORIGIN] = (pool) => {
     const { corner } = pool;
     return {
-        position: new THREE.Vector3(corner.x, corner.y, corner.z + 10),
-        lookAt: new THREE.Vector3(corner.x, corner.y, corner.z),
+        position: new THREE.Vector3(0, 0, 30),
+        lookAt: new THREE.Vector3(50, 50, 5),
     };
 };
 
