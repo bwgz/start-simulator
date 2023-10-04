@@ -31,7 +31,7 @@ const useStateStore = defineStore("state", {
             console.log(command)
             switch (command) {
                 case COMMAND.RESET:
-                    this.setState(STATE.IDLE);
+                    this.setState(STATE.WAITING);
                     break;
                 case COMMAND.SHORT_WHISTLES:
                     this.setState(STATE.COMMENCEMENT);

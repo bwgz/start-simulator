@@ -7,30 +7,28 @@ import { createWorld } from "@/three";
 import { POOL } from "./constants";
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { populateWorld } from "./populate";
-import { useStateStore } from "@/simulator/state";
-import { createDataGui } from "./gui";
+import { STATE, useStateStore } from "@/simulator/state";
+import { createDatGui } from "./gui";
 import { dumpGeometry } from "@/three/utils";
 
 const debug = ref(true);
 const state = useStateStore();
-
-const data = {
-    camera: CAMERA_NAMES.STARTER,
-};
 
 const settings = useSettingsStore();
 
 const progressBar = ref(null);
 const worldView = ref(null);
 const canvas = ref(null);
-const dataGui = ref(null);
+const datGui = ref(null);
 
 const loading = ref(0);
 const loaded = ref(0);
 const showView = ref(false);
 
 const world = {
+    state: STATE.WAITING,
     models: null,
+    camera: CAMERA_NAMES.STARTER,
 };
 
 const renderWorld = (models) => {
@@ -93,7 +91,7 @@ const renderWorld = (models) => {
     window.addEventListener("resize", onWindowResize, false);
 
     const render = () => {
-        renderer.render(scene, cameras[data.camera]);
+        renderer.render(scene, cameras[world.camera]);
     };
 
     const clock = new THREE.Clock();
@@ -113,15 +111,21 @@ const renderWorld = (models) => {
 };
 
 onMounted(() => {
+    let gui;
     const manager = new THREE.LoadingManager();
+
+    if (debug.value) {
+        gui = createDatGui(datGui.value, world);
+    }
 
     watch(state, (state) => {
         console.log("state", state.current);
-    });
+        world.state = state.current;
 
-    if (debug.value) {
-        createDataGui(dataGui.value, data);
-    }
+        if (gui) {
+            gui.updateDisplay();
+        }
+    });
 
     createWorld(manager, settings.pool.lanes).then((models) => renderWorld(models));
 });
@@ -142,7 +146,7 @@ onMounted(() => {
         </div>
 
         <div>
-            <div v-if="debug" ref="dataGui" />
+            <div v-if="debug" ref="datGui" />
             <canvas id="canvas" ref="canvas" class="h-auto d-inline-block" />
         </div>
     </div>
