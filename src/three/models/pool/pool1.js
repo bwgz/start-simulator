@@ -26,7 +26,11 @@ class PoolModel1 {
                     model.name = "pool";
                     model.rotateX(Math.PI / 2);
                     dumpGeometry("original", model);
-                  
+
+                    const scale = 0.1;
+                    model.scale.set(scale, scale, scale);
+                    dumpGeometry("scaled", model);
+
                     const boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);
                     const min = boundingBox.min;
@@ -35,7 +39,6 @@ class PoolModel1 {
                     model.position.y += min.y * -1;
                     model.position.z += min.z * -1;
                     dumpGeometry("transform", model);
-
 
                     resolve(model);
                 } catch (e) {

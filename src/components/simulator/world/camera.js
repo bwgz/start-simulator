@@ -92,7 +92,7 @@ cameraLocations[CAMERA_NAMES.ORIGIN] = (pool) => {
     const { corner } = pool;
     return {
         position: new THREE.Vector3(0, 0, 30),
-        lookAt: new THREE.Vector3(50, 50, 5),
+        lookAt: new THREE.Vector3(0, 0, 0),
     };
 };
 
