@@ -13,7 +13,7 @@ import * as THREE from "three";
  * @property {number} laneWidth - The width of each lane in the pool.
  */
 const POOL0 = {
-    corner: new THREE.Vector3(21.610, 17.1, 3.75),
+    corner: new THREE.Vector3(15.610, 17.1, 3.75),
     get rightLane() {
         return new THREE.Vector3(this.corner.x, this.corner.y + 1.31, this.corner.z);
     },
@@ -37,6 +37,6 @@ const POOL2 = {
     laneWidth: 2.43,
 };
 
-const POOL = POOL2;
+const POOL = POOL0;
 
 export { POOL };
