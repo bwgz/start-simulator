@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
+import { dumpGeometry } from "@/three/utils.js";
 
 /*
  * https://3dwarehouse.sketchup.com/model/fa68af35-dd16-4996-9f37-b51f7ae2ace0/Sandler-Folding-Chair
@@ -26,12 +27,14 @@ class ChairModel {
                     const model = result.scene.children[0];
                     model.name = "chair";
                     model.rotateZ(Math.PI / 2);
+                    //dumpGeometry("original", model);
 
                     let boundingBox = new THREE.Box3();
                     const size = new THREE.Vector3();
                     boundingBox.setFromObject(model).getSize(size);
                     const scale = width / size.y;
                     model.scale.set(scale, scale, scale);
+                    //dumpGeometry("scaled", model);
 
                     boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);

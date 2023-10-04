@@ -8,15 +8,17 @@ const CAMERA_NAMES = {
     FIFTEEN_METER: "15Meter",
     DECK_CHECK: "deckCheck",
     CORNER: "corner",
+    RIGHT_LANE: "rightLane",
     LANE: "lane",
+    ORIGIN: "origin",
 };
 
 const cameraLocations = [];
 cameraLocations[CAMERA_NAMES.STARTER] = (pool) => {
-    const { corner, laneWidth } = pool;
+    const { corner, rightLane, laneWidth } = pool;
     return {
-        position: corner.clone().add(new THREE.Vector3(150, -100, 150)),
-        lookAt: corner.clone().add(new THREE.Vector3(-70, laneWidth * 3, 100)),
+        position: corner.clone().add(new THREE.Vector3(2, -2, 2)),
+        lookAt: rightLane.clone().add(new THREE.Vector3(0, (laneWidth * 3), 0)),
     };
 };
 
@@ -24,7 +26,7 @@ cameraLocations[CAMERA_NAMES.DOWN_THE_LINE] = (pool) => {
     const { corner } = pool;
 
     return {
-        position: corner.clone().add(new THREE.Vector3(0, -200, 150)),
+        position: corner.clone().add(new THREE.Vector3(0, -4, 1)),
         lookAt: corner.clone().add(new THREE.Vector3(0, 2000, 0)),
     };
 };
@@ -32,7 +34,7 @@ cameraLocations[CAMERA_NAMES.DOWN_THE_LINE] = (pool) => {
 cameraLocations[CAMERA_NAMES.OVERHEAD] = (pool) => {
     const { rightLane, laneWidth } = pool;
     return {
-        position: rightLane.clone().add(new THREE.Vector3(0, laneWidth / 2, 200)),
+        position: rightLane.clone().add(new THREE.Vector3(0, laneWidth / 2, 2)),
         lookAt: rightLane.clone().add(new THREE.Vector3(0, laneWidth / 2, 0)),
     };
 };
@@ -40,7 +42,7 @@ cameraLocations[CAMERA_NAMES.OVERHEAD] = (pool) => {
 cameraLocations[CAMERA_NAMES.FIVE_METER] = (pool) => {
     const { rightLane, laneWidth } = pool;
     return {
-        position: rightLane.clone().add(new THREE.Vector3(500, laneWidth * 4, 200)),
+        position: rightLane.clone().add(new THREE.Vector3(5, laneWidth * 4, 2)),
         lookAt: rightLane.clone().add(new THREE.Vector3(0,  laneWidth * 4, 0)),
     };
 };
@@ -48,7 +50,7 @@ cameraLocations[CAMERA_NAMES.FIVE_METER] = (pool) => {
 cameraLocations[CAMERA_NAMES.FIFTEEN_METER] = (pool) => {
     const { rightLane, laneWidth } = pool;
     return {
-        position: rightLane.clone().add(new THREE.Vector3(1500, laneWidth * 4, 200)),
+        position: rightLane.clone().add(new THREE.Vector3(15, laneWidth * 4, 3)),
         lookAt: rightLane.clone().add(new THREE.Vector3(0,  laneWidth * 4, 0)),
     };
 };
@@ -56,7 +58,7 @@ cameraLocations[CAMERA_NAMES.FIFTEEN_METER] = (pool) => {
 cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
     const { rightLane, laneWidth } = pool;
     return {
-        position: rightLane.clone().add(new THREE.Vector3(0 - 50, 0, 0)),
+        position: rightLane.clone().add(new THREE.Vector3(0 - 25, 0, 0)),
         lookAt: rightLane.clone().add(new THREE.Vector3(0 - 50, 2000, 0)),
     };
 };
@@ -64,16 +66,33 @@ cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
 cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
     const { rightLane, laneWidth } = pool;
     return {
-        position: rightLane.clone().add(new THREE.Vector3(0 - 50, 0, 0)),
-        lookAt: rightLane.clone().add(new THREE.Vector3(0 - 50, 2000, 0)),
+        position: rightLane.clone().add(new THREE.Vector3(0.5, 0, 0)),
+        lookAt: rightLane.clone().add(new THREE.Vector3(0.5, 2000, 0)),
     };
 };
 
 cameraLocations[CAMERA_NAMES.CORNER] = (pool) => {
     const { corner } = pool;
     return {
-        position: corner.clone().add(new THREE.Vector3(0, 0, 200)),
+        position: corner.clone().add(new THREE.Vector3(0, 0, 1)),
         lookAt: corner.clone(),
+    };
+};
+
+cameraLocations[CAMERA_NAMES.RIGHT_LANE] = (pool) => {
+    const { rightLane } = pool;
+    return {
+        position: rightLane.clone().add(new THREE.Vector3(0, 0, 1.5)),
+        lookAt: rightLane.clone(),
+    };
+};
+
+
+cameraLocations[CAMERA_NAMES.ORIGIN] = (pool) => {
+    const { corner } = pool;
+    return {
+        position: new THREE.Vector3(0, 0, corner.y + 50),
+        lookAt: new THREE.Vector3(50, 25, corner.y),
     };
 };
 
@@ -146,6 +165,23 @@ function createCameras(pool, width, height) {
         1,
         7000,
         cameraLocations[CAMERA_NAMES.CORNER](pool)
+    );
+    cameras[CAMERA_NAMES.RIGHT_LANE] = createPerspectiveCamera(
+        CAMERA_NAMES.RIGHT_LANE,
+        70,
+        width / height,
+        1,
+        7000,
+        cameraLocations[CAMERA_NAMES.RIGHT_LANE](pool)
+    );
+
+    cameras[CAMERA_NAMES.ORIGIN] = createPerspectiveCamera(
+        CAMERA_NAMES.ORIGIN,
+        70,
+        width / height,
+        1,
+        7000,
+        cameraLocations[CAMERA_NAMES.ORIGIN](pool)
     );
     return cameras;
 }

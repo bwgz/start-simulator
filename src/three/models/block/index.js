@@ -10,9 +10,9 @@ import { dumpGeometry } from "@/three/utils.js";
  * Overall length x width : 780 x 640 mm
  * Top plate length x width : 740 x 520 mm
  * Height : max. 650 mm
- * 
+ *
  * This model does not fully confirm to the OMEGA OSB11 specifications. It's close but not exact.
-*/
+ */
 
 const length = 78.0; // cm - model's y axis
 const width = 64.0; // cm - model's x axis
@@ -31,19 +31,20 @@ class BlockModel {
                     const model = result.scene.children[0];
                     model.name = "block";
                     model.rotateZ(Math.PI / 2);
-                    //dumpGeometry("original", model);
+                    dumpGeometry("original", model);
 
                     let boundingBox = new THREE.Box3();
                     const size = new THREE.Vector3();
                     boundingBox.setFromObject(model).getSize(size);
 
-                    model.scale.set(width / size.y, length / size.x, height / size.z);
-                    //dumpGeometry("scaled", model);
-                    
+                    // correct size and scale to meters (original is centimeters)
+                    model.scale.set(width / size.y / 100, length / size.x / 100, height / size.z / 100);
+                    dumpGeometry("scaled", model);
+
                     boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);
                     let min = boundingBox.min;
- 
+
                     model.position.x += min.x * -1;
                     model.position.y += min.y * -1;
                     model.position.z += min.z * -1;

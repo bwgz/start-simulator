@@ -30,7 +30,7 @@ function populateBlocks(pool, blocks) {
     // move the block to the center of the lane
     const x = position.x - bounds.max.x;
     const y = position.y - bounds.min.y + (laneWidth - size.y) / 2;
-    const z = position.z - bounds.min.z - 0.5; // deck is slanted and need to go a little lower
+    const z = position.z - bounds.min.z - 0.01; // deck is slanted and need to go a little lower
     const lane = rightLane.clone().add(new THREE.Vector3(x, y, z));
 
     positionObject(blocks, lane, laneWidth)
@@ -52,7 +52,7 @@ function populateChairs(pool, chairs) {
 
 function populateWorld(pool, blocks, chairs) {
     populateBlocks(pool, blocks);
-    populateChairs(pool, chairs);
+    //populateChairs(pool, chairs);
 }
 
 export { populateWorld };

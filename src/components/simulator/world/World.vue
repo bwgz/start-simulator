@@ -54,24 +54,30 @@ const renderWorld = (models) => {
     cameras.forEach((camera) => scene.add(camera));
 
     const { pool, chairs, blocks, swimmers } = models;
-    [pool].concat(chairs, blocks, swimmers).forEach((model) => scene.add(model));
-
+    [pool].concat(blocks, swimmers).forEach((model) => scene.add(model));
     populateWorld(POOL, blocks, chairs);
 
-    if (debug.value) {
+    if (true) {
         let axisHelper = new THREE.AxesHelper(2000);
         axisHelper.position.copy(POOL.corner);
         scene.add(axisHelper);
     }
 
-    {
+    const geometry = new THREE.BoxGeometry(50, 26, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.copy(new THREE.Vector3(40, 30, 3));
+    //scene.add(cube);
+
+    if (true) {
         const boundingBox = new THREE.Box3();
         const size = new THREE.Vector3();
         boundingBox.setFromObject(swimmers[0]).getSize(size);
 
         const position = POOL.rightLane.clone();
         // x, y, z normalizes the block to the pool deck and
-        const x = swimmers[0].position.x - 150;
+        const x = swimmers[0].position.x - 1;
         const y = 0;
         const z = 0; // this is edge of the pool and behind the block is lower
         position.add(new THREE.Vector3(x, y, z));

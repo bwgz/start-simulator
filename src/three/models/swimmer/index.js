@@ -16,9 +16,13 @@ class SwimmerModel {
             fbxLoader.load("swimmer-01.fbx", (result) => {
                 try {
                     const model = result;
+                    model.name = "swimmer";
                     model.rotateZ(Math.PI / 2);
                     model.rotateX(Math.PI / 2);
-                    dumpGeometry("original", model);
+                    dumpGeometry("original swimmer", model);
+
+                    model.scale.set(0.01, 0.01, 0.01)
+                    dumpGeometry("scaled swimmer", model);
 
                     resolve(model); 
                 } catch (e) {

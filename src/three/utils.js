@@ -5,6 +5,7 @@ const dumpGeometry = (string, object) => {
     const boundingBox = new THREE.Box3();
     const center = new THREE.Vector3();
     const size = new THREE.Vector3();
+    const scale = object.scale
 
     string = string || object?.name;
 
@@ -13,6 +14,7 @@ const dumpGeometry = (string, object) => {
     box.getSize(size);
 
     console.log("--- " + string + " " + object.name + " ----------" );
+    console.log(string + " - scale: " + JSON.stringify(scale));
     console.log(string + " - position: " + JSON.stringify(object.position));
     console.log(string + " - boundingBox: " + JSON.stringify(boundingBox));
     console.log(string + " - center: " + JSON.stringify(center));

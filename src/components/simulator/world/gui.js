@@ -1,7 +1,6 @@
 import { GUI } from "dat.gui";
 import { CAMERA_NAMES } from "./camera";
 
-
 function createDatGui(parent, data) {
     const gui = new GUI({ autoPlace: false });
     parent.appendChild(gui.domElement);
@@ -16,6 +15,8 @@ function createDatGui(parent, data) {
         "15 Meter": CAMERA_NAMES.FIFTEEN_METER,
         "Deck Check": CAMERA_NAMES.DECK_CHECK,
         "Corner": CAMERA_NAMES.CORNER,
+        "Right Lane": CAMERA_NAMES.RIGHT_LANE,
+        "Origin": CAMERA_NAMES.ORIGIN,
     });
 
     return gui;

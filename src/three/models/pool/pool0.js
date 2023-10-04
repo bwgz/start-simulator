@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
+import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader";
 import { dumpGeometry } from "@/three/utils.js";
 
 /*
@@ -25,18 +25,21 @@ class PoolModel0 {
                     model.rotateX(Math.PI / 2);
                     //dumpGeometry("original", model);
 
-                    model.scale.set(2, 2, 2);
+                    // scaled 1 - size: {"x":3468.097900390625,"y":2646.669519760133,"z":539.3386251708985}
+                    // scaled 10 - size: {"x":34680.97900390625,"y":26466.695197601322,"z":5393.386251708985}
+
+                    //const scale = 1;// / model.scale.x;
+                    //model.scale.set(scale, scale, scale);
                     //dumpGeometry("scaled", model);
-                    
+
                     const boundingBox = new THREE.Box3();
                     boundingBox.setFromObject(model);
                     const min = boundingBox.min;
- 
+
                     model.position.x += min.x * -1;
                     model.position.y += min.y * -1;
                     model.position.z += min.z * -1;
                     //dumpGeometry("transform", model);
-
 
                     resolve(model);
                 } catch (e) {
@@ -49,4 +52,3 @@ class PoolModel0 {
 }
 
 export { PoolModel0 };
-
