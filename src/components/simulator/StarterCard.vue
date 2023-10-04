@@ -68,7 +68,7 @@ function toggleMic() {
                     type="button"
                     class="btn btn-primary m-2"
                     :class="{ disabled: !isHotMic }"
-                    @click="controls.setEvent(StartEvent.TAKE_YOUR_MARKS)"
+                    @click="state.command(COMMAND.TAKE_YOUR_MARKS)"
                     @keyup.esc="start"
                 >
                     <span>TYM</span>
@@ -77,7 +77,7 @@ function toggleMic() {
                     type="button"
                     class="btn btn-primary m-2"
                     :class="{ disabled: !isHotMic }"
-                    @click="controls.setEvent(StartEvent.STAND)"
+                    @click="state.command(COMMAND.STAND)"
                     @keyup.esc="start"
                 >
                     <span>STAND</span>
