@@ -22,13 +22,12 @@ const STATE = {
 const defaultState = {
     current: STATE.IDLE,
     previous: null,
-}
+};
 
 const useStateStore = defineStore("state", {
     state: () => defaultState,
     actions: {
         command(command) {
-            console.log(command)
             switch (command) {
                 case COMMAND.RESET:
                     this.setState(STATE.WAITING);
@@ -42,7 +41,7 @@ const useStateStore = defineStore("state", {
                 case COMMAND.SECOND_LONG_WHISTLE:
                     this.setState(STATE.ON_PLATFORM);
                     break;
-                case COMMAND.TAKE_YOUR_MARK:
+                case COMMAND.TAKE_YOUR_MARKS:
                     this.setState(STATE.STARTING_POSITION);
                     break;
                 case COMMAND.STAND:

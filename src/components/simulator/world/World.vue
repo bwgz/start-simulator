@@ -33,6 +33,7 @@ const world = {
 
 const renderWorld = (models) => {
     world.models = models;
+    world.swimmers = models.swimmers;
 
     const width = worldView.value.clientWidth;
     const height = worldView.value.clientHeight;
@@ -110,6 +111,52 @@ const renderWorld = (models) => {
     showView.value = true;
 };
 
+const onWaiting = () => {
+    console.log("onWaiting");
+    world.swimmers.forEach((swimmer) => {
+        const position = swimmer.position.clone();
+        position.sub(new THREE.Vector3(100, 0, 0));
+        swimmer.position.copy(position);
+    });
+
+};
+
+const onCommencement = () => {
+    console.log("onCommencement");
+    world.swimmers.forEach((swimmer) => {
+        const position = swimmer.position.clone();
+        position.add(new THREE.Vector3(100, 0, 0));
+        swimmer.position.copy(position);
+    });
+};
+
+const onOnPlatform = () => {
+    console.log("onOnPlatform");
+    world.swimmers.forEach((swimmer) => {
+        const position = swimmer.position.clone();
+        position.add(new THREE.Vector3(120, 70, 45));
+        swimmer.position.copy(position);
+    });
+};
+
+const onStartingPosition = () => {
+    console.log("onStartingPosition");
+    world.swimmers.forEach((swimmer) => {
+        const position = swimmer.position.clone();
+        position.add(new THREE.Vector3(12, 0, 0));
+        swimmer.position.copy(position);
+    });
+};
+
+const onRacing = () => {
+    console.log("onRacing");
+    world.swimmers.forEach((swimmer) => {
+        const position = swimmer.position.clone();
+        position.add(new THREE.Vector3(20, 0, 0));
+        swimmer.position.copy(position);
+    });
+};
+
 onMounted(() => {
     let gui;
     const manager = new THREE.LoadingManager();
@@ -119,11 +166,29 @@ onMounted(() => {
     }
 
     watch(state, (state) => {
-        console.log("state", state.current);
-        world.state = state.current;
+        const { current } = state;
+        world.state = current;
 
         if (gui) {
             gui.updateDisplay();
+        }
+
+        switch (current) {
+            case STATE.WAITING:
+                onWaiting();
+                break;
+            case STATE.COMMENCEMENT:
+                onCommencement();
+                break;
+            case STATE.ON_PLATFORM:
+                onOnPlatform();
+                break;
+            case STATE.STARTING_POSITION:
+                onStartingPosition();
+                break;
+            case STATE.RACING:
+                onRacing();
+                break;
         }
     });
 
