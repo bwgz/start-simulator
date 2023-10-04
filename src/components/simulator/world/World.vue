@@ -28,7 +28,7 @@ const showView = ref(false);
 const world = {
     state: STATE.WAITING,
     models: null,
-    camera: CAMERA_NAMES.STARTER,
+    camera: CAMERA_NAMES.RIGHT_LANE,
 };
 
 const renderWorld = (models) => {
@@ -59,7 +59,7 @@ const renderWorld = (models) => {
 
     if (true) {
         let axisHelper = new THREE.AxesHelper(2000);
-        axisHelper.position.copy(POOL.corner);
+        axisHelper.position.copy(POOL.rightLane);
         scene.add(axisHelper);
     }
 

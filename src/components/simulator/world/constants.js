@@ -30,11 +30,11 @@ const POOL1 = {
 };
 
 const POOL2 = {
-    corner: new THREE.Vector3(28, 29, 3.75),
+    corner: new THREE.Vector3(27.75, 27.8, 2.75),
     get rightLane() {
-        return new THREE.Vector3(this.corner.x, this.corner.y + 105, this.corner.z);
+        return new THREE.Vector3(this.corner.x, this.corner.y + 0.93, this.corner.z);
     },
-    laneWidth: 223,
+    laneWidth: 2.43,
 };
 
 const POOL = POOL2;

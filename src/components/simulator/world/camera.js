@@ -74,7 +74,7 @@ cameraLocations[CAMERA_NAMES.DECK_CHECK] = (pool) => {
 cameraLocations[CAMERA_NAMES.CORNER] = (pool) => {
     const { corner } = pool;
     return {
-        position: corner.clone().add(new THREE.Vector3(0, 0, 1)),
+        position: corner.clone().add(new THREE.Vector3(0, 0, 1.5)),
         lookAt: corner.clone(),
     };
 };
@@ -91,8 +91,8 @@ cameraLocations[CAMERA_NAMES.RIGHT_LANE] = (pool) => {
 cameraLocations[CAMERA_NAMES.ORIGIN] = (pool) => {
     const { corner } = pool;
     return {
-        position: new THREE.Vector3(0, 0, corner.y + 50),
-        lookAt: new THREE.Vector3(50, 25, corner.y),
+        position: new THREE.Vector3(corner.x, corner.y, corner.z + 10),
+        lookAt: new THREE.Vector3(corner.x, corner.y, corner.z),
     };
 };
 
