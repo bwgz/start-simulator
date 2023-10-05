@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader";
-import { dumpGeometry } from "@/three/utils.js";
+import { dumpGeometry, getGeometry } from "@/three";
 
 /*
  * Bounds: 67,225 x 88,090 x 13,699
@@ -50,6 +50,8 @@ const make = (manager) => {
                 //dumpGeometry("transform", model);
 
                 model.meta = meta;
+                model.meta.geometry = getGeometry(model);
+        
                 resolve(model);
             } catch (e) {
                 console.error(e);
@@ -60,6 +62,7 @@ const make = (manager) => {
 };
 
 const maker = {
+    id: meta.id,
     meta,
     make,
 };

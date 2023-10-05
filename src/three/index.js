@@ -1,4 +1,4 @@
-import { dumpGeometry } from "./utils.js";
+import { getGeometry, dumpGeometry } from "./utils.js";
 import { MAKE, makeAllModels } from "./models/factory.js";
 
-export { MAKE, dumpGeometry, makeAllModels };
+export { MAKE, dumpGeometry, getGeometry, makeAllModels };

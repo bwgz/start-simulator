@@ -20,6 +20,9 @@ const defaultSettings = {
         id: "pool:0", // "pool:0" is the only pool model available
         lanes: defaultLanes,
     },
+    block: {    
+        id: "omega",
+    },
     simulation: {
         numberOfSwimmers: defaultLanes,
         quality: SIMULATION_QUALITY.EXCELLENT,

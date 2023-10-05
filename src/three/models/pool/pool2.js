@@ -65,6 +65,7 @@ const make = (manager) => {
 };
 
 const maker = {
+    id: meta.id,
     meta,
     make,
 };

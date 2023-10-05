@@ -1,5 +1,5 @@
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
-import { BlockModel } from "./block";
+import { makeBlockModel } from "./block";
 import { ChairModel } from "./chair";
 import { makePoolModel } from "./pool";
 import { SwimmerModel } from "./swimmer";
@@ -43,8 +43,8 @@ function makePoolModels(manager, id, count) {
     });
 }
 
-function makeBlockModels(manager, count) {
-    return BlockModel.generate(manager).then((template) => {
+function makeBlockModels(manager, id, count) {
+    return makeBlockModel(manager, id).then((template) => {
         const clones = makeClones(MAKE.BLOCK, template, normalCloner, count);
         return bundleOrder(MAKE.BLOCK, template, clones);
     });
@@ -65,9 +65,11 @@ function makeSwimmerModels(manager, count) {
 }
 
 function makeAllModels(manager, settings) {
-    const { lanes, id } = settings.pool;
-    const pools = makePoolModels(manager, id, 1);
-    const blocks = makeBlockModels(manager, lanes);
+    const { pool, block } = settings;
+    const { lanes } = pool;
+
+    const pools = makePoolModels(manager, pool.id, 1);
+    const blocks = makeBlockModels(manager, block.id, lanes);
     const chairs = makeChairModels(manager, lanes);
     const swimmers = makeSwimmerModels(manager, lanes);
 
