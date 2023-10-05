@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { MAKE } from "@/three";
 
 function getDimensions(model) {
     const object = Array.isArray(model) ? model[0] : model;
@@ -21,7 +22,7 @@ function positionObject(objects, position, width) {
     });
 }
 
-function populateBlocks(pool, blocks) {
+function positionBlocks(pool, blocks) {
     const { laneWidth, rightLane } = pool;
     const { position, bounds, size } = getDimensions(blocks);
 
@@ -36,7 +37,7 @@ function populateBlocks(pool, blocks) {
     positionObject(blocks, lane, laneWidth)
 }
 
-function populateChairs(pool, chairs) {
+function positionChairs(pool, chairs) {
     const { laneWidth, rightLane } = pool;
     const { position, bounds, size } = getDimensions(chairs);
 
@@ -50,9 +51,8 @@ function populateChairs(pool, chairs) {
     positionObject(chairs, lane, laneWidth)
 }
 
-function populateWorld(pool, blocks, chairs) {
-    populateBlocks(pool, blocks);
-    //populateChairs(pool, chairs);
+function positionModels(pool, models) {
+    positionBlocks(pool, models[MAKE.BLOCK]);
 }
 
-export { populateWorld };
+export { positionModels };

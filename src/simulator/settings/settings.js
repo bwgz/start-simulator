@@ -17,6 +17,7 @@ const defaultLanes = 8;
 
 const defaultSettings = {
     pool: {
+        id: "pool:0", // "pool:0" is the only pool model available
         lanes: defaultLanes,
     },
     simulation: {

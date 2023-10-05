@@ -2,14 +2,14 @@
 import { onMounted, ref, watch } from "vue";
 import * as THREE from "three";
 
-import { useSettingsStore } from "@/simulator/settings";
-import { createWorld } from "@/three";
-import { POOL } from "./constants";
+import { MAKE, makeAllModels } from "@/three";
+import { positionModels } from "./position";
+
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
-import { populateWorld } from "./populate";
+
+import { useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
 import { createDatGui } from "./gui";
-import { dumpGeometry } from "@/three/utils";
 
 const debug = ref(true);
 const state = useStateStore();
@@ -28,10 +28,20 @@ const showView = ref(false);
 const world = {
     state: STATE.WAITING,
     models: null,
-    camera: CAMERA_NAMES.ORIGIN,
+    camera: CAMERA_NAMES.STARTER,
 };
 
-const renderWorld = (models) => {
+const addHelpers = (pool, scene) => {
+    if (false) {
+        let axisHelper = new THREE.AxesHelper(2000);
+        axisHelper.position.copy(POOL.rightLane);
+        scene.add(axisHelper);
+    }
+};
+
+const renderModels = (models) => {
+    const pool = models[MAKE.POOL][0];
+
     world.models = models;
     world.swimmers = models.swimmers;
 
@@ -50,27 +60,12 @@ const renderWorld = (models) => {
     const ambient = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambient);
 
-    const cameras = createCameras(POOL, width, height);
+    const cameras = createCameras(pool.meta, width, height);
     cameras.forEach((camera) => scene.add(camera));
 
-    const { pool, chairs, blocks, swimmers } = models;
-    [pool].concat(blocks, swimmers).forEach((model) => scene.add(model));
-    populateWorld(POOL, blocks, chairs);
+    models[MAKE.POOL].concat(models[MAKE.BLOCK]).forEach((model) => scene.add(model));
 
-    if (true) {
-        let axisHelper = new THREE.AxesHelper(2000);
-        axisHelper.position.copy(POOL.rightLane);
-        scene.add(axisHelper);
-    }
-
-    const geometry = new THREE.BoxGeometry(50, 26, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
-    const cube = new THREE.Mesh(geometry, material);
-    cube.position.copy(new THREE.Vector3(40, 30, 3));
-    //scene.add(cube);
-
-    if (true) {
+    if (false) {
         const boundingBox = new THREE.Box3();
         const size = new THREE.Vector3();
         boundingBox.setFromObject(swimmers[0]).getSize(size);
@@ -114,7 +109,6 @@ const renderWorld = (models) => {
         const delta = clock.getDelta();
 
         //for (const mixer of mixers) mixer.update(delta);
-        //controls.update();
         render();
     };
 
@@ -170,7 +164,6 @@ const onRacing = () => {
 
 onMounted(() => {
     let gui;
-    const manager = new THREE.LoadingManager();
 
     if (debug.value) {
         gui = createDatGui(datGui.value, world);
@@ -203,7 +196,22 @@ onMounted(() => {
         }
     });
 
-    createWorld(manager, settings.pool.lanes).then((models) => renderWorld(models));
+    const manager = new THREE.LoadingManager();
+    makeAllModels(manager, settings)
+        .then((models) =>
+            models.reduce((acc, cur) => {
+                acc[cur.make] = cur.items;
+                return acc;
+            }, [])
+        )
+        .then((models) => {
+            const meta = models[MAKE.POOL][0].meta
+            positionModels(meta, models);
+            return models;
+        })
+        .then((models) => {
+            renderModels(models);
+        });
 });
 </script>
 

@@ -1,8 +1,4 @@
-import { BlockModel } from "./models/block";
-import { ChairModel } from "./models/chair";
-import { PoolModel } from "./models/pool";
-import { SwimmerModel } from "./models/swimmer";
-import { loadModels } from "./loader";
-import { createWorld } from "./world";
+import { dumpGeometry } from "./utils.js";
+import { MAKE, makeAllModels } from "./models/factory.js";
 
-export { BlockModel, ChairModel, PoolModel, SwimmerModel, loadModels, createWorld };
+export { MAKE, dumpGeometry, makeAllModels };
