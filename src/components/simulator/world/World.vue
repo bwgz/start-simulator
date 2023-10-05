@@ -162,13 +162,7 @@ const onRacing = () => {
     });
 };
 
-onMounted(() => {
-    let gui;
-
-    if (debug.value) {
-        gui = createDatGui(datGui.value, world);
-    }
-
+const watchState = (gui) => {
     watch(state, (state) => {
         const { current } = state;
         world.state = current;
@@ -195,6 +189,14 @@ onMounted(() => {
                 break;
         }
     });
+};
+
+onMounted(() => {
+    let gui;
+
+    if (debug.value) {
+        gui = createDatGui(datGui.value, world);
+    }
 
     const manager = new THREE.LoadingManager();
     makeAllModels(manager, settings)
@@ -211,6 +213,8 @@ onMounted(() => {
         })
         .then((models) => {
             renderModels(models);
+        }).then(() => {
+            watchState(gui);
         });
 });
 </script>
