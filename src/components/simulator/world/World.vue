@@ -207,13 +207,14 @@ onMounted(() => {
             }, [])
         )
         .then((models) => {
-            const meta = models[MAKE.POOL][0].meta
+            const meta = models[MAKE.POOL][0].meta;
             positionModels(meta, models);
             return models;
         })
         .then((models) => {
             renderModels(models);
-        }).then(() => {
+        })
+        .then(() => {
             watchState(gui);
         });
 });
