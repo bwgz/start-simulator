@@ -51,8 +51,24 @@ function positionChairs(pool, chairs) {
     positionObject(chairs, lane, laneWidth)
 }
 
+function positionSwimmers(pool, swimmers) {
+    const { laneWidth, rightLane } = pool;
+    const { position, bounds, size } = getDimensions(swimmers);
+
+    // start at the right edge of lane 1
+    // x, y, z normalizes the block to the pool deck and
+    // move the block to the center of the lane
+    const x = position.x - bounds.max.x - 1;
+    const y = position.y - bounds.min.y + (laneWidth - size.y) / 2;
+    const z = position.z - bounds.min.z - 0.01; // deck is slanted and need to go a little lower
+    const lane = rightLane.clone().add(new THREE.Vector3(x, y, z));
+
+    positionObject(swimmers, lane, laneWidth)
+}
+
 function positionModels(pool, models) {
     positionBlocks(pool, models[MAKE.BLOCK]);
+    positionSwimmers(pool, models[MAKE.SWIMMER]);
 }
 
 export { positionModels };

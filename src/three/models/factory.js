@@ -2,7 +2,7 @@ import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { makeBlockModel } from "./block";
 import { ChairModel } from "./chair";
 import { makePoolModel } from "./pool";
-import { SwimmerModel } from "./swimmer";
+import { makeSwimmerModel } from "./swimmer";
 
 const generateModelName = (name, index) => name + ":" + index;
 
@@ -52,26 +52,26 @@ function makeBlockModels(manager, id, count) {
 
 function makeChairModels(manager, count) {
     return ChairModel.generate(manager).then((template) => {
-        const clones = makeClones(MAKE.BLOCK, template, normalCloner, count);
+        const clones = makeClones(MAKE.CHAIR, template, normalCloner, count);
         return bundleOrder(MAKE.CHAIR, template, clones);
     });
 }
 
-function makeSwimmerModels(manager, count) {
-    return SwimmerModel.generate(manager).then((template) => {
-        const clones = makeClones(MAKE.BLOCK, template, skeletionCloner, count);
+function makeSwimmerModels(manager, id, count) {
+    return makeSwimmerModel(manager, id).then((template) => {
+        const clones = makeClones(MAKE.SWIMMER, template, skeletionCloner, count);
         return bundleOrder(MAKE.SWIMMER, template, clones);
     });
 }
 
 function makeAllModels(manager, settings) {
-    const { pool, block } = settings;
+    const { pool, block, swimmer } = settings;
     const { lanes } = pool;
 
     const pools = makePoolModels(manager, pool.id, 1);
     const blocks = makeBlockModels(manager, block.id, lanes);
-    const chairs = makeChairModels(manager, lanes);
-    const swimmers = makeSwimmerModels(manager, lanes);
+    const chairs = makeChairModels(manager, block.id, lanes);
+    const swimmers = makeSwimmerModels(manager, swimmer.id, lanes);
 
     return Promise.allSettled([pools, blocks, chairs, swimmers]).then((orders) => orders.map((order) => order.value));
 }

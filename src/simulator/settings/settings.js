@@ -12,16 +12,21 @@ const LANE_ASSIGNMENT_METHOD = {
     RANDOM: 3
 };
 
-
 const defaultLanes = 8;
 
 const defaultSettings = {
     pool: {
-        id: "pool:0", // "pool:0" is the only pool model available
+        id: "pool:0",
         lanes: defaultLanes,
     },
     block: {    
         id: "omega",
+    },
+    chair: {
+        id: "sandler",
+    },
+    swimmer: {
+        id: "xbot",
     },
     simulation: {
         numberOfSwimmers: defaultLanes,
@@ -29,6 +34,5 @@ const defaultSettings = {
         laneAssignmentMethod: LANE_ASSIGNMENT_METHOD.RIGHT_TO_LEFT,
     },
 };
-
 
 export { SIMULATION_QUALITY, LANE_ASSIGNMENT_METHOD, defaultSettings };

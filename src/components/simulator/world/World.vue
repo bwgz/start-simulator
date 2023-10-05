@@ -63,7 +63,7 @@ const renderModels = (models) => {
     const cameras = createCameras(pool.meta, width, height);
     cameras.forEach((camera) => scene.add(camera));
 
-    models[MAKE.POOL].concat(models[MAKE.BLOCK]).forEach((model) => scene.add(model));
+    models[MAKE.POOL].concat(models[MAKE.BLOCK], models[MAKE.SWIMMER]).forEach((model) => scene.add(model));
 
     if (false) {
         const boundingBox = new THREE.Box3();
