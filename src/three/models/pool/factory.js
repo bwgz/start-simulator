@@ -1,7 +1,9 @@
-import { maker } from "./pool0";
+import { maker as poolZeroMaker } from "./pool0";
+import { maker as poolTwoMaker } from "./pool2";
 
 const makers = [];
-makers[maker.meta.id] = maker.make;
+makers[poolZeroMaker.meta.id] = poolZeroMaker.make;
+makers[poolTwoMaker.meta.id] = poolTwoMaker.make;
 
 function makePoolModel(manager, id) {
     return makers[id](manager);
