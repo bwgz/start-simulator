@@ -4,11 +4,10 @@ import * as THREE from "three";
 
 import { MAKE, makeAllModels } from "@/three";
 import { positionModels } from "./position";
-
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
-
 import { SIMULATION_QUALITY, useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
+import { getClipName, getRandomClipName } from "./clips";
 import { createDatGui } from "./gui";
 
 const debug = ref(true);
@@ -41,8 +40,6 @@ const addHelpers = (pool, scene) => {
     }
 };
 
-const getAnimationClipName = (name) => "Armature|" + name;
-
 const renderModels = (models) => {
     const pool = models[MAKE.POOL][0];
 
@@ -65,27 +62,7 @@ const renderModels = (models) => {
     cameras.forEach((camera) => scene.add(camera));
 
     models[MAKE.POOL].concat(models[MAKE.BLOCK], models[MAKE.SWIMMER]).forEach((model) => scene.add(model));
-
-    if (false) {
-        const boundingBox = new THREE.Box3();
-        const size = new THREE.Vector3();
-        boundingBox.setFromObject(swimmers[0]).getSize(size);
-
-        const position = POOL.rightLane.clone();
-        // x, y, z normalizes the block to the pool deck and
-        const x = swimmers[0].position.x - 1;
-        const y = 0;
-        const z = 0; // this is edge of the pool and behind the block is lower
-        position.add(new THREE.Vector3(x, y, z));
-
-        // move the block to the center of the lane
-        position.add(new THREE.Vector3(0, (POOL.laneWidth - size.y) / 2, 0));
-        for (let swimmer of swimmers) {
-            swimmer.position.copy(position);
-            position.add(new THREE.Vector3(0, POOL.laneWidth, 0));
-        }
-    }
-
+    
     const onWindowResize = (event) => {
         if (worldView?.value) {
             const width = worldView.value.clientWidth;
@@ -128,7 +105,7 @@ const onWaiting = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("bored"));
+        const action = mixer.clipAction(getRandomClipName(STATE.WAITING));
         action.timeScale = 0.7 + Math.random() * 0.3;
         action.play();
     });
@@ -144,7 +121,7 @@ const onCommencement = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("idle"));
+        const action = mixer.clipAction(getRandomClipName(STATE.COMMENCEMENT));
         action.timeScale = 0.7 + Math.random() * 0.3;
         action.play();
     });
@@ -160,7 +137,7 @@ const onOnPlatform = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("idle"));
+        const action = mixer.clipAction(getClipName("idle"));
         action.timeScale = 0.7 + Math.random() * 0.3;
         action.play();
     });
@@ -176,7 +153,7 @@ const onStartingPosition = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("take-your-mark"));
+        const action = mixer.clipAction(getClipName("take-your-mark"));
         action.clampWhenFinished = true;
         let timeScale = 1;
         if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
@@ -202,7 +179,7 @@ const onStanding = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("stand"));
+        const action = mixer.clipAction(getClipName("stand"));
         action.clampWhenFinished = true;
         let timeScale = 1;
         if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
@@ -228,7 +205,7 @@ const onRacing = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getAnimationClipName("start:2"));
+        const action = mixer.clipAction(getClipName("start:2"));
         action.clampWhenFinished = true;
         let timeScale = 1;
         if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
