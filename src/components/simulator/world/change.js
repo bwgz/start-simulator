@@ -135,9 +135,8 @@ stateHandlers[STATE.RACING] = onRacing;
 
 const onStateChange = (settings, state, world) => {
     const { current, previous } = state;
-    world.state = current;
 
-    stateHandlers[state](settings, world, previous);
+    stateHandlers[current](settings, world, previous);
 };
 
 const onSettingsChange = (settings, state, world) => {
@@ -178,9 +177,10 @@ const onSettingsChange = (settings, state, world) => {
 const watchState = (settings, state, world, gui) => {
     watch(state, (state) => {
         if (gui) {
+            world.state = state;
             gui.updateDisplay();
         }
-        
+
         onStateChange(settings, state, world);
     });
 
