@@ -16,7 +16,7 @@ const STATE = {
     ON_PLATFORM: "ON_PLATFORM", // short whistles
     STARTING_POSITION: "STARTING_POSITION", // take your mark
     STANDING: "STANDING", // stand
-    RACING: "RACING", // start signal
+    STARTING: "STARTING", // start signal
 };
 
 const defaultState = {
@@ -48,7 +48,7 @@ const useStateStore = defineStore("state", {
                     this.setState(STATE.STANDING);
                     break;
                 case COMMAND.START_SIGNAL:
-                    this.setState(STATE.RACING);
+                    this.setState(STATE.STARTING);
                     break;
             }
         },

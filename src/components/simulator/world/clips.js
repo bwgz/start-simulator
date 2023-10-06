@@ -8,7 +8,7 @@ clips[STATE.COMMENCEMENT] = [ "bashful", "clapping", "idle", "standing-idle"];
 clips[STATE.ON_PLATFORM] = ["bashful", "idle", "standing-idle"];
 clips[STATE.STARTING_POSITION] = ["take-your-marks"];
 clips[STATE.STANDING] = ["stand"];
-clips[STATE.RACING] = ["start:2"];
+clips[STATE.STARTING] = ["start:2"];
 
 const getRandomClipName = (state) => getClipName(clips[state][Math.floor(Math.random() * clips[state].length)]);
 

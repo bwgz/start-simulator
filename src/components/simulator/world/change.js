@@ -100,8 +100,8 @@ const onStanding = (settings, world, previous) => {
     });
 };
 
-const onRacing = (settings, world, previous) => {
-    console.log("onRacing");
+const onSTARTING = (settings, world, previous) => {
+    console.log("onSTARTING");
     const offset = new THREE.Vector3(0.35, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -131,7 +131,7 @@ stateHandlers[STATE.COMMENCEMENT] = onCommencement;
 stateHandlers[STATE.ON_PLATFORM] = onOnPlatform;
 stateHandlers[STATE.STARTING_POSITION] = onStartingPosition;
 stateHandlers[STATE.STANDING] = onStanding;
-stateHandlers[STATE.RACING] = onRacing;
+stateHandlers[STATE.STARTING] = onSTARTING;
 
 const onStateChange = (settings, current, previous, world) => {
 
