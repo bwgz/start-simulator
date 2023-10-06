@@ -10,7 +10,7 @@ import { STATE, useStateStore } from "@/simulator/state";
 import { watchState } from "./change";
 import { createDatGui } from "./gui";
 
-const debug = ref(true);
+const debug = ref(import.meta.env.MODE === "development");
 const state = useStateStore();
 const settings = useSettingsStore();
 
