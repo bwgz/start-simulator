@@ -180,7 +180,7 @@ onMounted(() => {
             const { simulation } = current;
             const { laneAssignmentMethod, numberOfSwimmers } = simulation;
 
-            if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.RIGHT_TO_LEFT) {
+            if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.NEAR) {
                 for (let i = 0; i < swimmers.length; i++) {
                     if (i >= numberOfSwimmers) {
                         swimmers[i].visible = false;
@@ -188,7 +188,7 @@ onMounted(() => {
                         swimmers[i].visible = true;
                     }
                 }
-            } else if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.LEFT_TO_RIGHT) {
+            } else if (laneAssignmentMethod == LANE_ASSIGNMENT_METHOD.FAR) {
                 for (let i = 0; i < swimmers.length; i++) {
                     if (i < numberOfSwimmers - 1) {
                         swimmers[i].visible = false;

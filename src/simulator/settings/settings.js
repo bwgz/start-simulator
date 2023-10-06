@@ -6,10 +6,9 @@ const SIMULATION_QUALITY = {
 };
 
 const LANE_ASSIGNMENT_METHOD = {
-    LEFT_TO_RIGHT: 0,
-    RIGHT_TO_LEFT: 1,
-    SEEDED: 2,
-    RANDOM: 3
+    FAR: "far",
+    NEAR: "near",
+    SEEDED: "seeded",
 };
 
 const defaultLanes = 8;
@@ -31,7 +30,7 @@ const defaultSettings = {
     simulation: {
         numberOfSwimmers: defaultLanes,
         quality: SIMULATION_QUALITY.EXCELLENT,
-        laneAssignmentMethod: LANE_ASSIGNMENT_METHOD.RIGHT_TO_LEFT,
+        laneAssignmentMethod: LANE_ASSIGNMENT_METHOD.NEAR,
     },
 };
 

@@ -51,10 +51,10 @@ const settings = useSettingsStore();
                             class="form-check-input"
                             type="radio"
                             id="rtol"
-                            value="1"
+                            value="near"
                             v-model="settings.simulation.laneAssignmentMethod"
                         />
-                        <label class="form-check-label" for="rtol">Right to Left</label>
+                        <label class="form-check-label" for="rtol">Near</label>
                     </div>
 
                     <div class="form-check">
@@ -62,10 +62,10 @@ const settings = useSettingsStore();
                             class="form-check-input"
                             type="radio"
                             id="ltor"
-                            value="0"
+                            value="far"
                             v-model="settings.simulation.laneAssignmentMethod"
                         />
-                        <label class="form-check-label" for="ltor">Left to Right</label>
+                        <label class="form-check-label" for="ltor">Far</label>
                     </div>
 
                     <div class="form-check">
@@ -73,21 +73,10 @@ const settings = useSettingsStore();
                             class="form-check-input"
                             type="radio"
                             id="seeded"
-                            value="2"
+                            value="seeded"
                             v-model="settings.simulation.laneAssignmentMethod"
                         />
                         <label class="form-check-label" for="seeded">Seeded</label>
-                    </div>
-                    <div class="form-check">
-                        <input
-                            class="form-check-input"
-                            type="radio"
-                            id="random"
-                            value="3"
-                            v-model="settings.simulation.laneAssignmentMethod"
-                            disabled
-                       />
-                        <label class="form-check-label" for="random">Random</label>
                     </div>
                 </div>
             </div>
