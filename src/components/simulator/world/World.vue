@@ -7,13 +7,12 @@ import { positionModels } from "./position";
 
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 
-import { useSettingsStore } from "@/simulator/settings";
+import { SIMULATION_QUALITY, useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
 import { createDatGui } from "./gui";
 
 const debug = ref(true);
 const state = useStateStore();
-
 const settings = useSettingsStore();
 
 const progressBar = ref(null);
@@ -29,6 +28,9 @@ const world = {
     state: STATE.WAITING,
     models: null,
     camera: CAMERA_NAMES.STARTER,
+    pool: null,
+    swimmers: [],
+    mixers: [],
 };
 
 const addHelpers = (pool, scene) => {
@@ -39,11 +41,10 @@ const addHelpers = (pool, scene) => {
     }
 };
 
+const getAnimationClipName = (name) => "Armature|" + name;
+
 const renderModels = (models) => {
     const pool = models[MAKE.POOL][0];
-
-    world.models = models;
-    world.swimmers = models.swimmers;
 
     const width = worldView.value.clientWidth;
     const height = worldView.value.clientHeight;
@@ -108,7 +109,7 @@ const renderModels = (models) => {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
 
-        //for (const mixer of mixers) mixer.update(delta);
+        world.mixers.forEach((mixer) => mixer.update(delta));
         render();
     };
 
@@ -117,54 +118,109 @@ const renderModels = (models) => {
     showView.value = true;
 };
 
-const onWaiting = () => {
+const onWaiting = (previous) => {
     console.log("onWaiting");
+    const offset = new THREE.Vector3(3, 0, 0);
+    const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
-        const position = swimmer.position.clone();
-        position.sub(new THREE.Vector3(100, 0, 0));
-        swimmer.position.copy(position);
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("bored"));
+        action.timeScale = 0.7 + Math.random() * 0.3;
+        action.play();
     });
 };
 
-const onCommencement = () => {
+const onCommencement = (previous) => {
     console.log("onCommencement");
+    const offset = new THREE.Vector3(2, 0, 0);
+    const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
-        const position = swimmer.position.clone();
-        position.add(new THREE.Vector3(100, 0, 0));
-        swimmer.position.copy(position);
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("idle"));
+        action.timeScale = 0.7 + Math.random() * 0.3;
+        action.play();
     });
 };
 
-const onOnPlatform = () => {
+const onOnPlatform = (previous) => {
     console.log("onOnPlatform");
+    const offset = new THREE.Vector3(0.4, 0, -0.45);
+    const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
-        const position = swimmer.position.clone();
-        position.add(new THREE.Vector3(120, 70, 45));
-        swimmer.position.copy(position);
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("idle"));
+        action.timeScale = 0.7 + Math.random() * 0.3;
+        action.play();
     });
 };
 
-const onStartingPosition = () => {
+const onStartingPosition = (previous) => {
     console.log("onStartingPosition");
+    const offset = new THREE.Vector3(0.35, 0, -0.45);
+    const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
-        const position = swimmer.position.clone();
-        position.add(new THREE.Vector3(12, 0, 0));
-        swimmer.position.copy(position);
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("take-your-mark"));
+        action.clampWhenFinished = true;
+        let timeScale = 1;
+        if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
+            timeScale = 0.25 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.GOOD) {
+            timeScale = 0.5 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.EXCELLENT) {
+            timeScale = 0.75 + Math.random() * 0.25;
+        }
+        action.timeScale = timeScale;
+        action.setLoop(THREE.LoopOnce, 1);
+        action.play();
     });
 };
 
-const onRacing = () => {
+const onRacing = (previous) => {
     console.log("onRacing");
+    const offset = new THREE.Vector3(0.25, 0, -0.45);
+    const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
-        const position = swimmer.position.clone();
-        position.add(new THREE.Vector3(20, 0, 0));
-        swimmer.position.copy(position);
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("start:2"));
+        action.clampWhenFinished = true;
+        let timeScale = 1;
+        if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
+            timeScale = 0.25 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.GOOD) {
+            timeScale = 0.5 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.EXCELLENT) {
+            timeScale = 0.75 + Math.random() * 0.25;
+        }
+        action.timeScale = timeScale;
+        action.setLoop(THREE.LoopOnce, 1);
+        action.play();
     });
 };
 
 const watchState = (gui) => {
     watch(state, (state) => {
-        const { current } = state;
+        const { current, previous } = state;
         world.state = current;
 
         if (gui) {
@@ -173,19 +229,19 @@ const watchState = (gui) => {
 
         switch (current) {
             case STATE.WAITING:
-                onWaiting();
+                onWaiting(previous);
                 break;
             case STATE.COMMENCEMENT:
-                onCommencement();
+                onCommencement(previous);
                 break;
             case STATE.ON_PLATFORM:
-                onOnPlatform();
+                onOnPlatform(previous);
                 break;
             case STATE.STARTING_POSITION:
-                onStartingPosition();
+                onStartingPosition(previous);
                 break;
             case STATE.RACING:
-                onRacing();
+                onRacing(previous);
                 break;
         }
     });
@@ -213,8 +269,15 @@ onMounted(() => {
         })
         .then((models) => {
             renderModels(models);
+            return models;
         })
-        .then(() => {
+        .then((models) => {
+            world.pool = models[MAKE.POOL][0];
+            world.swimmers = models[MAKE.SWIMMER];
+            world.swimmers.forEach((swimmer) => {
+                const mixer = new THREE.AnimationMixer(swimmer);
+                world.mixers.push(mixer);
+            });
             watchState(gui);
         });
 });

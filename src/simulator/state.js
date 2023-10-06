@@ -14,7 +14,6 @@ const STATE = {
     WAITING: "WAITING",
     COMMENCEMENT: "COMMENCEMENT", // 1st long whistle
     ON_PLATFORM: "ON_PLATFORM", // short whistles
-    STARTER_CONTROL: "STARTER_CONTROL", // outstretched arm
     STARTING_POSITION: "STARTING_POSITION", // take your mark
     RACING: "RACING", // start signal
 };
