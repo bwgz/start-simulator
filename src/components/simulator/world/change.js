@@ -102,7 +102,7 @@ const onStanding = (settings, world, previous) => {
 
 const onRacing = (settings, world, previous) => {
     console.log("onRacing");
-    const offset = new THREE.Vector3(0.25, 0, -0.45);
+    const offset = new THREE.Vector3(0.35, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
