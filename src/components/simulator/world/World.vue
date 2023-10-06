@@ -153,7 +153,7 @@ const onStartingPosition = (previous) => {
     });
     world.mixers.forEach((mixer) => {
         mixer.stopAllAction();
-        const action = mixer.clipAction(getClipName("take-your-mark"));
+        const action = mixer.clipAction(getClipName("take-your-marks"));
         action.clampWhenFinished = true;
         let timeScale = 1;
         if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {

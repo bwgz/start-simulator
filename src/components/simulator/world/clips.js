@@ -4,9 +4,9 @@ const getClipName = (name) => "Armature|" + name;
 
 const clips = [];
 clips[STATE.WAITING] = ["bashful", "bored", "idle", "standing-greeting", "standing-idle"];
-clips[STATE.COMMENCEMENT] = ["bashful", "idle", "idle-01", "standing-idle"];
+clips[STATE.COMMENCEMENT] = [ "bashful", "clapping", "idle", "standing-idle"];
 clips[STATE.ON_PLATFORM] = ["bashful", "idle", "standing-idle"];
-clips[STATE.STARTING_POSITION] = ["take-your-mark"];
+clips[STATE.STARTING_POSITION] = ["take-your-marks"];
 clips[STATE.STANDING] = ["stand"];
 clips[STATE.RACING] = ["start:2"];
 
