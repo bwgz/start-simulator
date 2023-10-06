@@ -5,7 +5,6 @@ import { getClipName, getRandomClipName } from "./clips";
 import { LANE_ASSIGNMENT_METHOD, SIMULATION_QUALITY } from "@/simulator/settings";
 
 const onWaiting = (settings, world, previous) => {
-    console.log("onWaiting");
     const offset = new THREE.Vector3(3, 0, 0);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -21,7 +20,6 @@ const onWaiting = (settings, world, previous) => {
 };
 
 const onCommencement = (settings, world, previous) => {
-    console.log("onCommencement");
     const offset = new THREE.Vector3(2, 0, 0);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -53,7 +51,6 @@ const onOnPlatform = (settings, world, previous) => {
 };
 
 const onStartingPosition = (settings, world, previous) => {
-    console.log("onStartingPosition");
     const offset = new THREE.Vector3(0.35, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -79,7 +76,6 @@ const onStartingPosition = (settings, world, previous) => {
 };
 
 const onStanding = (settings, world, previous) => {
-    console.log("onStartingPosition");
     const offset = new THREE.Vector3(0.35, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -129,38 +125,25 @@ const onRacing = (settings, world, previous) => {
         action.play();
     });
 };
+const stateHandlers = [];
+stateHandlers[STATE.WAITING] = onWaiting;
+stateHandlers[STATE.COMMENCEMENT] = onCommencement;
+stateHandlers[STATE.ON_PLATFORM] = onOnPlatform;
+stateHandlers[STATE.STARTING_POSITION] = onStartingPosition;
+stateHandlers[STATE.STANDING] = onStanding;
+stateHandlers[STATE.RACING] = onRacing;
 
 const onStateChange = (settings, state, world) => {
     const { current, previous } = state;
     world.state = current;
 
-    switch (current) {
-        case STATE.WAITING:
-            onWaiting(settings, world, previous);
-            break;
-        case STATE.COMMENCEMENT:
-            onCommencement(settings, world, previous);
-            break;
-        case STATE.ON_PLATFORM:
-            onOnPlatform(settings, world, previous);
-            break;
-        case STATE.STARTING_POSITION:
-            onStartingPosition(settings, world, previous);
-            break;
-        case STATE.STANDING:
-            onStanding(settings, world, previous);
-            break;
-        case STATE.RACING:
-            onRacing(settings, world, previous);
-            break;
-    }
+    stateHandlers[state](settings, world, previous);
 };
 
 const onSettingsChange = (settings, state, world) => {
     const { pool, simulation } = settings;
     const { laneAssignmentMethod, numberOfSwimmers, quality } = simulation;
     const { swimmers } = world;
-    console.log("onSettingsChange", laneAssignmentMethod, numberOfSwimmers, quality);
     if (laneAssignmentMethod === LANE_ASSIGNMENT_METHOD.NEAR) {
         for (let i = 0; i < swimmers.length; i++) {
             if (i >= numberOfSwimmers) {
