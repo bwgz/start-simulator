@@ -192,6 +192,32 @@ const onStartingPosition = (previous) => {
     });
 };
 
+const onStanding = (previous) => {
+    console.log("onStartingPosition");
+    const offset = new THREE.Vector3(0.35, 0, -0.45);
+    const position = world.pool.meta.corner.clone().sub(offset);
+    world.swimmers.forEach((swimmer) => {
+        swimmer.position.x = position.x;
+        swimmer.position.z = position.z;
+    });
+    world.mixers.forEach((mixer) => {
+        mixer.stopAllAction();
+        const action = mixer.clipAction(getAnimationClipName("stand"));
+        action.clampWhenFinished = true;
+        let timeScale = 1;
+        if (settings.simulation.quality == SIMULATION_QUALITY.POOR) {
+            timeScale = 0.25 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.GOOD) {
+            timeScale = 0.5 + Math.random() * 0.25;
+        } else if (settings.simulation.quality == SIMULATION_QUALITY.EXCELLENT) {
+            timeScale = 0.75 + Math.random() * 0.25;
+        }
+        action.timeScale = timeScale;
+        action.setLoop(THREE.LoopOnce, 1);
+        action.play();
+    });
+};
+
 const onRacing = (previous) => {
     console.log("onRacing");
     const offset = new THREE.Vector3(0.25, 0, -0.45);
@@ -239,6 +265,9 @@ const watchState = (gui) => {
                 break;
             case STATE.STARTING_POSITION:
                 onStartingPosition(previous);
+                break;
+            case STATE.STANDING:
+                onStanding(previous);
                 break;
             case STATE.RACING:
                 onRacing(previous);
