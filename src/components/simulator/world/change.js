@@ -133,8 +133,7 @@ stateHandlers[STATE.STARTING_POSITION] = onStartingPosition;
 stateHandlers[STATE.STANDING] = onStanding;
 stateHandlers[STATE.RACING] = onRacing;
 
-const onStateChange = (settings, state, world) => {
-    const { current, previous } = state;
+const onStateChange = (settings, current, previous, world) => {
 
     stateHandlers[current](settings, world, previous);
 };
@@ -176,12 +175,14 @@ const onSettingsChange = (settings, state, world) => {
 
 const watchState = (settings, state, world, gui) => {
     watch(state, (state) => {
+        const { current, previous } = state;
+
         if (gui) {
-            world.state = state;
+            world.state = current;
             gui.updateDisplay();
         }
 
-        onStateChange(settings, state, world);
+        onStateChange(settings, current, previous, world);
     });
 
     watch(settings, (settings) => {
