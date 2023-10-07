@@ -1,5 +1,5 @@
 <script setup>
-import { stats } from "./stats.js";
+import { stats } from "@/simulator";
 
 function displayWait() {
     const waitInSeconds = stats.waitInSeconds();

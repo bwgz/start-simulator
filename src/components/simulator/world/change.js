@@ -35,7 +35,6 @@ const onCommencement = (settings, world, previous) => {
 };
 
 const onOnPlatform = (settings, world, previous) => {
-    console.log("onOnPlatform");
     const offset = new THREE.Vector3(0.4, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
@@ -101,7 +100,6 @@ const onStanding = (settings, world, previous) => {
 };
 
 const onSTARTING = (settings, world, previous) => {
-    console.log("onSTARTING");
     const offset = new THREE.Vector3(0.35, 0, -0.45);
     const position = world.pool.meta.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {

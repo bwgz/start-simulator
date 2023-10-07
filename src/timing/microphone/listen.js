@@ -1,6 +1,11 @@
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-var SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList
-var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList;
+var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+
+const LISTEN_EVENT = {
+    SPEECH: "speech",
+    STATUS: "status",
+};
 
 class Listen {
     takeYourMarks = "#JSGF V1.0; grammar phrase; public <phrase> = take you marks;";
@@ -22,7 +27,7 @@ class Listen {
         this.callback = callback;
     }
 
-    handle(type, value) {
+    sendEvent(type, value) {
         if (this.callback) {
             this.callback({
                 type,
@@ -35,19 +40,18 @@ class Listen {
         if (!this.isListening) {
             this.isListening = true;
             this.recognition.start();
-            this.handle("isHot", this.isListening);
+            this.sendEvent(LISTEN_EVENT.STATUS, this.isListening);
 
             this.recognition.onresult = (event) => {
-                var speechResult = event.results[event.results.length -1][0].transcript.toLowerCase().trim();
-                this.handle("speech", speechResult);
+                var speechResult = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+                this.sendEvent(LISTEN_EVENT.SPEECH, speechResult);
             };
 
             this.recognition.onend = (event) => {
                 this.recognition.stop();
                 this.isListening = false;
-                this.handle("isHot", this.isListening);
+                this.sendEvent(LISTEN_EVENT.STATUS, this.isListening);
             };
-
         }
     }
 
@@ -55,9 +59,9 @@ class Listen {
         if (this.isListening) {
             this.recognition.stop();
             this.isListening = false;
-            this.handle("isHot", this.isListening);
+            this.sendEvent(LISTEN_EVENT.STATUS, this.isListening);
         }
     }
 }
 
-export { Listen };
+export { LISTEN_EVENT, Listen };

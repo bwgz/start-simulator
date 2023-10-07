@@ -1,3 +1,3 @@
-import { Microphone } from "./microphone/microphone";
+import { MICROPHONE_EVENT, Microphone } from "./microphone/microphone";
 
-export { Microphone };
+export { MICROPHONE_EVENT, Microphone };
