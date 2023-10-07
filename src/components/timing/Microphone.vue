@@ -11,15 +11,19 @@ const startButton = ref();
 const toggleKey = ref(false);
 const microphone = new Microphone();
 
-function onTakeYouMarks() {
+function onTakeYouMarks(value) {
     state.command(COMMAND.TAKE_YOUR_MARKS);
     stats.setCommand(value);
     stats.markTym();
 }
 
-function onStand() {
+function onStand(value) {
     state.command(COMMAND.STAND);
-    stats.clear();
+    stats.setCommand(value);
+}
+
+function onUnknown(value) {
+    stats.setCommand(value);
 }
 
 function onStartPress() {
@@ -41,9 +45,11 @@ microphone.onEvent((event) => {
             break;
         case MICROPHONE_EVENT.COMMAND:
             if (value.includes("stand")) {
-                onStand();
+                onStand(value);
             } else if (value.includes("take")) {
-                onTakeYouMarks();
+                onTakeYouMarks(value);
+            } else {
+                onUnknown(value);
             }
             break;
         case MICROPHONE_EVENT.START_PRESS:
