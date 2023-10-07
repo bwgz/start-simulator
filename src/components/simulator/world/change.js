@@ -132,14 +132,13 @@ stateHandlers[STATE.STANDING] = onStanding;
 stateHandlers[STATE.STARTING] = onSTARTING;
 
 const onStateChange = (settings, current, previous, world) => {
-
     stateHandlers[current](settings, world, previous);
 };
 
 const onSettingsChange = (settings, state, world) => {
-    const { pool, simulation } = settings;
+    const { simulation } = settings;
     const { laneAssignmentMethod, numberOfSwimmers } = simulation;
-    const { swimmers } = world;
+    const { pool, swimmers } = world;
     if (laneAssignmentMethod === LANE_ASSIGNMENT_METHOD.NEAR) {
         for (let i = 0; i < swimmers.length; i++) {
             if (i >= numberOfSwimmers) {
@@ -150,7 +149,7 @@ const onSettingsChange = (settings, state, world) => {
         }
     } else if (laneAssignmentMethod === LANE_ASSIGNMENT_METHOD.FAR) {
         for (let i = 0; i < swimmers.length; i++) {
-            if (i < (pool.lanes - numberOfSwimmers)) {
+            if (i < (pool.userData.specification.lanes - numberOfSwimmers)) {
                 swimmers[i].visible = false;
             } else {
                 swimmers[i].visible = true;
@@ -158,7 +157,7 @@ const onSettingsChange = (settings, state, world) => {
         }
     } else if (laneAssignmentMethod === LANE_ASSIGNMENT_METHOD.SEEDED) {
         const size = Number(numberOfSwimmers);
-        const start = Math.floor((pool.lanes - size) / 2);
+        const start = Math.floor((pool.userData.specification.lanes - size) / 2);
         const end = start + Number(size) - 1;
         console.log(start, end);
         for (let i = 0; i < swimmers.length; i++) {
@@ -171,7 +170,8 @@ const onSettingsChange = (settings, state, world) => {
     }
 };
 
-const watchState = (settings, state, world, gui) => {
+const watchForChange = (settings, state, world, gui) => {
+    onSettingsChange(settings, state, world);
     watch(state, (state) => {
         const { current, previous } = state;
 
@@ -188,4 +188,4 @@ const watchState = (settings, state, world, gui) => {
     });
 };
 
-export { watchState };
+export { watchForChange };

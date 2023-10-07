@@ -8,7 +8,7 @@ import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { createLights } from "./lights";
 import { useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
-import { watchState } from "./change";
+import { watchForChange } from "./change";
 import { createDatGui } from "./gui";
 
 const debug = ref(import.meta.env.MODE === "development");
@@ -63,11 +63,7 @@ const renderModels = (models) => {
     cameras.forEach((camera) => scene.add(camera));
 
     const lights = createLights(pool.userData.specification);
-    lights.forEach((light) => {
-        const helper = new THREE.DirectionalLightHelper(light, 5);
-        scene.add(light);
-        scene.add(helper);
-    });
+    lights.forEach((light) => scene.add(light));
 
     [pool].concat(blocks, swimmers).forEach((model) => scene.add(model));
 
@@ -133,7 +129,7 @@ onMounted(() => {
                 world.mixers.push(mixer);
             });
             settings.setNumberOfSwimmers(settings, Math.min(numberOfSwimmers, pool.userData.specification.lanes));
-            watchState(settings, state, world, gui);
+            watchForChange(settings, state, world, gui);
         });
 });
 </script>
