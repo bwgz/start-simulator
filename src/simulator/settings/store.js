@@ -2,7 +2,19 @@ import { defineStore } from "pinia";
 import { defaultSettings } from "./settings";
 
 const loadSettings = () => {
-    return (localStorage.getItem("settings")) ? JSON.parse(localStorage.getItem("settings")) : defaultSettings;
+    let settings = defaultSettings;
+    const item = localStorage.getItem("settings");
+    if (item) {
+        const object = JSON.parse(item);
+        if (object.version === defaultSettings.version) {
+            settings = object;
+        }
+        else {
+            localStorage.removeItem("settings");
+        }
+    }
+
+    return settings;
 };
 
 const useSettingsStore = defineStore("settings", {

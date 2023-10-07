@@ -14,6 +14,7 @@ const LANE_ASSIGNMENT_METHOD = {
 const defaultLanes = 8;
 
 const defaultSettings = {
+    version: "0.2",
     pool: {
         id: "pool:0",
         lanes: defaultLanes,
