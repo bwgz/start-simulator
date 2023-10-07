@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader";
-import { dumpGeometry, getGeometry } from "@/THREE";
+import { dumpGeometry, getGeometry } from "@/three";
 
 /*
  * https://www.swisstiming.com/fileadmin/Resources/Data/Datasheets/DOCM_AQ_OSB11_anTiSlip_0519.pdf
