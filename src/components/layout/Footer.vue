@@ -5,7 +5,7 @@ const buildDate = import.meta.env.VITE_BUILD_DATE ? import.meta.env.VITE_BUILD_D
 <template>
     <footer class="container py-5 bg-light">
         <div class="row pb-2">
-            <small>Starter Simulator 0.1</small>
+            <small>Starter Simulator 0.2</small>
             <small>Please note, this is alpha software. Some features may be incomplete or buggy.</small>
             <small>Built: {{ buildDate }}</small>
         </div>
