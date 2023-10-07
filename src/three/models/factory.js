@@ -4,8 +4,6 @@ import { ChairModel } from "./chair";
 import { makePoolModel } from "./pool";
 import { makeSwimmerModel } from "./swimmer";
 
-const generateModelName = (name, index) => name + ":" + index;
-
 const MAKE = {
     POOL: "pool",
     BLOCK: "block",
@@ -22,7 +20,6 @@ function makeClones(name, template, cloner, count = 1) {
 
     for (let i = 0; i < count - 1; i++) {
         const clone = cloner(template);
-        clone.name = generateModelName(name, i);
         clones.push(clone);
     }
 
@@ -45,35 +42,43 @@ function makePoolModels(manager, id, count) {
 
 function makeBlockModels(manager, id, count) {
     return makeBlockModel(manager, id).then((template) => {
-        const clones = makeClones(MAKE.BLOCK, template, normalCloner, count);
+        const clones = makeClones(template.name, template, normalCloner, count);
         return bundleOrder(MAKE.BLOCK, template, clones);
     });
 }
 
 function makeChairModels(manager, count) {
     return ChairModel.generate(manager).then((template) => {
-        const clones = makeClones(MAKE.CHAIR, template, normalCloner, count);
+        const clones = makeClones(template.name, template, normalCloner, count);
         return bundleOrder(MAKE.CHAIR, template, clones);
     });
 }
 
 function makeSwimmerModels(manager, id, count) {
     return makeSwimmerModel(manager, id).then((template) => {
-        const clones = makeClones(MAKE.SWIMMER, template, skeletionCloner, count);
+        const clones = makeClones(template.name, template, skeletionCloner, count);
         return bundleOrder(MAKE.SWIMMER, template, clones);
     });
 }
 
 function makeAllModels(manager, settings) {
     const { pool, block, swimmer } = settings;
-    const { lanes } = pool;
 
-    const pools = makePoolModels(manager, pool.id, 1);
-    const blocks = makeBlockModels(manager, block.id, lanes);
-    const chairs = makeChairModels(manager, block.id, lanes);
-    const swimmers = makeSwimmerModels(manager, swimmer.id, lanes);
+    return makePoolModel(manager, pool.id).then((pool) => {
+        const { lanes } = pool.userData.specification;
+        const blocks = makeBlockModels(manager, block.id, lanes);
+        const swimmers = makeSwimmerModels(manager, swimmer.id, lanes);
 
-    return Promise.allSettled([pools, blocks, chairs, swimmers]).then((orders) => orders.map((order) => order.value));
+        return Promise.allSettled([blocks, swimmers]).then((models) => {
+            const blocks = models[0].value.items;
+            const swimmers = models[1].value.items;
+            return {
+                pool,
+                blocks,
+                swimmers,
+            };
+        });
+    });
 }
 
 export { MAKE, makeAllModels };

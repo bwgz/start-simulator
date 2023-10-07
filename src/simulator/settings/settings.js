@@ -11,13 +11,10 @@ const LANE_ASSIGNMENT_METHOD = {
     SEEDED: "seeded",
 };
 
-const defaultLanes = 8;
-
 const defaultSettings = {
-    version: "0.2",
+    version: "0.3",
     pool: {
         id: "pool:0",
-        lanes: defaultLanes,
     },
     block: {    
         id: "omega",
@@ -29,7 +26,7 @@ const defaultSettings = {
         id: "xbot",
     },
     simulation: {
-        numberOfSwimmers: defaultLanes,
+        numberOfSwimmers: 8,
         quality: SIMULATION_QUALITY.EXCELLENT,
         laneAssignmentMethod: LANE_ASSIGNMENT_METHOD.NEAR,
     },

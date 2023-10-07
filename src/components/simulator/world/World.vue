@@ -5,14 +5,15 @@ import * as THREE from "three";
 import { MAKE, makeAllModels } from "@/three";
 import { positionModels } from "./position";
 import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
+import { createLights } from "./lights";
 import { useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
 import { watchState } from "./change";
 import { createDatGui } from "./gui";
 
 const debug = ref(import.meta.env.MODE === "development");
-const state = useStateStore();
 const settings = useSettingsStore();
+const state = useStateStore();
 
 const progressBar = ref(null);
 const worldView = ref(null);
@@ -41,7 +42,7 @@ const addHelpers = (pool, scene) => {
 };
 
 const renderModels = (models) => {
-    const pool = models[MAKE.POOL][0];
+    const { pool, blocks, swimmers } = models;
 
     const width = worldView.value.clientWidth;
     const height = worldView.value.clientHeight;
@@ -58,11 +59,18 @@ const renderModels = (models) => {
     const ambient = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambient);
 
-    const cameras = createCameras(pool.meta, width, height);
+    const cameras = createCameras(pool.userData.specification, width, height);
     cameras.forEach((camera) => scene.add(camera));
 
-    models[MAKE.POOL].concat(models[MAKE.BLOCK], models[MAKE.SWIMMER]).forEach((model) => scene.add(model));
-    
+    const lights = createLights(pool.userData.specification);
+    lights.forEach((light) => {
+        const helper = new THREE.DirectionalLightHelper(light, 5);
+        scene.add(light);
+        scene.add(helper);
+    });
+
+    [pool].concat(blocks, swimmers).forEach((model) => scene.add(model));
+
     const onWindowResize = (event) => {
         if (worldView?.value) {
             const width = worldView.value.clientWidth;
@@ -104,15 +112,9 @@ onMounted(() => {
 
     const manager = new THREE.LoadingManager();
     makeAllModels(manager, settings)
-        .then((models) =>
-            models.reduce((acc, cur) => {
-                acc[cur.make] = cur.items;
-                return acc;
-            }, [])
-        )
         .then((models) => {
-            const meta = models[MAKE.POOL][0].meta;
-            positionModels(meta, models);
+            const { pool } = models;
+            positionModels(models);
             return models;
         })
         .then((models) => {
@@ -120,12 +122,17 @@ onMounted(() => {
             return models;
         })
         .then((models) => {
-            world.pool = models[MAKE.POOL][0];
-            world.swimmers = models[MAKE.SWIMMER];
+            const { pool, swimmers } = models;
+            const { simulation } = settings;
+            const { numberOfSwimmers } = simulation;
+
+            world.pool = pool;
+            world.swimmers = swimmers;
             world.swimmers.forEach((swimmer) => {
                 const mixer = new THREE.AnimationMixer(swimmer);
                 world.mixers.push(mixer);
             });
+            settings.setNumberOfSwimmers(settings, Math.min(numberOfSwimmers, pool.userData.specification.lanes));
             watchState(settings, state, world, gui);
         });
 });

@@ -66,9 +66,11 @@ function positionSwimmers(pool, swimmers) {
     positionObject(swimmers, lane, laneWidth)
 }
 
-function positionModels(pool, models) {
-    positionBlocks(pool, models[MAKE.BLOCK]);
-    positionSwimmers(pool, models[MAKE.SWIMMER]);
+function positionModels( models) {
+    const { pool, blocks, swimmers } = models;
+    const { specification, geometry } = pool.userData;
+    positionBlocks(specification, blocks);
+    positionSwimmers(specification, swimmers);
 }
 
 export { positionModels };

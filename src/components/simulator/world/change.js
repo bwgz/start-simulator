@@ -6,7 +6,7 @@ import { LANE_ASSIGNMENT_METHOD, SIMULATION_QUALITY } from "@/simulator/settings
 
 const onWaiting = (settings, world, previous) => {
     const offset = new THREE.Vector3(3, 0, 0);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -21,7 +21,7 @@ const onWaiting = (settings, world, previous) => {
 
 const onCommencement = (settings, world, previous) => {
     const offset = new THREE.Vector3(2, 0, 0);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -36,7 +36,7 @@ const onCommencement = (settings, world, previous) => {
 
 const onOnPlatform = (settings, world, previous) => {
     const offset = new THREE.Vector3(0.4, 0, -0.45);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -51,7 +51,7 @@ const onOnPlatform = (settings, world, previous) => {
 
 const onStartingPosition = (settings, world, previous) => {
     const offset = new THREE.Vector3(0.35, 0, -0.45);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -76,7 +76,7 @@ const onStartingPosition = (settings, world, previous) => {
 
 const onStanding = (settings, world, previous) => {
     const offset = new THREE.Vector3(0.35, 0, -0.45);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -101,7 +101,7 @@ const onStanding = (settings, world, previous) => {
 
 const onSTARTING = (settings, world, previous) => {
     const offset = new THREE.Vector3(0.35, 0, -0.45);
-    const position = world.pool.meta.corner.clone().sub(offset);
+    const position = world.pool.userData.specification.corner.clone().sub(offset);
     world.swimmers.forEach((swimmer) => {
         swimmer.position.x = position.x;
         swimmer.position.z = position.z;
@@ -138,7 +138,7 @@ const onStateChange = (settings, current, previous, world) => {
 
 const onSettingsChange = (settings, state, world) => {
     const { pool, simulation } = settings;
-    const { laneAssignmentMethod, numberOfSwimmers, quality } = simulation;
+    const { laneAssignmentMethod, numberOfSwimmers } = simulation;
     const { swimmers } = world;
     if (laneAssignmentMethod === LANE_ASSIGNMENT_METHOD.NEAR) {
         for (let i = 0; i < swimmers.length; i++) {

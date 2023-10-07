@@ -52,6 +52,10 @@ class Listen {
                 this.isListening = false;
                 this.sendEvent(LISTEN_EVENT.STATUS, this.isListening);
             };
+
+            this.recognition.onerror = (event) => {
+                console.error(event.error);
+            };
         }
     }
 

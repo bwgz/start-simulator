@@ -15,7 +15,7 @@ import { dumpGeometry, getGeometry } from "@/three";
  * @property {THREE.Vector3} rightLane - The position of the right most lane of the pool.
  * @property {number} laneWidth - The width of each lane in the pool.
  */
-const meta = {
+const specification = {
     title: "Olympic Swimming Pool",
     url: "https://3dwarehouse.sketchup.com/model/93a0210ce458dbb4c90e1681ced8feb6/Olympic-Swimming-Pool",
     id: "pool:0",
@@ -23,6 +23,7 @@ const meta = {
     get rightLane() {
         return new THREE.Vector3(this.corner.x, this.corner.y + 1.31, this.corner.z);
     },
+    lanes: 8,
     laneWidth: 2.83,
 };
 
@@ -49,8 +50,10 @@ const make = (manager) => {
                 model.position.z += min.z * -1;
                 //dumpGeometry("transform", model);
 
-                model.meta = meta;
-                model.meta.geometry = getGeometry(model);
+                model.userData = {
+                    specification,
+                    geometry: getGeometry(model)
+                };
         
                 resolve(model);
             } catch (e) {
@@ -62,8 +65,8 @@ const make = (manager) => {
 };
 
 const maker = {
-    id: meta.id,
-    meta,
+    id: specification.id,
+    specification,
     make,
 };
 

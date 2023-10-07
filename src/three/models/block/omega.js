@@ -34,7 +34,7 @@ const make = (manager) => {
         mtlLoader.load("model.dae", (result) => {
             try {
                 const model = result.scene.children[0];
-                model.name = "block";
+                model.name = meta.id;
                 model.rotateZ(Math.PI / 2);
                 //dumpGeometry("original", model);
 

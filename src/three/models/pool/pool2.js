@@ -25,6 +25,7 @@ const meta = {
     get rightLane() {
         return new THREE.Vector3(this.corner.x, this.corner.y + 0.93, this.corner.z);
     },
+    lanes: 8,
     laneWidth: 2.43,
 };
 

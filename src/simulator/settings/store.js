@@ -8,8 +8,7 @@ const loadSettings = () => {
         const object = JSON.parse(item);
         if (object.version === defaultSettings.version) {
             settings = object;
-        }
-        else {
+        } else {
             localStorage.removeItem("settings");
         }
     }
@@ -19,6 +18,12 @@ const loadSettings = () => {
 
 const useSettingsStore = defineStore("settings", {
     state: loadSettings,
+    actions: {
+        setNumberOfSwimmers: (state, value) => {
+            state.simulation.numberOfSwimmers = value;
+        },
+    },
+
     getters: {
         getPool: (state) => {
             return state.pool;
@@ -29,5 +34,4 @@ const useSettingsStore = defineStore("settings", {
     },
 });
 
-  
 export { useSettingsStore };
