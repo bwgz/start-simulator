@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
-import { dumpGeometry } from "@/three/utils.js";
+import { dumpGeometry, getGeometry } from "@/three/utils.js";
 
 /*
  * https://3dwarehouse.sketchup.com/model/93a0210ce458dbb4c90e1681ced8feb6/Olympic-Swimming-Pool
@@ -17,7 +17,7 @@ import { dumpGeometry } from "@/three/utils.js";
  * @property {THREE.Vector3} rightLane - The position of the right most lane of the pool.
  * @property {number} laneWidth - The width of each lane in the pool.
  */
-const meta = {
+const specification = {
     title: "Olympic Swimming Pool - Sam Johnson",
     url: "https://3dwarehouse.sketchup.com/model/374dc1472621e7656967182a93c570c0/Olympic-Swimming-Pool",
     id: "pool:2",
@@ -39,11 +39,10 @@ const make = (manager) => {
             try {
                 const model = result.scene;
 
-                model.name = "pool";
+                model.name = specification.id;
                 model.rotateX(Math.PI / 2);
                 model.rotateZ(-Math.PI / 2);
-
-                dumpGeometry("original", model);
+                //dumpGeometry("original", model);
 
                 const boundingBox = new THREE.Box3();
                 boundingBox.setFromObject(model);
@@ -52,9 +51,13 @@ const make = (manager) => {
                 model.position.x += min.x * -1;
                 model.position.y += min.y * -1;
                 model.position.z += min.z * -1;
-                dumpGeometry("transform", model);
+                //dumpGeometry("transform", model);
 
-                model.meta = meta;
+                model.userData = {
+                    specification,
+                    geometry: getGeometry(model)
+                };
+
                 resolve(model);
             } catch (e) {
                 console.error(e);
@@ -66,8 +69,8 @@ const make = (manager) => {
 };
 
 const maker = {
-    id: meta.id,
-    meta,
+    id: specification.id,
+    specification,
     make,
 };
 

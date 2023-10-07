@@ -18,7 +18,7 @@ const length = 78.0; // cm - model's y axis
 const width = 64.0; // cm - model's x axis
 const height = 74.0; // cm - model's z axis
 
-const meta = {
+const specification = {
     title: "OMEGA OSB11 – SWIMMING STARTING BLOCK",
     url: "https://3dwarehouse.sketchup.com/model/8388c2569591f4ccbfefd139d92d2a51/OSB11-starting-block",
     id: "omega",
@@ -34,7 +34,7 @@ const make = (manager) => {
         mtlLoader.load("model.dae", (result) => {
             try {
                 const model = result.scene.children[0];
-                model.name = meta.id;
+                model.name = specification.id;
                 model.rotateZ(Math.PI / 2);
                 //dumpGeometry("original", model);
 
@@ -55,8 +55,10 @@ const make = (manager) => {
                 model.position.z += min.z * -1;
                 //dumpGeometry("transform", model);
 
-                model.meta = meta;
-                model.meta.geometry = getGeometry(model);
+                model.userData = {
+                    specification,
+                    geometry: getGeometry(model)
+                };
 
                 resolve(model);
             } catch (e) {
@@ -68,8 +70,8 @@ const make = (manager) => {
 };
 
 const maker = {
-    id: meta.id,
-    meta,
+    id: specification.id,
+    specification,
     make,
 };
 

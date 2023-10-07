@@ -14,7 +14,7 @@ const MAKE = {
 const normalCloner = (model) => model.clone();
 const skeletionCloner = (model) => SkeletonUtils.clone(model);
 
-function makeClones(name, template, cloner, count = 1) {
+function makeClones(template, cloner, count = 1) {
     const clones = [];
     clones.push(template);
 
@@ -33,30 +33,23 @@ function bundleOrder(make, template, items) {
         items,
     };
 }
-function makePoolModels(manager, id, count) {
-    return makePoolModel(manager, id).then((template) => {
-        const clones = makeClones(MAKE.POOL, template, normalCloner, count);
-        return bundleOrder(MAKE.POOL, template, clones);
-    });
-}
-
 function makeBlockModels(manager, id, count) {
     return makeBlockModel(manager, id).then((template) => {
-        const clones = makeClones(template.name, template, normalCloner, count);
+        const clones = makeClones(template, normalCloner, count);
         return bundleOrder(MAKE.BLOCK, template, clones);
     });
 }
 
 function makeChairModels(manager, count) {
     return ChairModel.generate(manager).then((template) => {
-        const clones = makeClones(template.name, template, normalCloner, count);
+        const clones = makeClones(template, normalCloner, count);
         return bundleOrder(MAKE.CHAIR, template, clones);
     });
 }
 
 function makeSwimmerModels(manager, id, count) {
     return makeSwimmerModel(manager, id).then((template) => {
-        const clones = makeClones(template.name, template, skeletionCloner, count);
+        const clones = makeClones(template, skeletionCloner, count);
         return bundleOrder(MAKE.SWIMMER, template, clones);
     });
 }
