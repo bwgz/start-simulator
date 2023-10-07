@@ -73,32 +73,41 @@ function start() {
     <div class="card">
         <div class="card-body">
             <h6 class="card-header bg-white">
-                <span>Starter</span><img v-if="toggleKey" height="18" src="../../assets/hotmic.png" />
+                <span>Starter</span>
             </h6>
-            <small class="pt-2">Switch on microphone to perform a start. Say "take your mark", "stand".</small>
+            <small class="pt-2">Switch microphone on to perform a start. Say "take your mark", "stand".</small>
             <div id="start-steps" class="p-2" role="group">
-                <div class="form-check form-switch">
-                    <label class="form-check-label" for="microphone">
-                        <span>Microphone</span>
-                    </label>
-                    <input
-                        id="microphone"
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="toggleKey"
-                        @click="toggleMic()"
-                        tabindex="0"
-                    />
+                <div class="row">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="microphone">
+                            <span>Microphone</span>
+                        </label>
+                        <input
+                            id="microphone"
+                            class="form-check-input"
+                            type="checkbox"
+                            v-model="toggleKey"
+                            @click="toggleMic()"
+                            tabindex="0"
+                        />
+                    </div>
                 </div>
-                <div v-if="false">
-                    <button type="button" class="btn btn-primary m-2" @click="state.command(COMMAND.TAKE_YOUR_MARKS)">
-                        <span>TYM</span>
-                    </button>
-                    <button type="button" class="btn btn-primary m-2" @click="state.command(COMMAND.STAND)">
-                        <span>STAND</span>
-                    </button>
+                <div class="row">
+                    <div v-if="false">
+                        <button
+                            type="button"
+                            class="btn btn-primary m-2"
+                            @click="state.command(COMMAND.TAKE_YOUR_MARKS)"
+                        >
+                            <span>TYM</span>
+                        </button>
+                        <button type="button" class="btn btn-primary m-2" @click="state.command(COMMAND.STAND)">
+                            <span>STAND</span>
+                        </button>
+                    </div>
                 </div>
 
+                <div class="row">
                 <button
                     id="startButton"
                     ref="startButton"
@@ -111,6 +120,7 @@ function start() {
                 >
                     <span>Start</span>
                 </button>
+                </div>
             </div>
         </div>
     </div>
