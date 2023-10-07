@@ -4,7 +4,7 @@ import { MICROPHONE_EVENT, Microphone } from "@/timing";
 import { COMMAND, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
 
-const debug = ref(true);
+const debug = ref(false);
 const state = useStateStore();
 
 const startButton = ref();
@@ -27,7 +27,6 @@ function onUnknown(value) {
 }
 
 function onStartPress() {
-    console.log("start");
     stats.markStart();
     state.command(COMMAND.START_SIGNAL);
 }
@@ -38,10 +37,10 @@ microphone.onEvent((event) => {
     switch (type) {
         case MICROPHONE_EVENT.KEY_DOWN:
             toggleKey.value = true;
+            startButton.value.focus();
             break;
         case MICROPHONE_EVENT.KEY_UP:
             toggleKey.value = false;
-            console.log("key up");
             break;
         case MICROPHONE_EVENT.COMMAND:
             if (value.includes("stand")) {
@@ -59,8 +58,6 @@ microphone.onEvent((event) => {
 });
 
 function toggleMic() {
-    console.log("toggleMic");
-
     toggleKey.value ? microphone.keyUp() : microphone.keyDown();
 }
 
@@ -75,7 +72,7 @@ function start() {
             <h6 class="card-header bg-white">
                 <span>Starter</span>
             </h6>
-            <small class="pt-2">Switch microphone on to perform a start. Say "take your mark", "stand".</small>
+            <small class="pt-2">Switch microphone on to perform a start. Say "take your marks" or "stand".</small>
             <div id="start-steps" class="p-2" role="group">
                 <div class="row">
                     <div class="form-check form-switch">
@@ -92,34 +89,39 @@ function start() {
                         />
                     </div>
                 </div>
-                <div class="row">
-                    <div v-if="false">
-                        <button
-                            type="button"
-                            class="btn btn-primary m-2"
-                            @click="state.command(COMMAND.TAKE_YOUR_MARKS)"
-                        >
-                            <span>TYM</span>
-                        </button>
-                        <button type="button" class="btn btn-primary m-2" @click="state.command(COMMAND.STAND)">
-                            <span>STAND</span>
-                        </button>
-                    </div>
+                <div v-if="debug" class="row">
+                    <button
+                        type="button"
+                        class="btn btn-primary m-2"
+                        :class="{ disabled: !toggleKey }"
+                        @click="state.command(COMMAND.TAKE_YOUR_MARKS)"
+                    >
+                        <span>TYM</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary m-2"
+                        :class="{ disabled: !toggleKey }"
+                        @click="state.command(COMMAND.STAND)"
+                    >
+                        <span>STAND</span>
+                    </button>
                 </div>
 
                 <div class="row">
-                <button
-                    id="startButton"
-                    ref="startButton"
-                    type="button"
-                    class="btn btn-danger m-2"
-                    @click="start"
-                    @keyup.esc="start"
-                    v-on:click.right.prevent="start"
-                    tabindex="1"
-                >
-                    <span>Start</span>
-                </button>
+                    <button
+                        id="startButton"
+                        ref="startButton"
+                        type="button"
+                        class="btn btn-danger m-2"
+                        :class="{ disabled: !toggleKey }"
+                        @click="start"
+                        @keyup.esc="start"
+                        v-on:click.right.prevent="start"
+                        tabindex="1"
+                    >
+                        <span>Start</span>
+                    </button>
                 </div>
             </div>
         </div>
