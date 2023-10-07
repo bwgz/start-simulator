@@ -30,14 +30,12 @@ class Microphone {
 
     onListenStatus(event) {
         const { value } = event;
-        console.log("onListenStatus", event);
         if (this.isHot && !value) {
             this.listen.start();
         }
     }
 
     onListenSpeechEvent(event) {
-        console.log("onListenSpeechEvent", event);
         const { value } = event;
         this.callback({ type: MICROPHONE_EVENT.COMMAND, value });
     }
