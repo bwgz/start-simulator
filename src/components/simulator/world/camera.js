@@ -111,7 +111,7 @@ function createCameras(pool, width, height) {
     const cameras = [];
     cameras[CAMERA_NAMES.STARTER] = createPerspectiveCamera(
         CAMERA_NAMES.STARTER,
-        70,
+        45,
         width / height,
         1,
         7000,
