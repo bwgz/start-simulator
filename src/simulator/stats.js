@@ -12,6 +12,7 @@ const stats = reactive({
     },
     markTym() {
         this.tym = Date.now();
+        this.start = null;
     },
     markStart() {
         this.start = Date.now();

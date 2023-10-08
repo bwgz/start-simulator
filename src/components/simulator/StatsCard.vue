@@ -3,19 +3,8 @@ import { stats } from "@/simulator";
 
 function displayWait() {
     const waitInSeconds = stats.waitInSeconds();
-    return waitInSeconds ? `${waitInSeconds} seconds` : "";
+    return waitInSeconds ? `${waitInSeconds} sec` : "";
 }
-
-const displayCommand = () => {
-    const command = stats.command;
-    return command ? command : "";
-};
-
-const isCorrectCommand = () => {
-    const command = stats.command;
-    const result = command ? command === "take your marks" : true;
-    return result;
-};
 </script>
 
 <template>
@@ -23,19 +12,10 @@ const isCorrectCommand = () => {
         <div class="card-body">
             <h6 class="card-header bg-white">Stats</h6>
             <div class="p-2">
-                <p>
-                    Command: <span :class="{ command_error: !isCorrectCommand() }">{{ displayCommand() }}</span>
-                </p>
-                <p>
-                    TYM to Start: <span>{{ displayWait() }}</span>
-                </p>
+                <span>
+                    Held: <span>{{ displayWait() }}</span>
+                </span>
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-.command_error {
-    color: red;
-}
-</style>

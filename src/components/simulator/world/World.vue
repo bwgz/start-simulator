@@ -8,10 +8,11 @@ import { CAMERA_NAMES, createCameras, updateCameras } from "./camera";
 import { createLights } from "./lights";
 import { useSettingsStore } from "@/simulator/settings";
 import { STATE, useStateStore } from "@/simulator/state";
+import { stats } from "@/simulator";
 import { watchForChange } from "./change";
 import { createDatGui } from "./gui";
 
-const debug = ref(import.meta.env.MODE === "development");
+const debug = ref(import.meta.env.MODE !== "development");
 const settings = useSettingsStore();
 const state = useStateStore();
 
@@ -158,6 +159,9 @@ onMounted(() => {
             </div>
         </div>
 
+        <div>
+            <p class="fw-bold">Command: <span  class="fw-normal">{{ stats.command }}</span></p>
+        </div>
         <div height="800" >
             <div v-if="debug" ref="datGui" />
             <canvas id="canvas" ref="canvas" class="d-flex block w-100 h-100"/>

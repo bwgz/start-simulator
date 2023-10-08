@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import { MICROPHONE_EVENT, Microphone } from "@/timing";
 import { COMMAND, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
@@ -29,6 +29,7 @@ function onUnknown(value) {
 function onStartPress() {
     stats.markStart();
     state.command(COMMAND.START_SIGNAL);
+    stats.setCommand("Start");
 }
 
 microphone.onEvent((event) => {
@@ -113,7 +114,7 @@ function start() {
                         id="startButton"
                         ref="startButton"
                         type="button"
-                        class="btn btn-danger m-2"
+                        class="btn btn-danger"
                         :class="{ disabled: !toggleKey }"
                         @click="start"
                         @keyup.esc="start"
