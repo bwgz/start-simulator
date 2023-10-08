@@ -12,7 +12,7 @@ const settings = useSettingsStore();
         <div class="card-body">
             <h6 class="card-header bg-white">Simulation Settings</h6>
             <div class="row mt-2">
-                <label for="customRange1" class="form-label"
+                <label for="numberOfSwimmers" class="form-label"
                     >Swimmers: {{ settings.simulation.numberOfSwimmers }}</label
                 >
                 <div class="col">
@@ -27,7 +27,7 @@ const settings = useSettingsStore();
                 </div>
             </div>
             <div class="row">
-                <label for="customRange1" class="form-label"
+                <label for="quality" class="form-label"
                     >Swimmer Quality: {{ qualityValues[settings.simulation.quality] }}</label
                 >
                 <div class="col">
@@ -42,7 +42,7 @@ const settings = useSettingsStore();
                 </div>
             </div>
             <div class="row">
-                <label for="customRange1" class="form-label"
+                <label class="form-label"
                     >Lane Assignment: {{ laneAssignmentMethodValues[settings.simulation.laneAssignmentMethod] }}</label
                 >
                 <div class="col">
@@ -50,22 +50,22 @@ const settings = useSettingsStore();
                         <input
                             class="form-check-input"
                             type="radio"
-                            id="rtol"
+                            id="near"
                             value="near"
                             v-model="settings.simulation.laneAssignmentMethod"
                         />
-                        <label class="form-check-label" for="rtol">Near</label>
+                        <label class="form-check-label" for="near">Near</label>
                     </div>
 
                     <div class="form-check">
                         <input
                             class="form-check-input"
                             type="radio"
-                            id="ltor"
+                            id="far"
                             value="far"
                             v-model="settings.simulation.laneAssignmentMethod"
                         />
-                        <label class="form-check-label" for="ltor">Far</label>
+                        <label class="form-check-label" for="far">Far</label>
                     </div>
 
                     <div class="form-check">
