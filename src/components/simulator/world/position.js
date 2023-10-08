@@ -66,11 +66,14 @@ function positionSwimmers(pool, swimmers) {
     positionObject(swimmers, lane, laneWidth)
 }
 
-function positionModels( models) {
+function positionModels(manager, models) {
+    const item = "positionModels";
+    manager.itemStart(item);
     const { pool, blocks, swimmers } = models;
     const { specification, geometry } = pool.userData;
     positionBlocks(specification, blocks);
     positionSwimmers(specification, swimmers);
+    manager.itemEnd(item);
 }
 
 export { positionModels };

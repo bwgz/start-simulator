@@ -12,7 +12,7 @@ import { stats } from "@/simulator";
 import { watchForChange } from "./change";
 import { createDatGui } from "./gui";
 
-const debug = ref(import.meta.env.MODE !== "development");
+const debug = ref(import.meta.env.MODE === "development");
 const settings = useSettingsStore();
 const state = useStateStore();
 
@@ -41,7 +41,10 @@ const addHelpers = (pool, scene) => {
     }
 };
 
-const renderModels = (models) => {
+const renderModels = (manager, models) => {
+    const item = "positionModels";
+    manager.itemStart(item);
+
     const { pool, blocks, swimmers } = models;
 
     const width = canvas.value.clientWidth;
@@ -97,6 +100,7 @@ const renderModels = (models) => {
     animate();
 
     showView.value = true;
+    manager.itemEnd(item);
 };
 
 onMounted(() => {
@@ -119,12 +123,11 @@ onMounted(() => {
 
     makeAllModels(manager, settings)
         .then((models) => {
-            const { pool } = models;
-            positionModels(models);
+            positionModels(manager, models);
             return models;
         })
         .then((models) => {
-            renderModels(models);
+            renderModels(manager, models);
             return models;
         })
         .then((models) => {
