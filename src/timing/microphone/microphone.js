@@ -2,8 +2,6 @@ import { LISTEN_EVENT, Listen } from "./listen";
 import { Beep } from "./sounds";
 
 const MICROPHONE_EVENT = {
-    KEY_UP: "key_up",
-    KEY_DOWN: "key_down",
     COMMAND: "command",
     START_PRESS: "start_press",
 };
@@ -54,7 +52,6 @@ class Microphone {
         if (!this.listen.isListening) {
             this.listen.start();
         }
-        this.sendEvent(MICROPHONE_EVENT.KEY_DOWN);
     }
 
     keyUp() {
@@ -62,7 +59,6 @@ class Microphone {
         if (this.listen.isListening) {
             this.listen.stop();
         }
-        this.sendEvent(MICROPHONE_EVENT.KEY_UP);
     }
 
     startPressed() {
@@ -77,7 +73,6 @@ class Microphone {
                 })
                 .finally(() => {
                     this.sendEvent(MICROPHONE_EVENT.START_PRESS);
-                    this.keyUp();
                 });
         }
     }

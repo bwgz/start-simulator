@@ -1,8 +1,12 @@
 <script setup>
-import { COMMAND, useStateStore } from "@/simulator/state";
+import { ref, watch } from "vue";
+import { COMMAND, STATE, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
+import "bootstrap5-toggle/css/bootstrap5-toggle.min.css";
+import "bootstrap5-toggle/js/bootstrap5-toggle.ecmas.min.js";
 
 const state = useStateStore();
+const auto = ref(false);
 
 const reset = () => {
     state.command(COMMAND.RESET);
@@ -18,6 +22,45 @@ const longWhistle = () => {
     state.command(COMMAND.LONG_WHISTLE);
     stats.setCommand("Long Whistle");
 };
+
+const timeoutId = ref(null);
+
+const autoCommand = (command, timeout) => {
+    timeoutId.value = setTimeout(() => {
+        command();
+    }, timeout);
+};
+
+const autoShortWhistles = () => {
+    if (auto.value) {
+        autoCommand(shortWhistles, 10000);
+    }
+};
+
+const autoLongWhistle = () => {
+    if (auto.value) {
+        autoCommand(longWhistle, 3000);
+    }
+};
+
+watch(state, (value) => {
+    const { current } = value;
+
+    if (current === STATE.STARTING || current === STATE.WAITING) {
+        autoShortWhistles();
+    } else if (current === STATE.COMMENCEMENT) {
+        autoLongWhistle();
+    }
+});
+
+watch(auto, (value) => {
+    if (value) {
+        shortWhistles();
+    }
+    else {
+        clearTimeout(timeoutId.value);
+    }
+});
 </script>
 
 <template>
@@ -36,6 +79,8 @@ const longWhistle = () => {
                         <button type="button" class="btn btn-primary btn-sm" @click="longWhistle()">
                             Long Whistle
                         </button>
+                        <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="success"
+                            data-onlabel="Auto Whistles On" data-offlabel="Auto Whistles Off" v-model="auto" />
                     </div>
                 </div>
             </div>

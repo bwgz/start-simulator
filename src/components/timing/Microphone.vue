@@ -1,14 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { MICROPHONE_EVENT, Microphone } from "@/timing";
 import { COMMAND, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
+import "bootstrap5-toggle/css/bootstrap5-toggle.min.css";
+import "bootstrap5-toggle/js/bootstrap5-toggle.ecmas.min.js";
 
 const debug = ref(false);
 const state = useStateStore();
 
+const keyButton = ref();
 const startButton = ref();
-const toggleKey = ref(false);
+const toggleKey = ref();
 const microphone = new Microphone();
 
 function onTakeYouMarks(value) {
@@ -30,19 +33,13 @@ function onStartPress() {
     stats.markStart();
     state.command(COMMAND.START_SIGNAL);
     stats.setCommand("Start");
+    keyButton.value.bootstrapToggle('off')
 }
 
 microphone.onEvent((event) => {
     const { type, value } = event;
 
     switch (type) {
-        case MICROPHONE_EVENT.KEY_DOWN:
-            toggleKey.value = true;
-            startButton.value.focus();
-            break;
-        case MICROPHONE_EVENT.KEY_UP:
-            toggleKey.value = false;
-            break;
         case MICROPHONE_EVENT.COMMAND:
             if (value.includes("stand")) {
                 onStand(value);
@@ -58,13 +55,24 @@ microphone.onEvent((event) => {
     }
 });
 
-function toggleMic() {
-    toggleKey.value ? microphone.keyUp() : microphone.keyDown();
-}
+
+watch(toggleKey, (value) => {
+    if (value) {
+        microphone.keyDown();
+        startButton.value.focus();
+    } else {
+        microphone.keyUp();
+    }
+});
 
 function start() {
     microphone.startPressed();
 }
+
+onMounted(() => {
+    // can't use Vue's element ref() because this is a custom element with its own API
+    keyButton.value = document.getElementById("keyButton");
+});
 </script>
 
 <template>
@@ -76,21 +84,6 @@ function start() {
             <div id="start-steps" class="" role="group">
                 <div class="row">
                     <p class="pt-1">Switch microphone on and say "take your marks" or "stand"</p>
-                </div>
-                <div class="row">
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="microphone">
-                            <span>Microphone</span>
-                        </label>
-                        <input
-                            id="microphone"
-                            class="form-check-input"
-                            type="checkbox"
-                            v-model="toggleKey"
-                            @click="toggleMic()"
-                            tabindex="0"
-                        />
-                    </div>
                 </div>
                 <div v-if="debug" class="row">
                     <button
@@ -112,19 +105,32 @@ function start() {
                 </div>
 
                 <div class="row">
-                    <button
-                        id="startButton"
-                        ref="startButton"
-                        type="button"
-                        class="btn btn-danger"
-                        :class="{ disabled: !toggleKey }"
-                        @click="start"
-                        @keyup.esc="start"
-                        v-on:click.right.prevent="start"
-                        tabindex="1"
-                    >
-                        <span>Start</span>
-                    </button>
+                    <div class="d-grid gap-2">
+                        <input
+                            id="keyButton"
+                            type="checkbox"
+                            data-toggle="toggle"
+                            data-size="sm"
+                            data-onstyle="success"
+                            data-onlabel="Microphone On"
+                            data-offlabel="Microphone Off"
+                            v-model="toggleKey"
+                        />
+
+                        <button
+                            id="startButton"
+                            ref="startButton"
+                            type="button"
+                            class="btn btn-danger"
+                            :class="{ disabled: !toggleKey }"
+                            @click="start"
+                            @keyup.esc="start"
+                            v-on:click.right.prevent="start"
+                            tabindex="1"
+                        >
+                            <span>Start</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
