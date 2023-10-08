@@ -6,11 +6,11 @@ const laneAssignmentMethodValues = ["Left to Right", "Right to Left", "Seeded", 
 
 const settings = useSettingsStore();
 </script>
-
+ 
 <template>
     <div class="card">
         <div class="card-body">
-            <h6 class="card-header bg-white">Simulation Settings</h6>
+            <h6 class="card-header bg-white">Settings</h6>
             <div class="row mt-2">
                 <label for="numberOfSwimmers" class="form-label"
                     >Swimmers: {{ settings.simulation.numberOfSwimmers }}</label
@@ -83,3 +83,9 @@ const settings = useSettingsStore();
         </div>
     </div>
 </template>
+
+<style scoped>
+.card-header {
+    padding: 2px 2px 4px 2px;
+}
+</style>

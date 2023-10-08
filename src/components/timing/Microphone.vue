@@ -130,6 +130,10 @@ function start() {
 </template>
 
 <style scoped>
+.card-header {
+    padding: 2px 2px 4px 2px;
+}
+
 p {
     font-size: 0.75rem;
     line-height: 1rem;

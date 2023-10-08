@@ -19,3 +19,9 @@ function displayWait() {
         </div>
     </div>
 </template>
+
+<style scoped>
+.card-header {
+    padding: 2px 2px 4px 2px;
+}
+</style>
