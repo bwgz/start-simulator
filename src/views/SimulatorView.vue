@@ -8,17 +8,17 @@ import StatsCard from "@/components/simulator/StatsCard.vue";
 import SettingsCard from "@/components/simulator/SettingsCard.vue";
 import { stats } from "@/simulator";
 
-const help = ref(true);
+const help = ref(false);
 </script>
 
 <template>
     <Layout>
         <template v-slot:default>
-            <div class="container-fluid">
+            <div class="container-fluid ">
                 <div class="row">
-                    <div :class="{ 'col-lg-10': help, 'col-lg-12': !help }">
+                    <div :class="{ 'col-lg-9': help, 'col-lg-12': !help }">
                         <div class="row">
-                            <div class="col-lg-10">
+                            <div :class="{ 'col-lg-9': help, 'col-lg-10': !help }">
                                 <nav class="navbar navbar-light bg-light">
                                     <span class="fw-bold">
                                         Command: <span class="fw-normal">{{ stats.command }}</span>
@@ -43,7 +43,7 @@ const help = ref(true);
                                 </nav>
                                 <World />
                             </div>
-                            <div class="col-lg-2">
+                            <div :class="{ 'col-lg-3': help, 'col-lg-2': !help }">
                                 <RefereeCard class="mb-2" />
                                 <StarterCard class="mb-2" />
                                 <StatsCard class="mb-2" />
@@ -51,9 +51,9 @@ const help = ref(true);
                             </div>
                         </div>
                     </div>
-                    <div v-if="help" class="border-left border-dark" :class="{ 'col-lg-2': help, 'col-lg-0': !help }">
-                        <nav class="navbar navbar-light bg-light">
-                            <span class="fw-bold"> Help </span>
+                    <div v-if="help" class="border-left border-dark" :class="{ 'col-lg-3': help, 'col-lg-0': !help }">
+                        <nav class="navbar navbar-light">
+                            <span class="fw-bold navbar-nav mx-auto" > Help </span>
                             <button class="text-decoration-none" @click="() => (help = false)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -74,10 +74,10 @@ const help = ref(true);
                         <p>Referee buttons are used to simulate the referee's whistle commands.</p>
                         <h6>Starter</h6>
                         <p>
-                            This simulator's microphone behaves like a real microphone. It is be activated by clicking a
+                            The  simulator's microphone behaves like a real microphone. It is activated by clicking a
                             switch. This action is the same as "keying" a real microphone. When switched on the
-                            microphone is becomes "hot" and the simulator listens to the computer's microphone. If you
-                            says "take your marks" or "stand" the swimmers will respond to that command. They'll ignore
+                            microphone is becomes "hot" and the simulator listens to the computer's microphone. 
+                            Say "take your marks" or "stand" and the swimmers will respond to that command. They'll ignore
                             anything else you say.
                         </p>
                         <p>
@@ -110,6 +110,10 @@ const help = ref(true);
 </template>
 
 <style scoped>
+p {
+    font-size: 0.875rem;
+}
+
 button {
     display: inline-block;
     position: relative;
