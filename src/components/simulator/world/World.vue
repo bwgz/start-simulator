@@ -107,6 +107,17 @@ onMounted(() => {
     }
 
     const manager = new THREE.LoadingManager();
+
+    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+        //console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
+        loaded.value = itemsLoaded;
+        loading.value = itemsTotal;
+        if (progressBar.value) {
+            progressBar.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
+        }
+    };
+
+
     makeAllModels(manager, settings)
         .then((models) => {
             const { pool } = models;
@@ -139,6 +150,7 @@ onMounted(() => {
         <div v-if="!showView">
             <div class="d-flex flex-column align-items-center justify-content-center">
                 <label class="display-3 p-20" for="progress-bar">Filling Up The Pool</label>
+                <img class="p-2" src="/fill-pool.png" alt="fill the pool  pool" />
                 <div id="progress-bar" class="progress" aria-busy="true" style="width: 400px">
                     <div ref="progressBar" class="progress-bar" role="progressBar"></div>
                 </div>

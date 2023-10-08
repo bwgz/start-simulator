@@ -25,9 +25,7 @@
                       return s.replace(/~and~/g, "&");
                   })
                   .join("?");
-              console.log("decoded", decoded);
               const url = l.pathname.slice(0, -1) + decoded + l.hash;
-              console.log("url", url);
               window.history.replaceState(null, null, url);
           }
       })(window.location);
