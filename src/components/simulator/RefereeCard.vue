@@ -25,7 +25,7 @@ const longWhistle = () => {
         <div class="card-body">
             <h6 class="card-header bg-white">Referee</h6>
             <div class="row">
-                <small class="p-2">Perform referee duties using these buttons.</small>
+                <p class="pt-1">Perform referee duties using these buttons.</p>
             </div>
             <div class="row">
                 <div class="col">
@@ -42,3 +42,10 @@ const longWhistle = () => {
         </div>
     </div>
 </template>
+
+<style scoped>
+p {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+</style>

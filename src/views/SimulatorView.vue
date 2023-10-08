@@ -51,7 +51,7 @@ const help = ref(false);
                             </div>
                         </div>
                     </div>
-                    <div v-if="help" class="border-left border-dark" :class="{ 'col-lg-3': help, 'col-lg-0': !help }">
+                    <div v-if="help" class="border" :class="{ 'col-lg-3': help, 'col-lg-0': !help }">
                         <nav class="navbar navbar-light">
                             <span class="fw-bold navbar-nav mx-auto" > Help </span>
                             <button class="text-decoration-none" @click="() => (help = false)">
@@ -74,7 +74,7 @@ const help = ref(false);
                         <p>Referee buttons are used to simulate the referee's whistle commands.</p>
                         <h6>Starter</h6>
                         <p>
-                            The  simulator's microphone behaves like a real microphone. It is activated by clicking a
+                            The  simulator's microphone behaves like a real microphone. It's activated by clicking the
                             switch. This action is the same as "keying" a real microphone. When switched on the
                             microphone is becomes "hot" and the simulator listens to the computer's microphone. 
                             Say "take your marks" or "stand" and the swimmers will respond to that command. They'll ignore
@@ -86,8 +86,8 @@ const help = ref(false);
                             to it.
                         </p>
                         <p>
-                            You'll see your voice command displayed in the command box. If the swimmers don't react it's
-                            because the command was not recognized as a valid command. Try again.
+                            Voice commands are displayed in the command box. If swimmers don't react it's
+                            likely that the command was not recognized as a valid command. Try again.
                         </p>
                         <p>
                             Your browser may ask you to allow the simulator to use the computer's microphone. You must

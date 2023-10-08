@@ -73,7 +73,7 @@ function start() {
             <h6 class="card-header bg-white">
                 <span>Starter</span>
             </h6>
-            <small class="pt-2">Switch microphone on to perform a start. Say "take your marks" or "stand".</small>
+            <p class="pt-1">Switch microphone on to perform a start. Say "take your marks" or "stand".</p>
             <div id="start-steps" class="p-2" role="group">
                 <div class="row">
                     <div class="form-check form-switch">
@@ -128,3 +128,10 @@ function start() {
         </div>
     </div>
 </template>
+
+<style scoped>
+p {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+</style>
