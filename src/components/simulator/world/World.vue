@@ -159,11 +159,6 @@ onMounted(() => {
             </div>
         </div>
 
-        <div v-if="showView">
-            <p class="fw-bold">
-                Command: <span class="fw-normal">{{ stats.command }}</span>
-            </p>
-        </div>
         <div height="800">
             <canvas id="canvas" ref="canvas" class="d-flex block w-100 h-100" />
         </div>
