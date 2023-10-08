@@ -106,16 +106,15 @@ onMounted(() => {
     }
 
     const manager = new THREE.LoadingManager();
-
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        //console.log("Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.");
+    const updateProgressBar = (url, itemsLoaded, itemsTotal) => {
         loaded.value = itemsLoaded;
         loading.value = itemsTotal;
         if (progressBar.value) {
             progressBar.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
         }
-    };
-
+    }
+    manager.onProgress = updateProgressBar;
+    manager.onEnd = updateProgressBar;
 
     makeAllModels(manager, settings)
         .then((models) => {
@@ -159,9 +158,9 @@ onMounted(() => {
             </div>
         </div>
 
-        <div>
+        <div height="800" >
             <div v-if="debug" ref="datGui" />
-            <canvas id="canvas" ref="canvas" class="d-flex w-100 h-100" />
+            <canvas id="canvas" ref="canvas" class="d-flex block w-100 h-100"/>
         </div>
     </div>
 </template>
