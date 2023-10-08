@@ -70,9 +70,9 @@ const help = ref(false);
                                 </svg>
                             </button>
                         </nav>
-                        <h6>Referee</h6>
+                        <h6><img src="/icons/noun-whistle-2505749.svg" width="24"> Referee</h6>
                         <p>Referee buttons are used to simulate the referee's whistle commands.</p>
-                        <h6>Starter</h6>
+                        <h6><img src="/icons/noun-microphone-6145626.svg" width="24"> Starter</h6>
                         <p>
                             The  simulator's microphone behaves like a real microphone. It's activated by clicking the
                             switch. This action is the same as "keying" a real microphone. When switched on the
@@ -93,9 +93,9 @@ const help = ref(false);
                             Your browser may ask you to allow the simulator to use the computer's microphone. You must
                             allow this for voice commands to work.
                         </p>
-                        <h6>Stats</h6>
+                        <h6><img src="/icons/noun-stats-2225104.svg" width="24"> Stats</h6>
                         <p>Held - the time between recognizing "take your marks" and the start signal.</p>
-                        <h6>Settings</h6>
+                        <h6><img src="/icons/noun-settings-6164385.svg" width="24"> Settings</h6>
                         <p>Swimmers: The number of swimmers in the heat.</p>
                         <p>
                             Swimmer Quality: You can adjust the quality of the swimmers. Low quality swimmers take
