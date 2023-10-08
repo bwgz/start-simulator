@@ -54,7 +54,14 @@ const help = ref(false);
                     <div v-if="help" class="border" :class="{ 'col-lg-3': help, 'col-lg-0': !help }">
                         <nav class="navbar navbar-light">
                             <h5 class="navbar-nav mx-auto">Help</h5>
-                            <button  type="button" class="btn" @click="() => (help = false)" data-toggle="tooltip" data-placement="left" title="Close">
+                            <button
+                                type="button"
+                                class="btn"
+                                @click="() => (help = false)"
+                                data-toggle="tooltip"
+                                data-placement="left"
+                                title="Close"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -72,6 +79,11 @@ const help = ref(false);
                         </nav>
                         <h6><img src="/icons/noun-whistle-2505749.svg" width="24" /> Referee</h6>
                         <p>Referee buttons are used to simulate the referee's whistle commands.</p>
+                        <p>
+                            Click on the whistle buttons or turn on auto whistles. Auto whistles executes the whistle
+                            commands for you. It monitors the start and will automatically command the swimmers back onto
+                            the starting platform.
+                        </p>
                         <h6><img src="/icons/noun-microphone-6145626.svg" width="24" /> Starter</h6>
                         <p>
                             The simulator's microphone behaves like a real microphone. It's activated by clicking the
@@ -127,10 +139,8 @@ button {
     cursor: pointer;
 }
 
-
 .icon:hover {
     background-color: gainsboro;
     border-radius: 24px;
-
 }
 </style>
