@@ -15,10 +15,9 @@ const debug = ref(import.meta.env.MODE === "development");
 const settings = useSettingsStore();
 const state = useStateStore();
 
-const progressBar = ref(null);
-const worldView = ref(null);
-const canvas = ref(null);
-const datGui = ref(null);
+const progressBar = ref();
+const canvas = ref();
+const datGui = ref();
 
 const loading = ref(0);
 const loaded = ref(0);
@@ -44,8 +43,8 @@ const addHelpers = (pool, scene) => {
 const renderModels = (models) => {
     const { pool, blocks, swimmers } = models;
 
-    const width = worldView.value.clientWidth;
-    const height = worldView.value.clientHeight;
+    const width = canvas.value.clientWidth;
+    const height = canvas.value.clientHeight;
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true });
     renderer.shadowMap.enabled = true;
@@ -68,9 +67,9 @@ const renderModels = (models) => {
     [pool].concat(blocks, swimmers).forEach((model) => scene.add(model));
 
     const onWindowResize = (event) => {
-        if (worldView?.value) {
-            const width = worldView.value.clientWidth;
-            const height = worldView.value.clientHeight;
+        if (canvas?.value) {
+            const width = canvas.value.clientWidth;
+            const height = canvas.value.clientHeight;
 
             if (width && height) {
                 updateCameras(cameras, width, height);
@@ -146,7 +145,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="worldView" style="height: 800px">
+    <div>
         <div v-if="!showView">
             <div class="d-flex flex-column align-items-center justify-content-center">
                 <label class="display-3 p-20" for="progress-bar">Filling Up The Pool</label>
@@ -162,7 +161,8 @@ onMounted(() => {
 
         <div>
             <div v-if="debug" ref="datGui" />
-            <canvas id="canvas" ref="canvas" class="h-auto d-inline-block" />
+            <canvas id="canvas" ref="canvas" class="d-flex w-100 h-100" />
         </div>
     </div>
 </template>
+

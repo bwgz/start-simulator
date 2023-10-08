@@ -159,7 +159,6 @@ const onSettingsChange = (settings, state, world) => {
         const size = Number(numberOfSwimmers);
         const start = Math.floor((pool.userData.specification.lanes - size) / 2);
         const end = start + Number(size) - 1;
-        console.log(start, end);
         for (let i = 0; i < swimmers.length; i++) {
             if (i < start || i > end) {
                 swimmers[i].visible = false;
