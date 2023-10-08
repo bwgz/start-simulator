@@ -113,7 +113,7 @@ onMounted(() => {
         if (progressBar.value) {
             progressBar.value.style.width = `${(itemsLoaded / itemsTotal) * 100}%`;
         }
-    }
+    };
     manager.onProgress = updateProgressBar;
     manager.onEnd = updateProgressBar;
 
@@ -159,13 +159,14 @@ onMounted(() => {
             </div>
         </div>
 
-        <div>
-            <p class="fw-bold">Command: <span  class="fw-normal">{{ stats.command }}</span></p>
+        <div v-if="showView">
+            <p class="fw-bold">
+                Command: <span class="fw-normal">{{ stats.command }}</span>
+            </p>
         </div>
-        <div height="800" >
-            <div v-if="debug" ref="datGui" />
-            <canvas id="canvas" ref="canvas" class="d-flex block w-100 h-100"/>
+        <div height="800">
+            <canvas id="canvas" ref="canvas" class="d-flex block w-100 h-100" />
         </div>
+        <div v-if="debug" ref="datGui" />
     </div>
 </template>
-
