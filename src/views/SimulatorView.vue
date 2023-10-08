@@ -14,7 +14,7 @@ const help = ref(false);
 <template>
     <Layout>
         <template v-slot:default>
-            <div class="container-fluid ">
+            <div class="container-fluid">
                 <div class="row">
                     <div :class="{ 'col-lg-9': help, 'col-lg-12': !help }">
                         <div class="row">
@@ -26,8 +26,8 @@ const help = ref(false);
                                     <button class="text-decoration-none" @click="() => (help = true)">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
+                                            width="24"
+                                            height="24"
                                             fill="currentColor"
                                             class="bi bi-question-circle"
                                             viewBox="0 0 16 16"
@@ -53,14 +53,14 @@ const help = ref(false);
                     </div>
                     <div v-if="help" class="border" :class="{ 'col-lg-3': help, 'col-lg-0': !help }">
                         <nav class="navbar navbar-light">
-                            <span class="fw-bold navbar-nav mx-auto" > Help </span>
-                            <button class="text-decoration-none" @click="() => (help = false)">
+                            <h5 class="navbar-nav mx-auto">Help</h5>
+                            <button  type="button" class="btn" @click="() => (help = false)" data-toggle="tooltip" data-placement="left" title="Close">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
+                                    width="24"
+                                    height="24"
                                     fill="currentColor"
-                                    class="bi bi-x-circle"
+                                    class="bi bi-x-circle icon"
                                     viewBox="0 0 16 16"
                                 >
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -70,32 +70,32 @@ const help = ref(false);
                                 </svg>
                             </button>
                         </nav>
-                        <h6><img src="/icons/noun-whistle-2505749.svg" width="24"> Referee</h6>
+                        <h6><img src="/icons/noun-whistle-2505749.svg" width="24" /> Referee</h6>
                         <p>Referee buttons are used to simulate the referee's whistle commands.</p>
-                        <h6><img src="/icons/noun-microphone-6145626.svg" width="24"> Starter</h6>
+                        <h6><img src="/icons/noun-microphone-6145626.svg" width="24" /> Starter</h6>
                         <p>
-                            The  simulator's microphone behaves like a real microphone. It's activated by clicking the
+                            The simulator's microphone behaves like a real microphone. It's activated by clicking the
                             switch. This action is the same as "keying" a real microphone. When switched on the
-                            microphone is becomes "hot" and the simulator listens to the computer's microphone. 
-                            Say "take your marks" or "stand" and the swimmers will respond to that command. They'll ignore
+                            microphone is becomes "hot" and the simulator listens to the computer's microphone. Say
+                            "take your marks" or "stand" and the swimmers will respond to that command. They'll ignore
                             anything else you say.
                         </p>
                         <p>
                             The start button is enabled When the microphone is hot. Clicking the start button or hitting
-                            the space bar will simulate a start signal. You'll hear beep and the swimmer's will respond
-                            to it.
+                            the space bar will simulate a start signal. You'll hear a beep and the swimmer's will
+                            respond to it.
                         </p>
                         <p>
-                            Voice commands are displayed in the command box. If swimmers don't react it's
-                            likely that the command was not recognized as a valid command. Try again.
+                            Voice commands are displayed in the command box. If swimmers don't react it's likely that
+                            the command was not recognized as a valid command. Try again.
                         </p>
                         <p>
                             Your browser may ask you to allow the simulator to use the computer's microphone. You must
                             allow this for voice commands to work.
                         </p>
-                        <h6><img src="/icons/noun-stats-2225104.svg" width="24"> Stats</h6>
+                        <h6><img src="/icons/noun-stats-2225104.svg" width="24" /> Stats</h6>
                         <p>Held - the time between recognizing "take your marks" and the start signal.</p>
-                        <h6><img src="/icons/noun-settings-6164385.svg" width="24"> Settings</h6>
+                        <h6><img src="/icons/noun-settings-6164385.svg" width="24" /> Settings</h6>
                         <p>Swimmers: The number of swimmers in the heat.</p>
                         <p>
                             Swimmer Quality: You can adjust the quality of the swimmers. Low quality swimmers take
@@ -125,8 +125,12 @@ button {
     color: inherit;
     text-decoration: none;
     cursor: pointer;
-    user-select: none;
-    z-index: 0;
-    overflow: visible;
+}
+
+
+.icon:hover {
+    background-color: gainsboro;
+    border-radius: 24px;
+
 }
 </style>
