@@ -1,9 +1,7 @@
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { COMMAND, STATE, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
-import "bootstrap5-toggle/css/bootstrap5-toggle.min.css";
-import "bootstrap5-toggle/js/bootstrap5-toggle.ecmas.min.js";
 
 const state = useStateStore();
 const auto = ref(false);
@@ -79,8 +77,15 @@ watch(auto, (value) => {
                         <button type="button" class="btn btn-primary btn-sm" @click="longWhistle()">
                             Long Whistle
                         </button>
-                        <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="success"
-                            data-onlabel="Auto Whistles On" data-offlabel="Auto Whistles Off" v-model="auto" />
+                        <button
+                            type="button"
+                            class="btn btn-sm"
+                            :class="{ 'btn-primary': auto, 'btn-secondary': !auto }"
+
+                            data-toggle="button"
+                            @click="auto = !auto"
+                            tabindex="0"
+                            >{{ auto ? "Auto Whistles On" : "Auto Whistles Off"}}</button>
                     </div>
                 </div>
             </div>

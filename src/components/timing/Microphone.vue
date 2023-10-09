@@ -1,17 +1,14 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { MICROPHONE_EVENT, Microphone } from "@/timing";
 import { COMMAND, useStateStore } from "@/simulator/state";
 import { stats } from "@/simulator";
-import "bootstrap5-toggle/css/bootstrap5-toggle.min.css";
-import "bootstrap5-toggle/js/bootstrap5-toggle.ecmas.min.js";
 
 const debug = ref(false);
 const state = useStateStore();
 
-const keyButton = ref();
+const key = ref(false);
 const startButton = ref();
-const toggleKey = ref();
 const microphone = new Microphone();
 
 function onTakeYouMarks(value) {
@@ -33,7 +30,7 @@ function onStartPress() {
     stats.markStart();
     state.command(COMMAND.START_SIGNAL);
     stats.setCommand("Start");
-    keyButton.value.bootstrapToggle('off')
+    key.value = false;
 }
 
 microphone.onEvent((event) => {
@@ -55,8 +52,7 @@ microphone.onEvent((event) => {
     }
 });
 
-
-watch(toggleKey, (value) => {
+watch(key, (value) => {
     if (value) {
         microphone.keyDown();
         startButton.value.focus();
@@ -69,10 +65,6 @@ function start() {
     microphone.startPressed();
 }
 
-onMounted(() => {
-    // can't use Vue's element ref() because this is a custom element with its own API
-    keyButton.value = document.getElementById("keyButton");
-});
 </script>
 
 <template>
@@ -89,7 +81,7 @@ onMounted(() => {
                     <button
                         type="button"
                         class="btn btn-primary m-2"
-                        :class="{ disabled: !toggleKey }"
+                        :class="{ disabled: !key }"
                         @click="state.command(COMMAND.TAKE_YOUR_MARKS)"
                     >
                         <span>TYM</span>
@@ -97,7 +89,7 @@ onMounted(() => {
                     <button
                         type="button"
                         class="btn btn-primary m-2"
-                        :class="{ disabled: !toggleKey }"
+                        :class="{ disabled: !key }"
                         @click="state.command(COMMAND.STAND)"
                     >
                         <span>STAND</span>
@@ -106,23 +98,22 @@ onMounted(() => {
 
                 <div class="row">
                     <div class="d-grid gap-2">
-                        <input
-                            id="keyButton"
-                            type="checkbox"
-                            data-toggle="toggle"
-                            data-size="sm"
-                            data-onstyle="success"
-                            data-onlabel="Microphone On"
-                            data-offlabel="Microphone Off"
-                            v-model="toggleKey"
-                        />
+                        <button
+                            type="button"
+                            class="btn"
+                            :class="{ 'btn-primary': key, 'btn-secondary': !key }"
+
+                            data-toggle="button"
+                            @click="key = !key"
+                            tabindex="0"
+                            >{{ key ? "Microphone On" : "Microphone Off"}}</button>
 
                         <button
                             id="startButton"
                             ref="startButton"
                             type="button"
                             class="btn btn-danger"
-                            :class="{ disabled: !toggleKey }"
+                            :class="{ disabled: !key }"
                             @click="start"
                             @keyup.esc="start"
                             v-on:click.right.prevent="start"
