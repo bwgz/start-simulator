@@ -37,7 +37,6 @@ const make = (manager) => {
         mtlLoader.load("model.dae", (result) => {
             try {
                 const model = result.scene;
-                dumpGeometry("original", model);
 
                 model.name = specification.id;
                 model.rotateX(Math.PI / 2);
