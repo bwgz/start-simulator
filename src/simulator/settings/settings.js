@@ -14,7 +14,7 @@ const LANE_ASSIGNMENT_METHOD = {
 const defaultSettings = {
     version: "0.3",
     pool: {
-        id: "pool:0",
+        id: "pool:4",
     },
     block: {    
         id: "omega",
